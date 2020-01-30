@@ -1,22 +1,27 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.google.api.client.util.Key;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Table {
 
-    private final String table;
+    @Key
+    private String table;
 
-    private final String currency;
+    @Key
+    private String currency;
 
-    private final String code;
+    @Key
+    private String code;
 
-    private final List<Rate> rates;
+    @Key
+    private List<Rate> rates;
 
 }

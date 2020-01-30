@@ -1,20 +1,23 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDate;
+import com.google.api.client.util.Key;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Rate {
 
-    private final String no;
+    @Key
+    private String no;
 
-    private final LocalDate effectiveDate;
+    // TODO: Use LocalDate instead of String
+    @Key
+    private String effectiveDate;
 
-    private final double rate;
+    @Key
+    private double mid;
 
 }
