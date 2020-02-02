@@ -17,17 +17,18 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
-                (HttpRequest request) -> {request.setParser(new JsonObjectParser(JSON_FACTORY));});
-
-        HttpRequest request = requestFactory.buildGetRequest(
-                new GenericUrl("http://api.nbp.pl/api/exchangerates/rates/A/EUR"));
-        String rawResponse = request.execute().parseAsString();
-
-        Table table = request.execute().parseAs(Table.class);
+        Table table = getTable("http://api.nbp.pl/api/exchangerates/rates/A/EUR");
         System.out.println(table.toString());
 
+    }
 
+    static Table getTable(String tableURL) throws IOException {
+
+        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
+                (HttpRequest request) -> {request.setParser(new JsonObjectParser(JSON_FACTORY));});
+        HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(tableURL));
+        Table table = request.execute().parseAs(Table.class);
+        return table;
 
     }
 }
