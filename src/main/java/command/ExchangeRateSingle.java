@@ -8,8 +8,8 @@ import picocli.CommandLine.Command;
 import java.time.LocalDate;
 
 @Getter
-@Command(name = "exchange")
-public class CurrencyRate {
+@Command(name = "single")
+public class ExchangeRateSingle implements Runnable{
 
     @Option(names = {"-a", "--amount"}, paramLabel = " ", description = "amount of money to exchange")
     private Double currencyInputAmount;
@@ -18,18 +18,17 @@ public class CurrencyRate {
     private String inputCurrency = String.valueOf(CurrencySymbol.EUR);
 
     @Option(names = {"-t", "--to"}, description = "select output currency")
-    private String getOutputCurrency;
+    private String outputCurrency;
 
-    @Option(names = {"-i", "--input"}, description = "input data")
-    private String inputData;
-
-    @Option(names = {"-o", "--output"}, description = "output data")
-    private String outputData;
-
-    @Option(names = {"-d", "--date"}, description = "date of monet exchange")
+    @Option(names = {"-d", "--date"}, description = "date of money exchange. Default: today (${DEFAULT-VALUE})")
     private LocalDate exchangeDate = LocalDate.now();
 
-    @Option(names = {"-h", "--help"}, usageHelp = true)
-    private boolean help;
-    
+    @Override
+    public void run() {
+        System.out.println("ExchangeRateSingle");
+        System.out.println("currencyInputAmount: " + currencyInputAmount);
+        System.out.println("inputCurrency: " + inputCurrency);
+        System.out.println("outputCurrency: " + outputCurrency);
+        System.out.println("exchangeDate: " + exchangeDate);
+    }
 }

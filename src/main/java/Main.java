@@ -6,28 +6,41 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import command.CurrencyRate;
+import command.ExchangeRateHistory;
+import command.ExchangeRateSingle;
 import model.Table;
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 
 import java.io.IOException;
 
-public class Main {
+@Command(name = "exchange-rate",
+        subcommands = {
+            ExchangeRateSingle.class,
+            ExchangeRateHistory.class}
+)
+public class Main implements Runnable {
+
+    // VERSION
+    @Option(names = {"-v", "--version"}, versionHelp = true, description = "Display version info")
+    boolean versionInfoRequested;
+
+    // HELP
+    @Option(names = {"?", "-h", "--help"}, usageHelp = true)
+    private boolean usageHelpRequested;
 
     static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     static JsonFactory JSON_FACTORY = new JacksonFactory();
 
     public static void main(String[] args) throws IOException {
 
-        CurrencyRate currencyRate = new CurrencyRate();
-        CommandLine commandLine = new CommandLine(currencyRate);
-        commandLine.parseArgs(args);
-        System.out.println(currencyRate.getCurrencyInputAmount());
-        System.out.println(currencyRate.getInputCurrency());
-        System.out.println(currencyRate.getExchangeDate());
-        if (commandLine.isUsageHelpRequested()); {
-            commandLine.usage(System.out);
-        }
+
+
+
+        CommandLine commandLine = new CommandLine(new Main());
+        commandLine.execute(args);
+
         Table table = getTable("https://api.exchangeratesapi.io/latest");
         System.out.println(table.toString());
 
@@ -41,5 +54,10 @@ public class Main {
         Table table = request.execute().parseAs(Table.class);
         return table;
 
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Main");
     }
 }
