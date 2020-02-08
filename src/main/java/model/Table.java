@@ -3,7 +3,7 @@ package model;
 import com.google.api.client.util.Key;
 import lombok.*;
 
-import java.util.List;
+import java.util.HashMap;
 
 @Getter
 @Setter
@@ -13,15 +13,12 @@ import java.util.List;
 public class Table {
 
     @Key
-    private String table;
+    private String base;
 
     @Key
-    private String currency;
+    private String date;
 
     @Key
-    private String code;
-
-    @Key
-    private List<Rate> rates;
+    private HashMap<String, Double> rates;
 
 }

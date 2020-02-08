@@ -19,12 +19,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        CommandLine commandLine = new CommandLine(new CurrencyRate());
+        CurrencyRate currencyRate = new CurrencyRate();
+        CommandLine commandLine = new CommandLine(currencyRate);
         commandLine.parseArgs(args);
+        System.out.println(currencyRate.getCurrencyInputAmount());
+        System.out.println(currencyRate.getInputCurrency());
+        System.out.println(currencyRate.getExchangeDate());
         if (commandLine.isUsageHelpRequested()); {
             commandLine.usage(System.out);
         }
-        Table table = getTable("http://api.nbp.pl/api/exchangerates/rates/A/EUR");
+        Table table = getTable("https://api.exchangeratesapi.io/latest");
         System.out.println(table.toString());
 
     }
