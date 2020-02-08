@@ -10,7 +10,7 @@ import java.util.HashMap;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Table {
+public class SimpleTable {
 
     @Key
     private String base;

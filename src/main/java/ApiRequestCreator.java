@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UrlBuilder {
+public class ApiRequestCreator {
 
     private final StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/");
+
+    public ApiRequestCreator() {
+    }
 
     private void setDate(LocalDate date) {
 
@@ -39,7 +42,7 @@ public class UrlBuilder {
     private void setOutputCurrency(CurrencySymbol outputCurrency) {
 
         if (outputCurrency == null) {
-            stringBuilder.append("?base=");
+            stringBuilder.append("?symbols=");
             stringBuilder.append(outputCurrency.toString());
         }
 
@@ -57,9 +60,9 @@ public class UrlBuilder {
 
     }
 
-    private String buildUrl(LocalDate date,
-                            CurrencySymbol inputCurrency,
-                            CurrencySymbol outputCurrency) {
+    private String getRequest(LocalDate date,
+                              CurrencySymbol inputCurrency,
+                              CurrencySymbol outputCurrency) {
 
         setDate(date);
         setInputCurrency(inputCurrency);
@@ -68,9 +71,9 @@ public class UrlBuilder {
 
     }
 
-    private String buildUrl(LocalDate date,
-                            CurrencySymbol inputCurrency,
-                            List<CurrencySymbol> outputCurrencies) {
+    private String getRequest(LocalDate date,
+                              CurrencySymbol inputCurrency,
+                              List<CurrencySymbol> outputCurrencies) {
 
         setDate(date);
         setInputCurrency(inputCurrency);
@@ -79,10 +82,10 @@ public class UrlBuilder {
 
     }
 
-    private String buildUrl(LocalDate startDate,
-                            LocalDate endDate,
-                            CurrencySymbol inputCurrency,
-                            CurrencySymbol outputCurrency) {
+    private String getRequest(LocalDate startDate,
+                              LocalDate endDate,
+                              CurrencySymbol inputCurrency,
+                              CurrencySymbol outputCurrency) {
 
         setHistory(startDate, endDate);
         setInputCurrency(inputCurrency);
@@ -91,7 +94,7 @@ public class UrlBuilder {
 
     }
 
-    private String buildUrl(LocalDate startDate, LocalDate endDate, CurrencySymbol inputCurrency, List<CurrencySymbol> outputCurrencies) {
+    private String getRequest(LocalDate startDate, LocalDate endDate, CurrencySymbol inputCurrency, List<CurrencySymbol> outputCurrencies) {
         setHistory(startDate, endDate);
         setInputCurrency(inputCurrency);
         setOutputCurrency(outputCurrencies);
