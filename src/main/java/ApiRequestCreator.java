@@ -22,10 +22,8 @@ public class ApiRequestCreator {
     private void setHistory(LocalDate startDate, LocalDate endDate) {
 
         if (startDate != null && endDate != null) {
-            stringBuilder.append("history?start_at=");
-            stringBuilder.append(startDate);
-            stringBuilder.append("&end_at=");
-            stringBuilder.append(endDate);
+            stringBuilder.append("");
+
         }
 
     }
@@ -33,8 +31,7 @@ public class ApiRequestCreator {
     private void setInputCurrency(CurrencySymbol inputCurrency) {
 
         if (inputCurrency == null) {
-            stringBuilder.append("?base=");
-            stringBuilder.append(inputCurrency.toString());
+
         }
 
     }

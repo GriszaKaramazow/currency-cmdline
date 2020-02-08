@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ExchangeRateSingle implements Runnable{
 
     @Option(names = {"-a", "--amount"}, paramLabel = " ", description = "amount of money to exchange")
-    private Double currencyInputAmount = 1d;
+    private Double baseAmount = 1d;
 
     @Option(names = {"-f", "--from"}, defaultValue = "EUR", description = "Select input currency. Default: ${DEFAULT-VALUE}")
     private CurrencySymbol inputCurrency = CurrencySymbol.EUR;
@@ -45,15 +45,11 @@ public class ExchangeRateSingle implements Runnable{
         stringBuilder.append(exchangeDate);
         stringBuilder.append("?base=");
         stringBuilder.append(inputCurrency);
-
-        if (outputCurrencies != null) {
-            stringBuilder.append("&symbols=");
-            String symbols = outputCurrencies.stream()
-                    .map(currencySymbol -> currencySymbol.toString())
-                    .collect(Collectors.joining(","));
-            stringBuilder.append(symbols);
-        }
-
+        stringBuilder.append("&symbols=");
+        String symbols = outputCurrencies.stream()
+                .map(currencySymbol -> currencySymbol.toString())
+                .collect(Collectors.joining(","));
+        stringBuilder.append(symbols);
         return stringBuilder.toString();
 
     }
@@ -68,9 +64,9 @@ public class ExchangeRateSingle implements Runnable{
 
     private void printRate(String outputCurrency, Double rate) {
 
-        System.out.print(currencyInputAmount + " ");
+        System.out.print(baseAmount + " ");
         System.out.print(inputCurrency + " = ");
-        System.out.print(currencyInputAmount*rate + " ");
+        System.out.print(baseAmount *rate + " ");
         System.out.println(outputCurrency);
 
     }
