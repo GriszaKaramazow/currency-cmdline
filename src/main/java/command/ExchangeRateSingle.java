@@ -9,6 +9,8 @@ import picocli.CommandLine.Option;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Command(name = "single")
@@ -20,8 +22,8 @@ public class ExchangeRateSingle implements Runnable{
     @Option(names = {"-f", "--from"}, defaultValue = "EUR", description = "Select input currency. Default: ${DEFAULT-VALUE}")
     private CurrencySymbol inputCurrency = CurrencySymbol.EUR;
 
-    @Option(names = {"-t", "--to"}, description = "select output currency")
-    private CurrencySymbol outputCurrency;
+    @Option(names = {"-t", "--to"}, arity = "1..*", description = "select output currency")
+    private List<CurrencySymbol> outputCurrencies;
 
     @Option(names = {"-d", "--date"}, description = "date of money exchange. Default: today (${DEFAULT-VALUE})")
     private LocalDate exchangeDate = LocalDate.now();
@@ -29,6 +31,7 @@ public class ExchangeRateSingle implements Runnable{
     @SneakyThrows
     @Override
     public void run() {
+
         TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
         tableBuilder.getRequest();
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
@@ -41,11 +44,14 @@ public class ExchangeRateSingle implements Runnable{
         StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/");
         stringBuilder.append(exchangeDate);
         stringBuilder.append("?base=");
-        stringBuilder.append(inputCurrency.toString());
+        stringBuilder.append(inputCurrency);
 
-        if (inputCurrency != null) {
+        if (outputCurrencies != null) {
             stringBuilder.append("&symbols=");
-            stringBuilder.append(outputCurrency.toString());
+            String symbols = outputCurrencies.stream()
+                    .map(currencySymbol -> currencySymbol.toString())
+                    .collect(Collectors.joining(","));
+            stringBuilder.append(symbols);
         }
 
         return stringBuilder.toString();
