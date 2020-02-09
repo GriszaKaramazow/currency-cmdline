@@ -1,6 +1,6 @@
 package command;
 
-import file.PrintToTXT;
+import file.PrintToFile;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import model.CurrencySymbol;
@@ -40,6 +40,7 @@ public class ExchangeRateHistory implements Runnable{
     @SneakyThrows
     @Override
     public void run() {
+
         System.out.println("ExchangeRateHistory");
 
         String httpAddress = buildHttpRequestAddress();
@@ -49,8 +50,10 @@ public class ExchangeRateHistory implements Runnable{
         printExchangeRateTable(historyTable);
         printExchangeRareTable(historyTable);
 
-        PrintToTXT printToTXT = new PrintToTXT();
-        printToTXT.printToTXT("d:/test.txt", createExchangeRateTable(historyTable));
+        PrintToFile printToFile = new PrintToFile(createExchangeRateTable(historyTable));
+        printToFile.printToTXT("d:/test.txt");
+        printToFile.printToCSV("d:/test.csv");
+
     }
 
     private String buildHttpRequestAddress() {

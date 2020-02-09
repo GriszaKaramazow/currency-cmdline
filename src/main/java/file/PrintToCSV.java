@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PrintToTXT {
+public class PrintToCSV {
 
     public void printToTXT(String filePath, List<List<String>> fileContent) {
 
@@ -33,5 +33,4 @@ public class PrintToTXT {
         }
 
     }
-
 }
