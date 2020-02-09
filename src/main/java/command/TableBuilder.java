@@ -25,11 +25,15 @@ public class TableBuilder {
         this.httpRequestAddress = httpRequestAddress;
     }
 
-    public void getRequest() throws IOException {
+    public void getExchangeRatesFromApi() {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
                 (HttpRequest request) -> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));});
-        httpRequest = requestFactory.buildGetRequest(new GenericUrl(httpRequestAddress));
+        try {
+            httpRequest = requestFactory.buildGetRequest(new GenericUrl(httpRequestAddress));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public SimpleTable getSimpleTable() {

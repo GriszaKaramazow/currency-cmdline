@@ -1,5 +1,6 @@
 package command;
 
+import file.PrintToTXT;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import model.CurrencySymbol;
@@ -41,15 +42,18 @@ public class ExchangeRateHistory implements Runnable{
     public void run() {
         System.out.println("ExchangeRateHistory");
 
-        System.out.println(generateRequestAddress());
-        TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
-        tableBuilder.getRequest();
-        HistoryTable historyTable= tableBuilder.getHistoryTable();
+        String httpAddress = buildHttpRequestAddress();
+        TableBuilder tableBuilder = new TableBuilder(httpAddress);
+        tableBuilder.getExchangeRatesFromApi();
+        HistoryTable historyTable = tableBuilder.getHistoryTable();
         printExchangeRateTable(historyTable);
         printExchangeRareTable(historyTable);
+
+        PrintToTXT printToTXT = new PrintToTXT();
+        printToTXT.printToTXT("d:/test.txt", createExchangeRateTable(historyTable));
     }
 
-    private String generateRequestAddress() {
+    private String buildHttpRequestAddress() {
 
         StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/history?start_at=");
         stringBuilder.append(startDate);

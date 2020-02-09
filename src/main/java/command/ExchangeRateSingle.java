@@ -33,7 +33,7 @@ public class ExchangeRateSingle implements Runnable{
     public void run() {
 
         TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
-        tableBuilder.getRequest();
+        tableBuilder.getExchangeRatesFromApi();
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
         printExchangeRateTable(simpleTable);
 
