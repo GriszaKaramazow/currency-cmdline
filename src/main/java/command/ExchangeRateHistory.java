@@ -8,8 +8,10 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Getter
@@ -44,6 +46,7 @@ public class ExchangeRateHistory implements Runnable{
         tableBuilder.getRequest();
         HistoryTable historyTable= tableBuilder.getHistoryTable();
         printExchangeRateTable(historyTable);
+        printExchangeRareTable(historyTable);
     }
 
     private String generateRequestAddress() {
@@ -62,15 +65,92 @@ public class ExchangeRateHistory implements Runnable{
         return stringBuilder.toString();
 
     }
+    
+    private void printExchangeRareTable(HistoryTable historyTable) {
+        List<List<String>> exchangeRareTable = createExchangeRateTable(historyTable);
 
+        for (List<String> line : exchangeRareTable) {
+            for (String cell : line) {
+                System.out.print(cell);
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
+    private List<String> createTitleRowForExchangeRateTable(HistoryTable historyTable) {
+
+        List<String> titleRow = new ArrayList<>();
+        titleRow.add("Date");
+
+        List<String> currencies = getCurrenciesSymbolsAsSortedList(historyTable);
+
+        for (String currency : currencies) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(inputCurrency);
+            stringBuilder.append("/");
+            stringBuilder.append(currency);
+            titleRow.add(stringBuilder.toString());
+        }
+
+        return titleRow;
+
+    }
+
+    private List<List<String>> createExchangeRateTable(HistoryTable historyTable) {
+
+        List<List<String>> exchangeRateTable = new ArrayList<>();
+        exchangeRateTable.add(createTitleRowForExchangeRateTable(historyTable));
+
+        List<String> dates = getDatesAsSortedList(historyTable);
+
+        for (String date : dates) {
+            TreeMap<String, Double> ratesForDate = historyTable.getRates().get(date);
+            exchangeRateTable.add(getRatesAsList(date, ratesForDate));
+        }
+        return exchangeRateTable;
+    }
+
+    private List<String> getRatesAsList(String date, TreeMap<String, Double> rates) {
+
+        List<String> tableLine = new ArrayList<>();
+        tableLine.add(date);
+
+        List<String> currenciesList = new ArrayList<>(rates.keySet());
+
+        for (String currency : currenciesList) {
+            tableLine.add(String.valueOf(rates.get(currency)));
+        }
+
+        return tableLine;
+
+    }
+
+    private List<String> getCurrenciesSymbolsAsSortedList(HistoryTable historyTable) {
+
+        TreeMap<String, Double> rates = historyTable.getRates().get(historyTable.getRates().firstKey());
+        List<String> currencies = new ArrayList<>(rates.keySet());
+        Collections.sort(currencies);
+        return currencies;
+
+    }
+
+    private List<String> getDatesAsSortedList(HistoryTable historyTable) {
+
+        List<String> dates = new ArrayList<>(historyTable.getRates().keySet());
+        Collections.sort(dates);
+        return dates;
+
+    }
 
     private void printExchangeRateTable(HistoryTable historyTable) {
-        HashMap<String, HashMap<String, Double>> outerHashMap = historyTable.getRates();
+
+        TreeMap<String, TreeMap<String, Double>> outerHashMap = historyTable.getRates();
         outerHashMap.forEach((key, value) -> printDateAndRate(key, value));
 
     }
 
-    private void printDateAndRate(String date, HashMap<String, Double> innerHashMap) {
+    private void printDateAndRate(String date, TreeMap<String, Double> innerHashMap) {
         System.out.print(date + "\t\t");
         innerHashMap.forEach((key, value) -> printRate(key, value));
         System.out.println();
@@ -80,13 +160,9 @@ public class ExchangeRateHistory implements Runnable{
 
         System.out.print(baseAmount + " ");
         System.out.print(inputCurrency + " = ");
-        System.out.print(baseAmount *rate + " ");
+        System.out.print(baseAmount * rate + " ");
         System.out.print(outputCurrency + "\t\t");
 
     }
-
-
-
-
-
+    
 }

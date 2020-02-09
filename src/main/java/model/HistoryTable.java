@@ -3,7 +3,7 @@ package model;
 import com.google.api.client.util.Key;
 import lombok.*;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 @Getter
 @Setter
@@ -19,6 +19,6 @@ public class HistoryTable {
     private String date;
 
     @Key
-    private HashMap<String, HashMap<String, Double>> rates;
+    private TreeMap<String, TreeMap<String, Double>> rates;
 
 }
