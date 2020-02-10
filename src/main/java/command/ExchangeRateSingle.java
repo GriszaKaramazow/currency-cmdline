@@ -22,10 +22,10 @@ public class ExchangeRateSingle implements Runnable{
     @Option(names = {"-f", "--from"}, defaultValue = "EUR", description = "Select input currency. Default: ${DEFAULT-VALUE}")
     private CurrencySymbol inputCurrency = CurrencySymbol.EUR;
 
-    @Option(names = {"-t", "--to"}, arity = "1..*", description = "select output currency")
+    @Option(names = {"-t", "--to"}, arity = "1..*", description = "Select output currency/currencies")
     private List<CurrencySymbol> outputCurrencies;
 
-    @Option(names = {"-d", "--date"}, description = "date of money exchange. Default: today (${DEFAULT-VALUE})")
+    @Option(names = {"-d", "--date"}, description = "Date of money exchange. Default: today (${DEFAULT-VALUE})")
     private LocalDate exchangeDate = LocalDate.now();
 
     @SneakyThrows
@@ -35,6 +35,7 @@ public class ExchangeRateSingle implements Runnable{
         TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
         tableBuilder.getExchangeRatesFromApi();
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
+        simpleTable.setBaseAmount(baseAmount);
         printExchangeRateTable(simpleTable);
 
     }

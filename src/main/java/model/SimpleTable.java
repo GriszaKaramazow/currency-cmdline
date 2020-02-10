@@ -21,4 +21,6 @@ public class SimpleTable {
     @Key
     private HashMap<String, Double> rates;
 
+    private double baseAmount;
+
 }

@@ -1,6 +1,7 @@
 package command;
 
-import file.PrintToFile;
+import print.PrintToConsole;
+import print.PrintToFile;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import model.CurrencySymbol;
@@ -9,10 +10,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -34,25 +32,29 @@ public class ExchangeRateHistory implements Runnable{
     @Option(names = {"-e", "--end"}, description = "")
     private LocalDate endDate = LocalDate.now();
 
-    @Option(names = {"-o", "--output"}, description = "Output file. Default: print to console")
+    @Option(names = {"-o", "--output"}, description = "Output file (txt, csv, xls or xlsx). Default: print to console")
     private String outputData;
+
+    private final List<String> availableFileExtensions = Arrays.asList("txt", "csv", "xls", "xlsx");
 
     @SneakyThrows
     @Override
     public void run() {
 
-        System.out.println("ExchangeRateHistory");
-
         String httpAddress = buildHttpRequestAddress();
         TableBuilder tableBuilder = new TableBuilder(httpAddress);
         tableBuilder.getExchangeRatesFromApi();
         HistoryTable historyTable = tableBuilder.getHistoryTable();
-        printExchangeRateTable(historyTable);
+        historyTable.setBaseAmount(baseAmount);
+
+        PrintToConsole printToConsole = new PrintToConsole(historyTable);
+        printToConsole.printExchangeRateTable();
         printExchangeRareTable(historyTable);
 
+
         PrintToFile printToFile = new PrintToFile(createExchangeRateTable(historyTable));
-        printToFile.printToTXT("d:/test.txt");
-        printToFile.printToCSV("d:/test.csv");
+        printToFile.printToTXT("test.txt");
+        printToFile.printToCSV("test.csv");
 
     }
 
@@ -147,28 +149,6 @@ public class ExchangeRateHistory implements Runnable{
         List<String> dates = new ArrayList<>(historyTable.getRates().keySet());
         Collections.sort(dates);
         return dates;
-
-    }
-
-    private void printExchangeRateTable(HistoryTable historyTable) {
-
-        TreeMap<String, TreeMap<String, Double>> outerHashMap = historyTable.getRates();
-        outerHashMap.forEach((key, value) -> printDateAndRate(key, value));
-
-    }
-
-    private void printDateAndRate(String date, TreeMap<String, Double> innerHashMap) {
-        System.out.print(date + "\t\t");
-        innerHashMap.forEach((key, value) -> printRate(key, value));
-        System.out.println();
-    }
-
-    private void printRate(String outputCurrency, Double rate) {
-
-        System.out.print(baseAmount + " ");
-        System.out.print(inputCurrency + " = ");
-        System.out.print(baseAmount * rate + " ");
-        System.out.print(outputCurrency + "\t\t");
 
     }
     

@@ -21,4 +21,6 @@ public class HistoryTable {
     @Key
     private TreeMap<String, TreeMap<String, Double>> rates;
 
+    private double baseAmount;
+
 }
