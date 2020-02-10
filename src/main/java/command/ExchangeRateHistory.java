@@ -1,6 +1,7 @@
 package command;
 
 import print.PrintToConsole;
+import print.PrintToExcel;
 import print.PrintToFile;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -53,8 +54,12 @@ public class ExchangeRateHistory implements Runnable{
 
 
         PrintToFile printToFile = new PrintToFile(createExchangeRateTable(historyTable));
-        printToFile.printToTXT("test.txt");
-        printToFile.printToCSV("test.csv");
+        printToFile.saveAsTXT("test.txt");
+        printToFile.saveAsCSV("test.csv");
+
+        PrintToExcel printToExcel = new PrintToExcel(createExchangeRateTable(historyTable));
+        printToExcel.saveAsXLS("test.xls");
+        printToExcel.saveAsXLSX("test.xlsx");
 
     }
 
