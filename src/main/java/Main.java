@@ -11,27 +11,21 @@ import java.io.IOException;
             ExchangeRateSingle.class,
             ExchangeRateHistory.class}
 )
-public class Main implements Runnable {
+public class Main {
 
     // VERSION
-    @Option(names = {"-v", "--version"}, versionHelp = true, description = "Display version info")
+    @Option(names = {"-v", "--version"}, versionHelp = true, description = "Displays version info")
     boolean versionInfoRequested;
 
     // HELP
-    @Option(names = {"?", "-h", "--help"}, usageHelp = true)
+    @Option(names = {"?", "-h", "--help"}, usageHelp = true, description = "Displays help")
     private boolean usageHelpRequested;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         CommandLine commandLine = new CommandLine(new Main());
         commandLine.execute(args);
 
     }
 
-    @Override
-    public void run() {
-
-        System.out.println("Main");
-
-    }
 }
