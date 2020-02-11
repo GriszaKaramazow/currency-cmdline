@@ -1,5 +1,6 @@
 package command;
 
+import print.FileContent;
 import print.PrintToConsole;
 import print.PrintToExcel;
 import print.PrintToFile;
@@ -50,14 +51,15 @@ public class ExchangeRateHistory implements Runnable{
 
         PrintToConsole printToConsole = new PrintToConsole(historyTable);
         printToConsole.printExchangeRateTable();
-        printExchangeRareTable(historyTable);
 
+        FileContent fileContent = new FileContent(historyTable);
+        fileContent.prepareFileContent();
 
-        PrintToFile printToFile = new PrintToFile(createExchangeRateTable(historyTable));
+        PrintToFile printToFile = new PrintToFile(fileContent.getFileContent());
         printToFile.saveAsTXT("test.txt");
         printToFile.saveAsCSV("test.csv");
 
-        PrintToExcel printToExcel = new PrintToExcel(createExchangeRateTable(historyTable));
+        PrintToExcel printToExcel = new PrintToExcel(fileContent.getFileContent());
         printToExcel.saveAsXLS("test.xls");
         printToExcel.saveAsXLSX("test.xlsx");
 
@@ -80,8 +82,8 @@ public class ExchangeRateHistory implements Runnable{
 
     }
     
-    private void printExchangeRareTable(HistoryTable historyTable) {
-        List<List<String>> exchangeRareTable = createExchangeRateTable(historyTable);
+    private void printExchangeRareTable(FileContent fileContent) {
+        List<List<String>> exchangeRareTable = fileContent.getFileContent();
 
         for (List<String> line : exchangeRareTable) {
             for (String cell : line) {
@@ -92,69 +94,6 @@ public class ExchangeRateHistory implements Runnable{
         }
     }
 
-    private List<String> createTitleRowForExchangeRateTable(HistoryTable historyTable) {
 
-        List<String> titleRow = new ArrayList<>();
-        titleRow.add("Date");
-
-        List<String> currencies = getCurrenciesSymbolsAsSortedList(historyTable);
-
-        for (String currency : currencies) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(inputCurrency);
-            stringBuilder.append("/");
-            stringBuilder.append(currency);
-            titleRow.add(stringBuilder.toString());
-        }
-
-        return titleRow;
-
-    }
-
-    private List<List<String>> createExchangeRateTable(HistoryTable historyTable) {
-
-        List<List<String>> exchangeRateTable = new ArrayList<>();
-        exchangeRateTable.add(createTitleRowForExchangeRateTable(historyTable));
-
-        List<String> dates = getDatesAsSortedList(historyTable);
-
-        for (String date : dates) {
-            TreeMap<String, Double> ratesForDate = historyTable.getRates().get(date);
-            exchangeRateTable.add(getRatesAsList(date, ratesForDate));
-        }
-        return exchangeRateTable;
-    }
-
-    private List<String> getRatesAsList(String date, TreeMap<String, Double> rates) {
-
-        List<String> tableLine = new ArrayList<>();
-        tableLine.add(date);
-
-        List<String> currenciesList = new ArrayList<>(rates.keySet());
-
-        for (String currency : currenciesList) {
-            tableLine.add(String.valueOf(rates.get(currency)));
-        }
-
-        return tableLine;
-
-    }
-
-    private List<String> getCurrenciesSymbolsAsSortedList(HistoryTable historyTable) {
-
-        TreeMap<String, Double> rates = historyTable.getRates().get(historyTable.getRates().firstKey());
-        List<String> currencies = new ArrayList<>(rates.keySet());
-        Collections.sort(currencies);
-        return currencies;
-
-    }
-
-    private List<String> getDatesAsSortedList(HistoryTable historyTable) {
-
-        List<String> dates = new ArrayList<>(historyTable.getRates().keySet());
-        Collections.sort(dates);
-        return dates;
-
-    }
     
 }
