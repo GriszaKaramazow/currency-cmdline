@@ -12,8 +12,8 @@ import java.util.HashMap;
 @ToString
 public class SimpleTable {
 
-    @Key
-    private String base;
+    @Key("base")
+    private String baseCurrency;
 
     @Key
     private String date;

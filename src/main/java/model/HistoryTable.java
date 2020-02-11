@@ -12,8 +12,8 @@ import java.util.TreeMap;
 @ToString
 public class HistoryTable {
 
-    @Key
-    private String base;
+    @Key("base")
+    private String baseCurrency;
 
     @Key
     private String date;

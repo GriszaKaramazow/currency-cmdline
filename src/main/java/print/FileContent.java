@@ -23,7 +23,7 @@ public class FileContent {
 
         for (String currency : currencies) {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(historyTable.getBase());
+            stringBuilder.append(historyTable.getBaseCurrency());
             stringBuilder.append("/");
             stringBuilder.append(currency);
             titleRow.add(stringBuilder.toString());

@@ -3,7 +3,7 @@ package command;
 import print.FileContent;
 import print.PrintToConsole;
 import print.PrintToExcel;
-import print.PrintToFile;
+import print.PrintToText;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import model.CurrencySymbol;
@@ -37,7 +37,7 @@ public class ExchangeRateHistory implements Runnable{
     @Option(names = {"-o", "--output"}, description = "Output file (txt, csv, xls or xlsx). Default: print to console")
     private String outputData;
 
-    private final List<String> availableFileExtensions = Arrays.asList("txt", "csv", "xls", "xlsx");
+
 
     @SneakyThrows
     @Override
@@ -55,9 +55,9 @@ public class ExchangeRateHistory implements Runnable{
         FileContent fileContent = new FileContent(historyTable);
         fileContent.prepareFileContent();
 
-        PrintToFile printToFile = new PrintToFile(fileContent.getFileContent());
-        printToFile.saveAsTXT("test.txt");
-        printToFile.saveAsCSV("test.csv");
+        PrintToText printToText = new PrintToText(fileContent.getFileContent());
+        printToText.saveAsTXT("test.txt");
+        printToText.saveAsCSV("test.csv");
 
         PrintToExcel printToExcel = new PrintToExcel(fileContent.getFileContent());
         printToExcel.saveAsXLS("test.xls");
@@ -94,6 +94,25 @@ public class ExchangeRateHistory implements Runnable{
         }
     }
 
+    private boolean validateFileExtension(String filePath) {
 
+        List<String> supportedFileExtensions = Arrays.asList("txt", "csv", "xls", "xlsx");
+        String fileExtension = getFileExtension(filePath);
+        return supportedFileExtensions.contains(fileExtension);
+
+    }
+
+    private String getFileExtension(String filePath) {
+
+        String fileExtension = "";
+
+        int i = filePath.lastIndexOf('.');
+
+        if (i > 0) {
+            fileExtension = filePath.substring(i + 1);
+        }
+
+        return fileExtension;
+    }
     
 }

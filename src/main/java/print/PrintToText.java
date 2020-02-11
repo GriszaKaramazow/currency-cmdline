@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PrintToFile {
+public class PrintToText {
 
     private final List<List<String>> fileContent;
 
-    public PrintToFile(List<List<String>> fileContent) {
+    public PrintToText(List<List<String>> fileContent) {
 
         this.fileContent = fileContent;
 
@@ -47,7 +47,7 @@ public class PrintToFile {
 
         } catch (IOException exception) {
 
-            System.out.println("An error occurred");
+            System.out.println("An error occurred during saving " + filePath);
             exception.printStackTrace();
 
         }

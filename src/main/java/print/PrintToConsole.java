@@ -30,7 +30,7 @@ public class PrintToConsole {
     private void printRate(String outputCurrency, Double rate) {
 
         System.out.print(historyTable.getBaseAmount() + " ");
-        System.out.print(historyTable.getBase() + " = ");
+        System.out.print(historyTable.getBaseCurrency() + " = ");
         System.out.print(historyTable.getBaseAmount() * rate + " ");
         System.out.print(outputCurrency + "\t\t");
 
