@@ -1,7 +1,6 @@
 package command;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
 import model.CurrencySymbol;
 import model.SimpleTable;
 import picocli.CommandLine.Command;
@@ -13,29 +12,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Command(name = "single")
+@Command(name = "single",
+         usageHelpAutoWidth = true,
+         headerHeading = "exchange-rate single%n%n",
+         header = "Prints to console an exchange rate for a single date.%n%nSupported currencies:%n" +
+                "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
+                "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
+                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n",
+         optionListHeading = "%nOptions:%n")
+
 public class ExchangeRateSingle implements Runnable{
 
-    @Option(names = {"-a", "--amount"}, paramLabel = " ", description = "amount of money to exchange")
-    private Double baseAmount = 1d;
+    @Option(names = {"-h", "--help"},
+            usageHelp = true,
+            description = "Display help menu.")
+    private boolean usageHelpRequested;
 
-    @Option(names = {"-f", "--from"}, defaultValue = "EUR", description = "Select input currency. Default: ${DEFAULT-VALUE}")
-    private CurrencySymbol inputCurrency = CurrencySymbol.EUR;
+    @Option(names = {"-b", "--base"},
+            defaultValue = "EUR",
+            description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
+    private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
-    @Option(names = {"-t", "--to"}, arity = "1..*", description = "Select output currency/currencies")
-    private List<CurrencySymbol> outputCurrencies;
+    @Option(names = {"-q", "--quote"},
+            arity = "1..*",
+            description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
+    private List<CurrencySymbol> quoteCurrencies;
 
-    @Option(names = {"-d", "--date"}, description = "Date of money exchange. Default: today (${DEFAULT-VALUE})")
+    @Option(names = {"-d", "--date"},
+            description = "Enter a date of exchange rate in yyyy-MM-dd format. Default: ${DEFAULT-VALUE}.")
     private LocalDate exchangeDate = LocalDate.now();
 
-    @SneakyThrows
     @Override
     public void run() {
 
         TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
         tableBuilder.getExchangeRatesFromApi();
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
-        simpleTable.setBaseAmount(baseAmount);
         printExchangeRateTable(simpleTable);
 
     }
@@ -45,9 +57,9 @@ public class ExchangeRateSingle implements Runnable{
         StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/");
         stringBuilder.append(exchangeDate);
         stringBuilder.append("?base=");
-        stringBuilder.append(inputCurrency);
+        stringBuilder.append(baseCurrency);
         stringBuilder.append("&symbols=");
-        String symbols = outputCurrencies.stream()
+        String symbols = quoteCurrencies.stream()
                 .map(currencySymbol -> currencySymbol.toString())
                 .collect(Collectors.joining(","));
         stringBuilder.append(symbols);
@@ -63,12 +75,11 @@ public class ExchangeRateSingle implements Runnable{
 
     }
 
-    private void printRate(String outputCurrency, Double rate) {
+    private void printRate(String quoteCurrency, Double rate) {
 
-        System.out.print(baseAmount + " ");
-        System.out.print(inputCurrency + " = ");
-        System.out.print(baseAmount *rate + " ");
-        System.out.println(outputCurrency);
+        System.out.print(quoteCurrency + "/");
+        System.out.print(baseCurrency + ": ");
+        System.out.println(rate);
 
     }
 }

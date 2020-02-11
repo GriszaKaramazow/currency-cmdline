@@ -12,7 +12,7 @@ public class PrintToConsole {
         this.historyTable = historyTable;
     }
 
-    public void printExchangeRateTable() {
+    public void showOnScreen() {
 
         TreeMap<String, TreeMap<String, Double>> outerTreeMap = historyTable.getRates();
         outerTreeMap.forEach((key, value) -> printDateAndRate(key, value));
@@ -27,12 +27,11 @@ public class PrintToConsole {
 
     }
 
-    private void printRate(String outputCurrency, Double rate) {
+    private void printRate(String quoteCurrency, Double rate) {
 
-        System.out.print(historyTable.getBaseAmount() + " ");
-        System.out.print(historyTable.getBaseCurrency() + " = ");
-        System.out.print(historyTable.getBaseAmount() * rate + " ");
-        System.out.print(outputCurrency + "\t\t");
+        System.out.print(quoteCurrency + "/");
+        System.out.print(historyTable.getBaseCurrency() + ": ");
+        System.out.print(rate + "\t\t");
 
     }
 

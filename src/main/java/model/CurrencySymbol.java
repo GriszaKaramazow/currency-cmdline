@@ -2,38 +2,8 @@ package model;
 
 public enum CurrencySymbol {
 
-    EUR,
-    CAD,
-    HKD,
-    ISK,
-    PHP,
-    DKK,
-    HUF,
-    CZK,
-    AUD,
-    RON,
-    SEK,
-    IDR,
-    INR,
-    BRL,
-    RUB,
-    HRK,
-    JPY,
-    THB,
-    CHF,
-    SGD,
-    PLN,
-    BGN,
-    TRY,
-    CNY,
-    NOK,
-    NZD,
-    ZAR,
-    USD,
-    MXN,
-    ILS,
-    GBP,
-    KRW,
-    MYR
+    AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,
+    HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,
+    NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR
 
 }

@@ -7,9 +7,6 @@ import java.util.HashMap;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class SimpleTable {
 
     @Key("base")
@@ -20,7 +17,5 @@ public class SimpleTable {
 
     @Key
     private HashMap<String, Double> rates;
-
-    private double baseAmount;
 
 }

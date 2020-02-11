@@ -7,9 +7,6 @@ import java.util.TreeMap;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class HistoryTable {
 
     @Key("base")
@@ -20,7 +17,5 @@ public class HistoryTable {
 
     @Key
     private TreeMap<String, TreeMap<String, Double>> rates;
-
-    private double baseAmount;
 
 }

@@ -1,42 +1,62 @@
 package command;
 
-import print.*;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import model.CurrencySymbol;
 import model.HistoryTable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import print.FileContent;
+import print.PrintToConsole;
+import print.PrintToFile;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Command(name = "history")
+@Command(name = "history",
+        usageHelpAutoWidth = true,
+        headerHeading = "exchange-rate history%n%n",
+        header = "Prints to console an exchange rate for a single date.%n%nSupported currencies:%n" +
+                "@|fg(yellow) AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,|@%n" +
+                "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
+                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n ",
+        optionListHeading = "%nOptions:%n")
 public class ExchangeRateHistory implements Runnable{
 
-    @Option(names = {"-a", "--amount"}, description = "amount of money to exchange")
-    private Double baseAmount = 1d;
+    @Option(names = {"-h", "--help"},
+            usageHelp = true,
+            description = "Display help menu.")
+    private boolean usageHelpRequested;
 
-    @Option(names = {"-f", "--from"}, defaultValue = "EUR", description = "Select input currency. Default: ${DEFAULT-VALUE}")
-    private CurrencySymbol inputCurrency = CurrencySymbol.EUR;
+    @Option(names = {"-b", "--base"},
+            paramLabel = "SYMBOL",
+            defaultValue = "EUR",
+            description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
+    private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
-    @Option(names = {"-t", "--to"}, arity = "1..*", description = "select output currency")
-    private List<CurrencySymbol> outputCurrencies;
+    @Option(names = {"-q", "--quote"},
+            arity = "1..*",
+            paramLabel = "SYMBOL",
+            description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
+    private List<CurrencySymbol> quoteCurrencies;
 
-    @Option(names = {"-s", "--start"}, required = true, description = "date of money exchangeDefault: today (${DEFAULT-VALUE})")
+    @Option(names = {"-s", "--start"},
+            paramLabel = "DATE",
+            required = true,
+            description = "Enter a start date of a period in yyyy-MM-dd format. Required value.")
     private LocalDate startDate;
 
-    @Option(names = {"-e", "--end"}, description = "")
+    @Option(names = {"-e", "--end"},
+            paramLabel = "DATE",
+            description = "Enter an end date of a period in yyyy-MM-dd format. Default: ${DEFAULT-VALUE}.")
     private LocalDate endDate = LocalDate.now();
 
-    @Option(names = {"-o", "--output"}, description = "Output file (txt, csv, xls or xlsx). Default: print to console")
+    @Option(names = {"-f", "--file"},
+            paramLabel = "FILE",
+            description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use to print to console.")
     private String filePath;
 
-
-
-    @SneakyThrows
     @Override
     public void run() {
 
@@ -44,25 +64,16 @@ public class ExchangeRateHistory implements Runnable{
         TableBuilder tableBuilder = new TableBuilder(httpAddress);
         tableBuilder.getExchangeRatesFromApi();
         HistoryTable historyTable = tableBuilder.getHistoryTable();
-        historyTable.setBaseAmount(baseAmount);
 
         if (filePath == null) {
             PrintToConsole printToConsole = new PrintToConsole(historyTable);
-            printToConsole.printExchangeRateTable();
+            printToConsole.showOnScreen();
         } else {
             FileContent fileContent = new FileContent(historyTable);
             fileContent.prepareFileContent();
             PrintToFile printToFile = new PrintToFile(filePath, fileContent);
             printToFile.printFileContentToFile();
         }
-
-//        PrintToText printToText = new PrintToText(fileContent.getFileContent());
-//        printToText.saveAsTXT("test.txt");
-//        printToText.saveAsCSV("test.csv");
-//
-//        PrintToExcel printToExcel = new PrintToExcel(fileContent.getFileContent());
-//        printToExcel.saveAsXLS("test.xls");
-//        printToExcel.saveAsXLSX("test.xlsx");
 
     }
 
@@ -73,9 +84,9 @@ public class ExchangeRateHistory implements Runnable{
         stringBuilder.append("&end_at=");
         stringBuilder.append(endDate);
         stringBuilder.append("&base=");
-        stringBuilder.append(inputCurrency.toString());
+        stringBuilder.append(baseCurrency.toString());
         stringBuilder.append("&symbols=");
-        String symbols = outputCurrencies.stream()
+        String symbols = quoteCurrencies.stream()
                 .map(currencySymbol -> currencySymbol.toString())
                 .collect(Collectors.joining(","));
         stringBuilder.append(symbols);
