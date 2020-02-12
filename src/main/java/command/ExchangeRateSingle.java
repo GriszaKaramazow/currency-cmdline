@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Command(name = "single",
          usageHelpAutoWidth = true,
          headerHeading = "exchange-rate single%n%n",
-         header = "Prints to console an exchange rate for a single date.%n%nSupported currencies:%n" +
+         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
                 "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
                 "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
                 "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n",
@@ -29,25 +29,40 @@ public class ExchangeRateSingle implements Runnable{
     private boolean usageHelpRequested;
 
     @Option(names = {"-b", "--base"},
+            paramLabel = "<symbol>",
             defaultValue = "EUR",
             description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
     private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
     @Option(names = {"-q", "--quote"},
+            paramLabel = "<symbol>",
             arity = "1..*",
             description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
     private List<CurrencySymbol> quoteCurrencies;
 
     @Option(names = {"-d", "--date"},
-            description = "Enter a date of exchange rate in yyyy-MM-dd format. Default: ${DEFAULT-VALUE}.")
+            paramLabel = "<date>",
+            description = "Enter a date of exchange rate in yyyy-MM-dd format starting from 1999-01-04. Default: ${DEFAULT-VALUE}.")
     private LocalDate exchangeDate = LocalDate.now();
 
     @Override
     public void run() {
 
+        if(exchangeDate.isBefore(LocalDate.of(1999,01,04))) {
+            System.out.println("The exchange rate data are available from 1999-01-04");
+            return;
+        }
+
         TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
         tableBuilder.getExchangeRatesFromApi();
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
+
+        if (!validateDate(simpleTable)) {
+            System.out.println("Exchange rate unavailable for " + exchangeDate.toString());
+            System.out.println("A later exchange rate is available for " + simpleTable.getDate());
+            return;
+        }
+
         printExchangeRateTable(simpleTable);
 
     }
@@ -64,6 +79,14 @@ public class ExchangeRateSingle implements Runnable{
                 .collect(Collectors.joining(","));
         stringBuilder.append(symbols);
         return stringBuilder.toString();
+
+    }
+
+    private boolean validateDate(SimpleTable simpleTable) {
+
+        String receivedDateString = simpleTable.getDate();
+        LocalDate receivedDate = LocalDate.parse(receivedDateString);
+        return receivedDate.equals(exchangeDate);
 
     }
 

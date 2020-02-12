@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Command(name = "history",
         usageHelpAutoWidth = true,
         headerHeading = "exchange-rate history%n%n",
-        header = "Prints to console an exchange rate for a single date.%n%nSupported currencies:%n" +
+        header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
                 "@|fg(yellow) AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,|@%n" +
                 "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
                 "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n ",
@@ -30,25 +30,25 @@ public class ExchangeRateHistory implements Runnable{
     private boolean usageHelpRequested;
 
     @Option(names = {"-b", "--base"},
-            paramLabel = "SYMBOL",
+            paramLabel = "<symbol>",
             defaultValue = "EUR",
             description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
     private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
     @Option(names = {"-q", "--quote"},
+            paramLabel = "<symbol>",
             arity = "1..*",
-            paramLabel = "SYMBOL",
             description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
     private List<CurrencySymbol> quoteCurrencies;
 
     @Option(names = {"-s", "--start"},
-            paramLabel = "DATE",
+            paramLabel = "<date>",
             required = true,
-            description = "Enter a start date of a period in yyyy-MM-dd format. Required value.")
+            description = "Enter a start date of a period in yyyy-MM-dd format starting from 1999-01-04. Required value.")
     private LocalDate startDate;
 
     @Option(names = {"-e", "--end"},
-            paramLabel = "DATE",
+            paramLabel = "<date>",
             description = "Enter an end date of a period in yyyy-MM-dd format. Default: ${DEFAULT-VALUE}.")
     private LocalDate endDate = LocalDate.now();
 

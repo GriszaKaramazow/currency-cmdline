@@ -1,5 +1,6 @@
 import command.ExchangeRateHistory;
 import command.ExchangeRateSingle;
+import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -20,8 +21,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        AnsiConsole.systemInstall();
         CommandLine commandLine = new CommandLine(new Main());
-        commandLine.execute(args);
+        commandLine.setCaseInsensitiveEnumValuesAllowed(true).execute(args);
+        AnsiConsole.systemUninstall();
 
     }
 
