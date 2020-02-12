@@ -48,7 +48,7 @@ public class ExchangeRateSingle implements Runnable{
     @Override
     public void run() {
 
-        if(exchangeDate.isBefore(LocalDate.of(1999,01,04))) {
+        if (exchangeDate.isBefore(LocalDate.of(1999,01,04))) {
             System.out.println("The exchange rate data are available from 1999-01-04");
             return;
         }

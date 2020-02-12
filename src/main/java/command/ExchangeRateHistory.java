@@ -60,6 +60,17 @@ public class ExchangeRateHistory implements Runnable{
     @Override
     public void run() {
 
+        if (startDate.isBefore(LocalDate.of(1999,01,04)) ||
+                endDate.isBefore(LocalDate.of(1999,01,04))) {
+            System.out.println("The exchange rate data are available from 1999-01-04");
+            return;
+        }
+
+        if (startDate.isAfter(endDate)) {
+            System.out.println("'form " + startDate + " to " + endDate + "' is invalid period of time");
+            return;
+        }
+
         String httpAddress = buildHttpRequestAddress();
         TableBuilder tableBuilder = new TableBuilder(httpAddress);
         tableBuilder.getExchangeRatesFromApi();
