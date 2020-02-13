@@ -1,10 +1,8 @@
 package print;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PrintToText {
 
@@ -16,39 +14,36 @@ public class PrintToText {
 
     }
 
-    public void saveAsTXT(String filePath) {
+    public boolean saveAsTXT(String filePath) {
 
-        saveAsTextFile(filePath, "\t");
-
-    }
-
-    public void saveAsCSV(String filePath) {
-
-        saveAsTextFile(filePath, ",");
+        return saveAsTextFile(filePath, "\t");
 
     }
 
-    public void saveAsTextFile(String filePath, String delimiter) {
+    public boolean saveAsCSV(String filePath) {
+
+        return saveAsTextFile(filePath, ",");
+
+    }
+
+    public boolean saveAsTextFile(String filePath, String delimiter) {
 
         try {
 
-            File myFile = new File(filePath);
-            myFile.createNewFile();
             FileWriter fileWriter = new FileWriter(filePath);
 
             for (List<String> fileLine : fileContent) {
-                String lineText = fileLine.stream()
-                        .map(text -> text.toString())
-                        .collect(Collectors.joining(delimiter));
+                String lineText = String.join(delimiter, fileLine);
                 fileWriter.write(lineText + "\n");
             }
 
             fileWriter.close();
+            return true;
 
         } catch (IOException exception) {
 
-            System.out.println("An error occurred during saving " + filePath);
-            exception.printStackTrace();
+            System.out.println("An error occurred during saving data to file");
+            return false;
 
         }
 

@@ -5,11 +5,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,19 +20,19 @@ public class PrintToExcel {
         this.fileContent = fileContent;
     }
 
-    public void saveAsXLS(String filePath) {
+    public boolean saveAsXLS(String filePath) {
 
-        saveAsExcel(new HSSFWorkbook(), filePath);
-
-    }
-
-    public void saveAsXLSX(String filePath) {
-
-        saveAsExcel(new XSSFWorkbook(), filePath);
+        return saveAsExcel(new HSSFWorkbook(), filePath);
 
     }
 
-    private void saveAsExcel(Workbook workbook, String filePath) {
+    public boolean saveAsXLSX(String filePath) {
+
+        return saveAsExcel(new XSSFWorkbook(), filePath);
+
+    }
+
+    private boolean saveAsExcel(Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
 
@@ -54,7 +51,7 @@ public class PrintToExcel {
                 } else if (columnCounter == 1) {
                     cell.setCellValue(LocalDate.parse(field));
                 } else {
-                    cell.setCellValue(Double.valueOf(field));
+                    cell.setCellValue(Double.parseDouble(field));
                 }
 
             }
@@ -62,14 +59,15 @@ public class PrintToExcel {
         }
 
         try {
-            File myFile = new File(filePath);
-            myFile.createNewFile();
+
             FileOutputStream outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return true;
+
+        } catch (IOException exception) {
+
+            return false;
+
         }
 
     }

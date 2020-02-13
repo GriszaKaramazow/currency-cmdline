@@ -11,9 +11,11 @@ public class PrintToFile {
     private String fileExtension;
 
     public PrintToFile(String filePath, FileContent fileContent) {
+
         this.filePath = filePath;
         setFileExtension();
         this.fileContent = fileContent;
+
     }
 
     public void printFileContentToFile() {
@@ -26,39 +28,54 @@ public class PrintToFile {
 
             case "txt":
                 PrintToText printToTXT = new PrintToText(fileContent.getFileContent());
-                printToTXT.saveAsTXT(filePath);
+                printResult(printToTXT.saveAsTXT(filePath));
                 break;
 
             case "csv":
                 PrintToText printToCSV = new PrintToText(fileContent.getFileContent());
-                printToCSV.saveAsCSV(filePath);
+                printResult(printToCSV.saveAsCSV(filePath));
                 break;
 
             case "xls":
                 PrintToExcel printToXLS = new PrintToExcel(fileContent.getFileContent());
-                printToXLS.saveAsXLS(filePath);
+                printResult(printToXLS.saveAsXLS(filePath));
                 break;
 
             case "xlsx":
                 PrintToExcel printToXLSX = new PrintToExcel(fileContent.getFileContent());
-                printToXLSX.saveAsXLSX(filePath);
+                printResult(printToXLSX.saveAsXLSX(filePath));
                 break;
 
             default:
-                System.out.println("Unsupported file format (" + fileExtension + ")");
+                System.out.println(fileExtension + " is unsupported file format.");
 
         }
 
     }
 
     private boolean validateFilePath() {
+
         File myFile = new File(filePath);
+
         try {
+
             myFile.createNewFile();
             return true;
+
         } catch (IOException exception) {
-            System.out.println("Inappropiate file path " + filePath);
+
+            System.out.println("Inappropriate file path '" + filePath + "'.");
             return false;
+
+        }
+    }
+
+    private void printResult(boolean result) {
+
+        if (result) {
+            System.out.println("The data have been saved successfully to '" + filePath + "'.");
+        } else {
+            System.out.println("An error occurred during saving the data to file.");
         }
     }
 
@@ -74,4 +91,5 @@ public class PrintToFile {
         this.fileExtension = fileExtension;
 
     }
+
 }
