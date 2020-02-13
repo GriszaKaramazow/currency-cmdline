@@ -1,13 +1,13 @@
-package command;
+package pl.connectis.command;
 
 import lombok.Getter;
-import model.CurrencySymbol;
-import model.HistoryTable;
+import pl.connectis.model.CurrencySymbol;
+import pl.connectis.model.HistoryTable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import print.FileContent;
-import print.PrintToConsole;
-import print.PrintToFile;
+import pl.connectis.print.FileContent;
+import pl.connectis.print.PrintToConsole;
+import pl.connectis.print.PrintToFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,11 +16,10 @@ import java.util.stream.Collectors;
 @Getter
 @Command(name = "history",
         usageHelpAutoWidth = true,
-        headerHeading = "exchange-rate history%n%n",
+        headerHeading = "history%n%n",
         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
-                "@|fg(yellow) AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,|@%n" +
-                "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
-                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n ",
+                "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, %n" +
+                "ISK, JPY, KRW, MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n ",
         optionListHeading = "%nOptions:%n")
 public class ExchangeRateHistory implements Runnable{
 
@@ -38,6 +37,7 @@ public class ExchangeRateHistory implements Runnable{
     @Option(names = {"-q", "--quote"},
             paramLabel = "<symbol>",
             arity = "1..*",
+            required = true,
             description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
     private List<CurrencySymbol> quoteCurrencies;
 
@@ -60,14 +60,14 @@ public class ExchangeRateHistory implements Runnable{
     @Override
     public void run() {
 
-        if (startDate.isBefore(LocalDate.of(1999,01,04)) ||
-                endDate.isBefore(LocalDate.of(1999,01,04))) {
-            System.out.println("The exchange rate data are available from 1999-01-04");
+        if (startDate.isBefore(LocalDate.of(1999,1,4)) ||
+                endDate.isBefore(LocalDate.of(1999,1,4))) {
+            System.out.println("@|fg(yellow)The exchange rate data are available from 1999-01-04|@");
             return;
         }
 
         if (startDate.isAfter(endDate)) {
-            System.out.println("'form " + startDate + " to " + endDate + "' is invalid period of time");
+            System.out.println("@|fg(yellow)'form " + startDate + " to " + endDate + "' is invalid period of time|@");
             return;
         }
 
@@ -98,25 +98,11 @@ public class ExchangeRateHistory implements Runnable{
         stringBuilder.append(baseCurrency.toString());
         stringBuilder.append("&symbols=");
         String symbols = quoteCurrencies.stream()
-                .map(currencySymbol -> currencySymbol.toString())
+                .map(Enum::toString)
                 .collect(Collectors.joining(","));
         stringBuilder.append(symbols);
         return stringBuilder.toString();
 
     }
-    
-    private void printExchangeRareTable(FileContent fileContent) {
-        List<List<String>> exchangeRareTable = fileContent.getFileContent();
 
-        for (List<String> line : exchangeRareTable) {
-            for (String cell : line) {
-                System.out.print(cell);
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-    }
-
-
-    
 }

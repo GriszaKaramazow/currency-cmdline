@@ -1,6 +1,6 @@
-package print;
+package pl.connectis.print;
 
-import model.HistoryTable;
+import pl.connectis.model.HistoryTable;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package command;
+package pl.connectis.command;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -8,8 +8,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import model.HistoryTable;
-import model.SimpleTable;
+import pl.connectis.model.HistoryTable;
+import pl.connectis.model.SimpleTable;
 
 import java.io.IOException;
 

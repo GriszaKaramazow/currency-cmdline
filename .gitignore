@@ -8,9 +8,9 @@ target/
 *.iml
 *.ipr
 
-# Compiled class print
+# Compiled class pl.connectis.print
 *.class
 
-# Log print
+# Log pl.connectis.print
 *.log
 

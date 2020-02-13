@@ -1,8 +1,10 @@
-import command.ExchangeRateHistory;
-import command.ExchangeRateSingle;
+package pl.connectis;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.command.ExchangeRateHistory;
+import pl.connectis.command.ExchangeRateSingle;
 
 
 @Command(name = "exchange-rate",
@@ -10,7 +12,7 @@ import picocli.CommandLine.Option;
             ExchangeRateSingle.class,
             ExchangeRateHistory.class}
 )
-public class Main {
+public class Main implements Runnable {
 
 
     @Option(names = {"-h", "--help"},
@@ -25,4 +27,8 @@ public class Main {
 
     }
 
+    @Override
+    public void run() {
+        System.out.println("Main class");
+    }
 }

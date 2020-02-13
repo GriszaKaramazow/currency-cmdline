@@ -1,4 +1,4 @@
-package model;
+package pl.connectis.model;
 
 public enum CurrencySymbol {
 

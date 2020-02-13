@@ -1,4 +1,4 @@
-package print;
+package pl.connectis.print;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class PrintToFile {
                 break;
 
             default:
-                System.out.println(fileExtension + " is unsupported file format.");
+                System.out.println("@|fg(yellow)" + fileExtension + " is unsupported file format.|@");
 
         }
 
@@ -64,7 +64,7 @@ public class PrintToFile {
 
         } catch (IOException exception) {
 
-            System.out.println("Inappropriate file path '" + filePath + "'.");
+            System.out.println("@|fg(yellow)Inappropriate file path '" + filePath + "'.|@");
             return false;
 
         }
@@ -75,7 +75,7 @@ public class PrintToFile {
         if (result) {
             System.out.println("The data have been saved successfully to '" + filePath + "'.");
         } else {
-            System.out.println("An error occurred during saving the data to file.");
+            System.out.println("@|fg(yellow)An error occurred during saving the data to file.|@");
         }
     }
 

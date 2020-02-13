@@ -1,6 +1,6 @@
 # currency-cmdline
 
-This simple command line app generates currencies exchange rate tables for selected period of time.
+This simple pl.connectis.command line app generates currencies exchange rate tables for selected period of time.
 
 ## getting started
 

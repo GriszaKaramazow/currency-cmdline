@@ -1,4 +1,4 @@
-package print;
+package pl.connectis.print;
 
 import java.io.FileWriter;
 import java.io.IOException;

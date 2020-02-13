@@ -1,10 +1,10 @@
-package command;
+package pl.connectis.command;
 
 import lombok.Getter;
-import model.CurrencySymbol;
-import model.SimpleTable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.model.CurrencySymbol;
+import pl.connectis.model.SimpleTable;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -37,6 +37,7 @@ public class ExchangeRateSingle implements Runnable{
     @Option(names = {"-q", "--quote"},
             paramLabel = "<symbol>",
             arity = "1..*",
+            required = true,
             description = "Enter symbols of quote currencies separated by space (ie. -q EUR USD GBP). Required value.")
     private List<CurrencySymbol> quoteCurrencies;
 
@@ -48,8 +49,8 @@ public class ExchangeRateSingle implements Runnable{
     @Override
     public void run() {
 
-        if (exchangeDate.isBefore(LocalDate.of(1999,01,04))) {
-            System.out.println("The exchange rate data are available from 1999-01-04");
+        if (exchangeDate.isBefore(LocalDate.of(1999,1,4))) {
+            System.out.println("@|fg(yellow)The exchange rate data are available from 1999-01-04|@");
             return;
         }
 
@@ -58,9 +59,7 @@ public class ExchangeRateSingle implements Runnable{
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
 
         if (!validateDate(simpleTable)) {
-            System.out.println("Exchange rate unavailable for " + exchangeDate.toString());
-            System.out.println("A later exchange rate is available for " + simpleTable.getDate());
-            return;
+            System.out.println("@|fg(yellow)Exchange rate unavailable for " + simpleTable.getDate() + "|@");
         }
 
         printExchangeRateTable(simpleTable);
@@ -75,7 +74,7 @@ public class ExchangeRateSingle implements Runnable{
         stringBuilder.append(baseCurrency);
         stringBuilder.append("&symbols=");
         String symbols = quoteCurrencies.stream()
-                .map(currencySymbol -> currencySymbol.toString())
+                .map(Enum::toString)
                 .collect(Collectors.joining(","));
         stringBuilder.append(symbols);
         return stringBuilder.toString();

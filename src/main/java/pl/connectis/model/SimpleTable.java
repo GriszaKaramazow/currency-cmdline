@@ -1,13 +1,13 @@
-package model;
+package pl.connectis.model;
 
 import com.google.api.client.util.Key;
 import lombok.*;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 @Getter
 @Setter
-public class HistoryTable {
+public class SimpleTable {
 
     @Key("base")
     private String baseCurrency;
@@ -16,6 +16,6 @@ public class HistoryTable {
     private String date;
 
     @Key
-    private TreeMap<String, TreeMap<String, Double>> rates;
+    private HashMap<String, Double> rates;
 
 }
