@@ -59,19 +59,22 @@ public class ExchangeRateHistory implements Runnable{
             description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use, to print to console.")
     private String filePath;
 
+    private final String yellowFontColor = "\u001b[33m";
+    private final String resetFontColor = "\u001b[0m";
+
     @Override
     public void run() {
 
         if (startDate.isBefore(LocalDate.of(1999,1,4)) ||
                 endDate.isBefore(LocalDate.of(1999,1,4))) {
-            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
-                    "The exchange rate data are available from 1999-01-04" + Ansi.ansi().reset());
+            System.out.println(yellowFontColor +  "The exchange rate data are available from 1999-01-04" +
+                    resetFontColor);
             return;
         }
 
         if (startDate.isAfter(endDate)) {
-            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) + "from " + startDate +
-                    " to " + endDate + "' is invalid period" + Ansi.ansi().reset());
+            System.out.println(yellowFontColor + "'from " + startDate + " to " + endDate + "' is invalid period" +
+                    resetFontColor);
             return;
         }
 

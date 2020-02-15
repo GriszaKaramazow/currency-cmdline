@@ -22,11 +22,9 @@ public class Main implements Runnable {
 
     public static void main(String[] args) {
 
-        AnsiConsole.systemInstall();
         CommandLine commandLine = new CommandLine(new Main());
         commandLine.setCaseInsensitiveEnumValuesAllowed(true)
                 .execute(args);
-        AnsiConsole.systemUninstall();
 
     }
 

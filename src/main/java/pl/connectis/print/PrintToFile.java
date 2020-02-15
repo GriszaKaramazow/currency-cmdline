@@ -13,6 +13,9 @@ public class PrintToFile {
 
     private String fileExtension;
 
+    private final String yellowFontColor = "\u001b[33m";
+    private final String resetFontColor = "\u001b[0m";
+
     public PrintToFile(String filePath, FileContent fileContent) {
 
         this.filePath = filePath;
@@ -50,8 +53,7 @@ public class PrintToFile {
                 break;
 
             default:
-                AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) + fileExtension +
-                        " is unsupported file format." + Ansi.ansi().reset());
+                System.out.println(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
 
         }
 
@@ -68,8 +70,7 @@ public class PrintToFile {
 
         } catch (IOException exception) {
 
-            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
-                    "Inappropriate file path '" + filePath + "'."  + Ansi.ansi().reset());
+            System.out.println(yellowFontColor + "Inappropriate file path '" + filePath + "'."  + resetFontColor);
             return false;
 
         }
@@ -79,11 +80,10 @@ public class PrintToFile {
     private void printResult(boolean result) {
 
         if (result) {
-            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
-                    "The data have been saved successfully to '" + filePath + "'." + Ansi.ansi().reset());
+            System.out.println(yellowFontColor + "The data have been saved successfully to '" + filePath + "'." +
+                    resetFontColor);
         } else {
-            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
-                    "An error occurred during saving the data to file." + Ansi.ansi().reset());
+            System.out.println(yellowFontColor + "An error occurred during saving the data to file." + resetFontColor);
         }
 
     }
