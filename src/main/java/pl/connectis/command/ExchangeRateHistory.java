@@ -1,6 +1,8 @@
 package pl.connectis.command;
 
 import lombok.Getter;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.HistoryTable;
 import picocli.CommandLine.Command;
@@ -31,7 +33,7 @@ public class ExchangeRateHistory implements Runnable{
     @Option(names = {"-b", "--base"},
             paramLabel = "<symbol>",
             defaultValue = "EUR",
-            description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
+            description = "Enter a symbol of a base currency. Default: ${DEFAULT-VALUE}.")
     private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
     @Option(names = {"-q", "--quote"},
@@ -54,7 +56,7 @@ public class ExchangeRateHistory implements Runnable{
 
     @Option(names = {"-f", "--file"},
             paramLabel = "FILE",
-            description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use to print to console.")
+            description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use, to print to console.")
     private String filePath;
 
     @Override
@@ -62,12 +64,14 @@ public class ExchangeRateHistory implements Runnable{
 
         if (startDate.isBefore(LocalDate.of(1999,1,4)) ||
                 endDate.isBefore(LocalDate.of(1999,1,4))) {
-            System.out.println("@|fg(yellow)The exchange rate data are available from 1999-01-04|@");
+            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
+                    "The exchange rate data are available from 1999-01-04" + Ansi.ansi().reset());
             return;
         }
 
         if (startDate.isAfter(endDate)) {
-            System.out.println("@|fg(yellow)'form " + startDate + " to " + endDate + "' is invalid period of time|@");
+            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) + "from " + startDate +
+                    " to " + endDate + "' is invalid period" + Ansi.ansi().reset());
             return;
         }
 

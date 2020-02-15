@@ -1,6 +1,8 @@
 package pl.connectis.command;
 
 import lombok.Getter;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 @Command(name = "single",
          usageHelpAutoWidth = true,
-         headerHeading = "exchange-rate single%n%n",
+         headerHeading = "single%n%n",
          header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
                 "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
                 "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
@@ -31,7 +33,7 @@ public class ExchangeRateSingle implements Runnable{
     @Option(names = {"-b", "--base"},
             paramLabel = "<symbol>",
             defaultValue = "EUR",
-            description = "Enter symbol of a base currency. Default: ${DEFAULT-VALUE}.")
+            description = "Enter a symbol of a base currency. Default: ${DEFAULT-VALUE}.")
     private CurrencySymbol baseCurrency = CurrencySymbol.EUR;
 
     @Option(names = {"-q", "--quote"},
@@ -46,11 +48,14 @@ public class ExchangeRateSingle implements Runnable{
             description = "Enter a date of exchange rate in yyyy-MM-dd format starting from 1999-01-04. Default: ${DEFAULT-VALUE}.")
     private LocalDate exchangeDate = LocalDate.now();
 
+    private final String yellowFontColor = "\u001b[33m";
+    private final String resetFontColor = "\u001b[0m";
+
     @Override
     public void run() {
 
         if (exchangeDate.isBefore(LocalDate.of(1999,1,4))) {
-            System.out.println("@|fg(yellow)The exchange rate data are available from 1999-01-04|@");
+            System.out.println(yellowFontColor + "The exchange rate data are available from 1999-01-04" + resetFontColor);
             return;
         }
 
@@ -59,7 +64,7 @@ public class ExchangeRateSingle implements Runnable{
         SimpleTable simpleTable = tableBuilder.getSimpleTable();
 
         if (!validateDate(simpleTable)) {
-            System.out.println("@|fg(yellow)Exchange rate unavailable for " + simpleTable.getDate() + "|@");
+            System.out.println(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
         }
 
         printExchangeRateTable(simpleTable);

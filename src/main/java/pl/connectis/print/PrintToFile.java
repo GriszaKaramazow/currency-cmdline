@@ -1,5 +1,8 @@
 package pl.connectis.print;
 
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -47,7 +50,8 @@ public class PrintToFile {
                 break;
 
             default:
-                System.out.println("@|fg(yellow)" + fileExtension + " is unsupported file format.|@");
+                AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) + fileExtension +
+                        " is unsupported file format." + Ansi.ansi().reset());
 
         }
 
@@ -64,19 +68,24 @@ public class PrintToFile {
 
         } catch (IOException exception) {
 
-            System.out.println("@|fg(yellow)Inappropriate file path '" + filePath + "'.|@");
+            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
+                    "Inappropriate file path '" + filePath + "'."  + Ansi.ansi().reset());
             return false;
 
         }
+
     }
 
     private void printResult(boolean result) {
 
         if (result) {
-            System.out.println("The data have been saved successfully to '" + filePath + "'.");
+            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
+                    "The data have been saved successfully to '" + filePath + "'." + Ansi.ansi().reset());
         } else {
-            System.out.println("@|fg(yellow)An error occurred during saving the data to file.|@");
+            AnsiConsole.out.println(Ansi.ansi().fg(Ansi.Color.YELLOW) +
+                    "An error occurred during saving the data to file." + Ansi.ansi().reset());
         }
+
     }
 
     private void setFileExtension() {

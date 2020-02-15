@@ -1,5 +1,6 @@
 package pl.connectis;
 
+import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -14,7 +15,6 @@ import pl.connectis.command.ExchangeRateSingle;
 )
 public class Main implements Runnable {
 
-
     @Option(names = {"-h", "--help"},
             usageHelp = true,
             description = "Displays help menu.")
@@ -22,13 +22,18 @@ public class Main implements Runnable {
 
     public static void main(String[] args) {
 
+        AnsiConsole.systemInstall();
         CommandLine commandLine = new CommandLine(new Main());
-        commandLine.setCaseInsensitiveEnumValuesAllowed(true).execute(args);
+        commandLine.setCaseInsensitiveEnumValuesAllowed(true)
+                .execute(args);
+        AnsiConsole.systemUninstall();
 
     }
 
     @Override
     public void run() {
-        System.out.println("Main class");
+
+        System.out.println("Use -h or --help to display help menu.");
+
     }
 }
