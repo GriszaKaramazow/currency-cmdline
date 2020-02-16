@@ -1,8 +1,5 @@
 package pl.connectis.print;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-
 import java.io.File;
 import java.io.IOException;
 

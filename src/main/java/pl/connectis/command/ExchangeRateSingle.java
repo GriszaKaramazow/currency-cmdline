@@ -1,8 +1,6 @@
 package pl.connectis.command;
 
 import lombok.Getter;
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
@@ -15,13 +13,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @Command(name = "single",
+         sortOptions = false,
          usageHelpAutoWidth = true,
          headerHeading = "single%n%n",
-         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
-                "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
+         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
+         optionListHeading = "%nOptions:%n",
+         footerHeading = "%nSupported currencies:%n",
+         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
                 "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
-                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n",
-         optionListHeading = "%nOptions:%n")
+                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
 
 public class ExchangeRateSingle implements Runnable{
 

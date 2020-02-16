@@ -1,8 +1,6 @@
 package pl.connectis.command;
 
 import lombok.Getter;
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.HistoryTable;
 import picocli.CommandLine.Command;
@@ -17,12 +15,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @Command(name = "history",
-        usageHelpAutoWidth = true,
-        headerHeading = "history%n%n",
-        header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n%nSupported currencies:%n" +
-                "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, %n" +
-                "ISK, JPY, KRW, MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.%n ",
-        optionListHeading = "%nOptions:%n")
+         sortOptions = false,
+         usageHelpAutoWidth = true,
+         headerHeading = "history%n%n",
+         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
+         optionListHeading = "%nOptions:%n",
+         footerHeading = "%nSupported currencies:%n",
+         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
+                  "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
+                  "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
 public class ExchangeRateHistory implements Runnable{
 
     @Option(names = {"-h", "--help"},

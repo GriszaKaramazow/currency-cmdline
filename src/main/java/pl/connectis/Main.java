@@ -1,6 +1,5 @@
 package pl.connectis;
 
-import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -8,7 +7,7 @@ import pl.connectis.command.ExchangeRateHistory;
 import pl.connectis.command.ExchangeRateSingle;
 
 
-@Command(name = "exchange-rate",
+@Command(name = "currency-cmdline-0.3.0.jar",
         subcommands = {
             ExchangeRateSingle.class,
             ExchangeRateHistory.class}
