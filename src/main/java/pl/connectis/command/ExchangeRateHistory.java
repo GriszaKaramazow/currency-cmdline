@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
          sortOptions = false,
          usageHelpAutoWidth = true,
          headerHeading = "history%n%n",
-         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
+         header = "Generates table with exchange rates for selected period (from 1999-01-04) and prints it to the console or to a file.%n",
          optionListHeading = "%nOptions:%n",
          footerHeading = "%nSupported currencies:%n",
          footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +

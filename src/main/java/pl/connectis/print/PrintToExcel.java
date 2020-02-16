@@ -32,7 +32,7 @@ public class PrintToExcel {
     private boolean saveAsExcel(Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
-        
+
         CellStyle boldCellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
         font.setBold(true);
