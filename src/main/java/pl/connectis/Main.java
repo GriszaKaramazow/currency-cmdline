@@ -19,7 +19,7 @@ public class Main implements Runnable {
             description = "Displays help menu.")
     private boolean usageHelpRequested;
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
 
         CommandLine commandLine = new CommandLine(new Main());
         commandLine.setCaseInsensitiveEnumValuesAllowed(true)
@@ -27,10 +27,10 @@ public class Main implements Runnable {
 
     }
 
-    @Override
     public void run() {
 
         System.out.println("Use -h or --help to display help menu.");
 
     }
+
 }

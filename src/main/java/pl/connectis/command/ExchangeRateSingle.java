@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
          header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
          optionListHeading = "%nOptions:%n",
          footerHeading = "%nSupported currencies:%n",
-         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,%n" +
-                "HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK,%n" +
-                "NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
-
+         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +
+                 "MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
 public class ExchangeRateSingle implements Runnable{
 
     @Option(names = {"-h", "--help"},

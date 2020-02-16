@@ -1,10 +1,7 @@
 package pl.connectis.print;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
@@ -35,21 +32,33 @@ public class PrintToExcel {
     private boolean saveAsExcel(Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
+        
+        CellStyle boldCellStyle = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        boldCellStyle.setFont(font);
+
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        dateCellStyle.setDataFormat((short) 14);
 
         int rowCounter = 0;
 
         for (List<String> line : fileContent) {
 
-            Row row = sheet.createRow(++rowCounter);
+            Row row = sheet.createRow(rowCounter++);
+
 
             int columnCounter = 0;
 
             for (String field : line) {
-                Cell cell = row.createCell(++columnCounter);
+                Cell cell = row.createCell(columnCounter++);
+                sheet.setDefaultColumnWidth(10);
                 if (rowCounter == 1) {
                     cell.setCellValue(field);
+                    cell.setCellStyle(boldCellStyle);
                 } else if (columnCounter == 1) {
                     cell.setCellValue(LocalDate.parse(field));
+                    cell.setCellStyle(dateCellStyle);
                 } else {
                     cell.setCellValue(Double.parseDouble(field));
                 }
