@@ -13,30 +13,32 @@ import pl.connectis.model.SimpleTable;
 
 import java.io.IOException;
 
-public class TableBuilder {
+public class ExchangeRatesRequester {
 
-    private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private JsonFactory JSON_FACTORY = new JacksonFactory();
+    private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private final JsonFactory JSON_FACTORY = new JacksonFactory();
 
     private final String httpRequestAddress;
-    private HttpRequest httpRequest;
 
-    public TableBuilder(String httpRequestAddress) {
+    public ExchangeRatesRequester(String httpRequestAddress) {
         this.httpRequestAddress = httpRequestAddress;
     }
 
-    public void getExchangeRatesFromApi() {
+    private HttpRequest getHttpRequester(GenericUrl genericUrl) {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
                 (HttpRequest request) -> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));});
         try {
-            httpRequest = requestFactory.buildGetRequest(new GenericUrl(httpRequestAddress));
+            HttpRequest httpRequest = requestFactory.buildGetRequest(genericUrl);
+            return httpRequest;
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+        return null;
     }
 
     public SimpleTable getSimpleTable() {
+        HttpRequest httpRequest = getHttpRequester(new GenericUrl(httpRequestAddress));
         try {
             return httpRequest.execute().parseAs(SimpleTable.class);
         } catch (IOException exception) {
@@ -46,6 +48,7 @@ public class TableBuilder {
     }
 
     public HistoryTable getHistoryTable() {
+        HttpRequest httpRequest = getHttpRequester(new GenericUrl(httpRequestAddress));
         try {
             return httpRequest.execute().parseAs(HistoryTable.class);
         } catch (IOException exception) {

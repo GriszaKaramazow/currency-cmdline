@@ -79,9 +79,8 @@ public class ExchangeRateHistory implements Runnable{
         }
 
         String httpAddress = buildHttpRequestAddress();
-        TableBuilder tableBuilder = new TableBuilder(httpAddress);
-        tableBuilder.getExchangeRatesFromApi();
-        HistoryTable historyTable = tableBuilder.getHistoryTable();
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(httpAddress);
+        HistoryTable historyTable = exchangeRatesRequester.getHistoryTable();
 
         if (filePath == null) {
             PrintToConsole printToConsole = new PrintToConsole(historyTable);

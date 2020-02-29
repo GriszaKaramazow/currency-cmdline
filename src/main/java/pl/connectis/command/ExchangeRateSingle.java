@@ -57,9 +57,8 @@ public class ExchangeRateSingle implements Runnable{
             return;
         }
 
-        TableBuilder tableBuilder = new TableBuilder(generateRequestAddress());
-        tableBuilder.getExchangeRatesFromApi();
-        SimpleTable simpleTable = tableBuilder.getSimpleTable();
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(generateRequestAddress());
+        SimpleTable simpleTable = exchangeRatesRequester.getSimpleTable();
 
         if (!validateDate(simpleTable)) {
             System.out.println(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
