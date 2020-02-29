@@ -5,6 +5,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.SimpleTable;
+import pl.connectis.request.SimpleUrl;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class ExchangeRateSingle implements Runnable{
             return;
         }
 
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(generateRequestAddress());
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getSimpleUrl());
         SimpleTable simpleTable = exchangeRatesRequester.getSimpleTable();
 
         if (!validateDate(simpleTable)) {
@@ -68,19 +69,14 @@ public class ExchangeRateSingle implements Runnable{
 
     }
 
-    private String generateRequestAddress() {
-
-        StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/");
-        stringBuilder.append(exchangeDate);
-        stringBuilder.append("?base=");
-        stringBuilder.append(baseCurrency);
-        stringBuilder.append("&symbols=");
+    private SimpleUrl getSimpleUrl() {
+        SimpleUrl simpleUrl = new SimpleUrl(exchangeDate);
+        simpleUrl.base = String.valueOf(baseCurrency);
         String symbols = quoteCurrencies.stream()
                 .map(Enum::toString)
                 .collect(Collectors.joining(","));
-        stringBuilder.append(symbols);
-        return stringBuilder.toString();
-
+        simpleUrl.symbols = symbols;
+        return simpleUrl;
     }
 
     private boolean validateDate(SimpleTable simpleTable) {

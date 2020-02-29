@@ -18,13 +18,13 @@ public class ExchangeRatesRequester {
     private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-    private final String httpRequestAddress;
+    private final GenericUrl genericUrl;
 
-    public ExchangeRatesRequester(String httpRequestAddress) {
-        this.httpRequestAddress = httpRequestAddress;
+    public ExchangeRatesRequester(GenericUrl genericUrl) {
+        this.genericUrl = genericUrl;
     }
 
-    private HttpRequest getHttpRequester(GenericUrl genericUrl) {
+    private HttpRequest getHttpRequester() {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
                 (HttpRequest request) -> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));});
@@ -38,7 +38,7 @@ public class ExchangeRatesRequester {
     }
 
     public SimpleTable getSimpleTable() {
-        HttpRequest httpRequest = getHttpRequester(new GenericUrl(httpRequestAddress));
+        HttpRequest httpRequest = getHttpRequester();
         try {
             return httpRequest.execute().parseAs(SimpleTable.class);
         } catch (IOException exception) {
@@ -48,7 +48,7 @@ public class ExchangeRatesRequester {
     }
 
     public HistoryTable getHistoryTable() {
-        HttpRequest httpRequest = getHttpRequester(new GenericUrl(httpRequestAddress));
+        HttpRequest httpRequest = getHttpRequester();
         try {
             return httpRequest.execute().parseAs(HistoryTable.class);
         } catch (IOException exception) {

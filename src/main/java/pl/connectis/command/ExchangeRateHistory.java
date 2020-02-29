@@ -1,13 +1,14 @@
 package pl.connectis.command;
 
 import lombok.Getter;
-import pl.connectis.model.CurrencySymbol;
-import pl.connectis.model.HistoryTable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.model.CurrencySymbol;
+import pl.connectis.model.HistoryTable;
 import pl.connectis.print.FileContent;
 import pl.connectis.print.PrintToConsole;
 import pl.connectis.print.PrintToFile;
+import pl.connectis.request.HistoryUrl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -78,8 +79,8 @@ public class ExchangeRateHistory implements Runnable{
             return;
         }
 
-        String httpAddress = buildHttpRequestAddress();
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(httpAddress);
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getHistoryUrl());
+
         HistoryTable historyTable = exchangeRatesRequester.getHistoryTable();
 
         if (filePath == null) {
@@ -94,21 +95,16 @@ public class ExchangeRateHistory implements Runnable{
 
     }
 
-    private String buildHttpRequestAddress() {
-
-        StringBuilder stringBuilder = new StringBuilder("https://api.ratesapi.io/api/history?start_at=");
-        stringBuilder.append(startDate);
-        stringBuilder.append("&end_at=");
-        stringBuilder.append(endDate);
-        stringBuilder.append("&base=");
-        stringBuilder.append(baseCurrency.toString());
-        stringBuilder.append("&symbols=");
+    private HistoryUrl getHistoryUrl() {
+        HistoryUrl historyUrl = new HistoryUrl();
+        historyUrl.start_at = String.valueOf(startDate);
+        historyUrl.end_at = String.valueOf(endDate);
+        historyUrl.base = String.valueOf(baseCurrency);
         String symbols = quoteCurrencies.stream()
                 .map(Enum::toString)
                 .collect(Collectors.joining(","));
-        stringBuilder.append(symbols);
-        return stringBuilder.toString();
-
+        historyUrl.symbols = symbols;
+        return historyUrl;
     }
 
 }
