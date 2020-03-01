@@ -1,8 +1,11 @@
 package pl.connectis.print;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class PrintToFile {
 
     private final String filePath;
@@ -50,7 +53,7 @@ public class PrintToFile {
                 break;
 
             default:
-                System.out.println(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
+                log.warn(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
 
         }
 
@@ -67,7 +70,7 @@ public class PrintToFile {
 
         } catch (IOException exception) {
 
-            System.out.println(yellowFontColor + "Inappropriate file path '" + filePath + "'."  + resetFontColor);
+            log.error(yellowFontColor + "Inappropriate file path '" + filePath + "'."  + resetFontColor, exception);
             return false;
 
         }
@@ -77,10 +80,9 @@ public class PrintToFile {
     private void printResult(boolean result) {
 
         if (result) {
-            System.out.println(yellowFontColor + "The data have been saved successfully to '" + filePath + "'." +
-                    resetFontColor);
+            log.info(yellowFontColor + "The data have been saved successfully to '" + filePath + "'." + resetFontColor);
         } else {
-            System.out.println(yellowFontColor + "An error occurred during saving the data to file." + resetFontColor);
+            log.warn(yellowFontColor + "An error occurred during saving the data to file." + resetFontColor);
         }
 
     }
@@ -95,6 +97,7 @@ public class PrintToFile {
         }
 
         this.fileExtension = fileExtension;
+        log.debug("");
 
     }
 

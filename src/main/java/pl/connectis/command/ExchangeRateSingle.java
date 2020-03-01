@@ -1,6 +1,7 @@
 package pl.connectis.command;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 @Command(name = "single",
          sortOptions = false,
@@ -54,7 +56,7 @@ public class ExchangeRateSingle implements Runnable{
     public void run() {
 
         if (exchangeDate.isBefore(LocalDate.of(1999,1,4))) {
-            System.out.println(yellowFontColor + "The exchange rate data are available from 1999-01-04" + resetFontColor);
+            log.warn(yellowFontColor + "The exchange rate data are available from 1999-01-04" + resetFontColor);
             return;
         }
 
@@ -62,7 +64,7 @@ public class ExchangeRateSingle implements Runnable{
         SimpleTable simpleTable = exchangeRatesRequester.getSimpleTable();
 
         if (!validateDate(simpleTable)) {
-            System.out.println(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
+            log.warn(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
         }
 
         printExchangeRateTable(simpleTable);
@@ -89,7 +91,7 @@ public class ExchangeRateSingle implements Runnable{
 
     private void printExchangeRateTable(SimpleTable simpleTable) {
 
-        System.out.println("The exchange rate for " + simpleTable.getDate());
+        log.info("The exchange rate for " + simpleTable.getDate());
         HashMap<String, Double> rateHashMap = simpleTable.getRates();
         rateHashMap.forEach(this::printRate);
 
@@ -97,9 +99,7 @@ public class ExchangeRateSingle implements Runnable{
 
     private void printRate(String quoteCurrency, Double rate) {
 
-        System.out.print(quoteCurrency + "/");
-        System.out.print(baseCurrency + ": ");
-        System.out.println(rate);
+        log.info(quoteCurrency + "/" + baseCurrency + ": " + rate);
 
     }
 }

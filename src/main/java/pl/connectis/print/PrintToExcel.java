@@ -1,5 +1,6 @@
 package pl.connectis.print;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 public class PrintToExcel {
 
     private final List<List<String>> fileContent;
@@ -47,7 +49,6 @@ public class PrintToExcel {
 
             Row row = sheet.createRow(rowCounter++);
 
-
             int columnCounter = 0;
 
             for (String field : line) {
@@ -75,6 +76,7 @@ public class PrintToExcel {
 
         } catch (IOException exception) {
 
+            log.error("An error occurred during saving data to file", exception);
             return false;
 
         }

@@ -1,9 +1,12 @@
 package pl.connectis.print;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 public class PrintToText {
 
     private final List<List<String>> fileContent;
@@ -42,7 +45,7 @@ public class PrintToText {
 
         } catch (IOException exception) {
 
-            System.out.println("An error occurred during saving data to file");
+            log.error("An error occurred during saving data to file", exception);
             return false;
 
         }

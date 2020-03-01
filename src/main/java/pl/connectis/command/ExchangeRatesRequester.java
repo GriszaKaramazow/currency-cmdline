@@ -8,11 +8,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import lombok.extern.slf4j.Slf4j;
 import pl.connectis.model.HistoryTable;
 import pl.connectis.model.SimpleTable;
 
 import java.io.IOException;
 
+@Slf4j
 public class ExchangeRatesRequester {
 
     private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -32,7 +34,7 @@ public class ExchangeRatesRequester {
             HttpRequest httpRequest = requestFactory.buildGetRequest(genericUrl);
             return httpRequest;
         } catch (IOException exception) {
-            exception.printStackTrace();
+            log.error("An error occurred during building http request", exception);
         }
         return null;
     }
@@ -42,7 +44,7 @@ public class ExchangeRatesRequester {
         try {
             return httpRequest.execute().parseAs(SimpleTable.class);
         } catch (IOException exception) {
-            exception.printStackTrace();
+            log.error("An error occurred during parsing http request", exception);
         }
         return null;
     }
@@ -52,7 +54,7 @@ public class ExchangeRatesRequester {
         try {
             return httpRequest.execute().parseAs(HistoryTable.class);
         } catch (IOException exception) {
-            exception.printStackTrace();
+            log.error("An error occurred during parsing http request", exception);
         }
         return null;
     }

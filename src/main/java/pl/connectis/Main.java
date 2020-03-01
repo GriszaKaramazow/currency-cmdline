@@ -1,5 +1,6 @@
 package pl.connectis;
 
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -7,6 +8,7 @@ import pl.connectis.command.ExchangeRateHistory;
 import pl.connectis.command.ExchangeRateSingle;
 import pl.connectis.exception.ShortErrorMessageHandler;
 
+@Slf4j
 @Command(name = "currency-cmdline-0.3.0.jar",
         subcommands = {
             ExchangeRateSingle.class,
@@ -30,7 +32,7 @@ public class Main implements Runnable {
 
     public void run() {
 
-        System.out.println("Use -h or --help to display help menu.");
+        log.info("Use -h or --help to display help menu.");
 
     }
 
