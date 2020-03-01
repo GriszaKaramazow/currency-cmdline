@@ -1,17 +1,19 @@
 package pl.connectis.print;
 
-import pl.connectis.model.HistoryTable;
+import lombok.Getter;
+import pl.connectis.model.HistoryRates;
 
 import java.util.*;
 
 public class FileContent {
 
-    private final HistoryTable historyTable;
+    private final HistoryRates historyRates;
 
     private List<List<String>> fileContent = new ArrayList<>();
 
-    public FileContent(HistoryTable historyTable) {
-        this.historyTable = historyTable;
+    public FileContent(HistoryRates historyRates) {
+        this.historyRates = historyRates;
+        prepareFileContent();
     }
 
     private void addTitleRowToFileContent() {
@@ -23,7 +25,7 @@ public class FileContent {
 
         for (String currency : currencies) {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(historyTable.getBaseCurrency());
+            stringBuilder.append(historyRates.getBaseCurrency());
             stringBuilder.append("/");
             stringBuilder.append(currency);
             titleRow.add(stringBuilder.toString());
@@ -33,14 +35,14 @@ public class FileContent {
 
     }
 
-    public void prepareFileContent() {
+    private void prepareFileContent() {
 
         addTitleRowToFileContent();
 
         List<String> dates = getDatesAsSortedList();
 
         for (String date : dates) {
-            TreeMap<String, Double> ratesForDate = historyTable.getRates().get(date);
+            TreeMap<String, Double> ratesForDate = historyRates.getRates().get(date);
             fileContent.add(getRatesAsList(date, ratesForDate));
         }
 
@@ -63,7 +65,7 @@ public class FileContent {
 
     private List<String> getCurrenciesAsSortedList() {
 
-        TreeMap<String, Double> ratesMap = historyTable.getRates().get(historyTable.getRates().firstKey());
+        TreeMap<String, Double> ratesMap = historyRates.getRates().get(historyRates.getRates().firstKey());
         Set<String> currenciesSet = ratesMap.keySet();
         List<String> currencies = new ArrayList<>(currenciesSet);
         Collections.sort(currencies);
@@ -73,7 +75,7 @@ public class FileContent {
 
     private List<String> getDatesAsSortedList() {
 
-        Set<String> datesSet = historyTable.getRates().keySet();
+        Set<String> datesSet = historyRates.getRates().keySet();
         List<String> datesList = new ArrayList<>(datesSet);
         Collections.sort(datesList);
         return datesList;

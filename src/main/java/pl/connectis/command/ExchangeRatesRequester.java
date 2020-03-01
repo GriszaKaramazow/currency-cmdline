@@ -9,8 +9,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import lombok.extern.slf4j.Slf4j;
-import pl.connectis.model.HistoryTable;
-import pl.connectis.model.SimpleTable;
+import pl.connectis.model.HistoryRates;
+import pl.connectis.model.SingleDayRates;
 
 import java.io.IOException;
 
@@ -39,20 +39,20 @@ public class ExchangeRatesRequester {
         return null;
     }
 
-    public SimpleTable getSimpleTable() {
+    public SingleDayRates getSingleDayRates() {
         HttpRequest httpRequest = getHttpRequester();
         try {
-            return httpRequest.execute().parseAs(SimpleTable.class);
+            return httpRequest.execute().parseAs(SingleDayRates.class);
         } catch (IOException exception) {
             log.error("An error occurred during parsing http request", exception);
         }
         return null;
     }
 
-    public HistoryTable getHistoryTable() {
+    public HistoryRates getHistoryRates() {
         HttpRequest httpRequest = getHttpRequester();
         try {
-            return httpRequest.execute().parseAs(HistoryTable.class);
+            return httpRequest.execute().parseAs(HistoryRates.class);
         } catch (IOException exception) {
             log.error("An error occurred during parsing http request", exception);
         }

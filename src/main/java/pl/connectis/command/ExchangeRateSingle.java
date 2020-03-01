@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
-import pl.connectis.model.SimpleTable;
+import pl.connectis.model.SingleDayRates;
 import pl.connectis.request.SimpleUrl;
 
 import java.time.LocalDate;
@@ -61,13 +61,13 @@ public class ExchangeRateSingle implements Runnable{
         }
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getSimpleUrl());
-        SimpleTable simpleTable = exchangeRatesRequester.getSimpleTable();
+        SingleDayRates singleDayRates = exchangeRatesRequester.getSingleDayRates();
 
-        if (!validateDate(simpleTable)) {
+        if (!validateDate(singleDayRates)) {
             log.warn(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
         }
 
-        printExchangeRateTable(simpleTable);
+        printExchangeRateTable(singleDayRates);
 
     }
 
@@ -81,18 +81,18 @@ public class ExchangeRateSingle implements Runnable{
         return simpleUrl;
     }
 
-    private boolean validateDate(SimpleTable simpleTable) {
+    private boolean validateDate(SingleDayRates singleDayRates) {
 
-        String receivedDateString = simpleTable.getDate();
+        String receivedDateString = singleDayRates.getDate();
         LocalDate receivedDate = LocalDate.parse(receivedDateString);
         return receivedDate.equals(exchangeDate);
 
     }
 
-    private void printExchangeRateTable(SimpleTable simpleTable) {
+    private void printExchangeRateTable(SingleDayRates singleDayRates) {
 
-        log.info("The exchange rate for " + simpleTable.getDate());
-        HashMap<String, Double> rateHashMap = simpleTable.getRates();
+        log.info("The exchange rate for " + singleDayRates.getDate());
+        HashMap<String, Double> rateHashMap = singleDayRates.getRates();
         rateHashMap.forEach(this::printRate);
 
     }

@@ -53,7 +53,7 @@ public class PrintToFile {
                 break;
 
             default:
-                log.warn(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
+                log.error(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
 
         }
 
@@ -82,7 +82,7 @@ public class PrintToFile {
         if (result) {
             log.info(yellowFontColor + "The data have been saved successfully to '" + filePath + "'." + resetFontColor);
         } else {
-            log.warn(yellowFontColor + "An error occurred during saving the data to file." + resetFontColor);
+            log.error(yellowFontColor + "An error occurred during saving the data to file." + resetFontColor);
         }
 
     }

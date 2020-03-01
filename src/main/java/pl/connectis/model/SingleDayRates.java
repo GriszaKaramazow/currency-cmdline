@@ -1,5 +1,6 @@
 package pl.connectis.model;
 
+import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
 import lombok.*;
 
@@ -7,7 +8,7 @@ import java.util.HashMap;
 
 @Getter
 @Setter
-public class SimpleTable {
+public class SingleDayRates extends GenericJson {
 
     @Key("base")
     private String baseCurrency;

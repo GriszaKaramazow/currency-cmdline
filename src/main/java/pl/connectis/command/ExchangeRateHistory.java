@@ -1,10 +1,11 @@
 package pl.connectis.command;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
-import pl.connectis.model.HistoryTable;
+import pl.connectis.model.HistoryRates;
 import pl.connectis.print.FileContent;
 import pl.connectis.print.PrintToConsole;
 import pl.connectis.print.PrintToFile;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 @Command(name = "history",
          sortOptions = false,
@@ -66,29 +68,25 @@ public class ExchangeRateHistory implements Runnable{
     @Override
     public void run() {
 
-        if (startDate.isBefore(LocalDate.of(1999,1,4)) ||
-                endDate.isBefore(LocalDate.of(1999,1,4))) {
-            System.out.println(yellowFontColor +  "The exchange rate data are available from 1999-01-04" +
-                    resetFontColor);
+        if (startDate.isBefore(LocalDate.of(1999,1,4))) {
+            log.error(yellowFontColor +  "The exchange rate data are available from 1999-01-04" + resetFontColor);
             return;
         }
 
         if (startDate.isAfter(endDate)) {
-            System.out.println(yellowFontColor + "'from " + startDate + " to " + endDate + "' is invalid period" +
-                    resetFontColor);
+            log.error(yellowFontColor + "'from " + startDate + " to " + endDate + "' is invalid period" + resetFontColor);
             return;
         }
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getHistoryUrl());
 
-        HistoryTable historyTable = exchangeRatesRequester.getHistoryTable();
+        HistoryRates historyRates = exchangeRatesRequester.getHistoryRates();
 
         if (filePath == null) {
-            PrintToConsole printToConsole = new PrintToConsole(historyTable);
+            PrintToConsole printToConsole = new PrintToConsole(historyRates);
             printToConsole.showOnScreen();
         } else {
-            FileContent fileContent = new FileContent(historyTable);
-            fileContent.prepareFileContent();
+            FileContent fileContent = new FileContent(historyRates);
             PrintToFile printToFile = new PrintToFile(filePath, fileContent);
             printToFile.printFileContentToFile();
         }
