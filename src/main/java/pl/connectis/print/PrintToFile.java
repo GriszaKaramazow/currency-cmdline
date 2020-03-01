@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 public class PrintToFile {
@@ -25,6 +27,10 @@ public class PrintToFile {
     }
 
     public void printFileContentToFile() {
+
+        if (!validateFileExtension()) {
+            return;
+        }
 
         if (!validateFilePath()) {
             return;
@@ -51,10 +57,6 @@ public class PrintToFile {
                 PrintToExcel printToXLSX = new PrintToExcel(fileContent.getFileContent());
                 printResult(printToXLSX.saveAsXLSX(filePath));
                 break;
-
-            default:
-                log.error(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
-
         }
 
     }
@@ -66,6 +68,7 @@ public class PrintToFile {
         try {
 
             myFile.createNewFile();
+            log.debug("File '" + filePath + "' successfully created.");
             return true;
 
         } catch (IOException exception) {
@@ -74,6 +77,20 @@ public class PrintToFile {
             return false;
 
         }
+
+    }
+
+    private boolean validateFileExtension() {
+
+        if (fileExtension == null) {
+            log.error(yellowFontColor + "An inappropriate file '" + filePath + "'." + resetFontColor);
+            return false;
+        } else if (!Arrays.asList("txt", "csv", "xls", "xlsx").contains(fileExtension)) {
+            log.error(yellowFontColor + fileExtension + " is unsupported file format." + resetFontColor);
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -92,12 +109,13 @@ public class PrintToFile {
         String fileExtension = "";
         int i = filePath.lastIndexOf('.');
 
-        if (i > 0) {
-            fileExtension = filePath.substring(i + 1);
+        if (i <= 0) {
+            this.fileExtension = null;
+            log.debug("An inappropriate file format: '" + filePath + "'.");
+        } else {
+            this.fileExtension = filePath.substring(i + 1);
+            log.debug("File extension: " + fileExtension);
         }
-
-        this.fileExtension = fileExtension;
-        log.debug("");
 
     }
 
