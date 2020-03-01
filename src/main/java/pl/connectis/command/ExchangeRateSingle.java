@@ -6,6 +6,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.SingleDayRates;
+import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
 
 import java.time.LocalDate;

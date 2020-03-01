@@ -9,6 +9,7 @@ import pl.connectis.model.HistoryRates;
 import pl.connectis.print.FileContent;
 import pl.connectis.print.PrintToConsole;
 import pl.connectis.print.PrintToFile;
+import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.HistoryUrl;
 
 import java.time.LocalDate;
