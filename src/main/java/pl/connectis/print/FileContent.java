@@ -1,6 +1,5 @@
 package pl.connectis.print;
 
-import lombok.Getter;
 import pl.connectis.model.HistoryRates;
 
 import java.util.*;
@@ -42,13 +41,13 @@ public class FileContent {
         List<String> dates = getDatesAsSortedList();
 
         for (String date : dates) {
-            TreeMap<String, Double> ratesForDate = historyRates.getRates().get(date);
+            Map<String, Double> ratesForDate = historyRates.getRates().get(date);
             fileContent.add(getRatesAsList(date, ratesForDate));
         }
 
     }
 
-    private List<String> getRatesAsList(String date, TreeMap<String, Double> rates) {
+    private List<String> getRatesAsList(String date, Map<String, Double> rates) {
 
         List<String> tableLine = new ArrayList<>();
         tableLine.add(date);
@@ -65,7 +64,7 @@ public class FileContent {
 
     private List<String> getCurrenciesAsSortedList() {
 
-        TreeMap<String, Double> ratesMap = historyRates.getRates().get(historyRates.getRates().firstKey());
+        Map<String, Double> ratesMap = historyRates.getRates().entrySet().stream().findFirst().get().getValue();
         Set<String> currenciesSet = ratesMap.keySet();
         List<String> currencies = new ArrayList<>(currenciesSet);
         Collections.sort(currencies);

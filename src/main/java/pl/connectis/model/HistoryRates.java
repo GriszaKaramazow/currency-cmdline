@@ -4,7 +4,7 @@ import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
 import lombok.*;
 
-import java.util.TreeMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -14,6 +14,6 @@ public class HistoryRates extends GenericJson {
     private String baseCurrency;
 
     @Key
-    private TreeMap<String, TreeMap<String, Double>> rates;
+    private Map<String, Map<String, Double>> rates;
 
 }

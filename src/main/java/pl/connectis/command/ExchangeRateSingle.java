@@ -12,6 +12,7 @@ import pl.connectis.request.SimpleUrl;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -93,7 +94,7 @@ public class ExchangeRateSingle implements Runnable{
     private void printExchangeRateTable(SingleDayRates singleDayRates) {
 
         log.info("The exchange rate for " + singleDayRates.getDate());
-        HashMap<String, Double> rateHashMap = singleDayRates.getRates();
+        Map<String, Double> rateHashMap = singleDayRates.getRates();
         rateHashMap.forEach(this::printRate);
 
     }

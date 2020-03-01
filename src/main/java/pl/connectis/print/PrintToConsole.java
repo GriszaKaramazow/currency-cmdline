@@ -2,6 +2,7 @@ package pl.connectis.print;
 
 import pl.connectis.model.HistoryRates;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 public class PrintToConsole {
@@ -14,12 +15,12 @@ public class PrintToConsole {
 
     public void showOnScreen() {
 
-        TreeMap<String, TreeMap<String, Double>> outerTreeMap = historyRates.getRates();
+        Map<String, Map<String, Double>> outerTreeMap = historyRates.getRates();
         outerTreeMap.forEach((key, value) -> printDateAndRate(key, value));
 
     }
 
-    private void printDateAndRate(String date, TreeMap<String, Double> innerTreeMap) {
+    private void printDateAndRate(String date, Map<String, Double> innerTreeMap) {
 
         System.out.print(date + "\t\t");
         innerTreeMap.forEach((key, value) -> printRate(key, value));

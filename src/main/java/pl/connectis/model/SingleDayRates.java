@@ -4,7 +4,7 @@ import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
 import lombok.*;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,6 +17,6 @@ public class SingleDayRates extends GenericJson {
     private String date;
 
     @Key
-    private HashMap<String, Double> rates;
+    private Map<String, Double> rates;
 
 }
