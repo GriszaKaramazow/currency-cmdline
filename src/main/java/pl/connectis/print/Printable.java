@@ -1,37 +1,41 @@
 package pl.connectis.print;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-public class PrintToExcel {
+abstract class Printable {
 
-    private final List<List<String>> fileContent;
+    boolean printToTextFile(List<List<String>> fileContent, String filePath, String delimiter) {
 
-    public PrintToExcel(List<List<String>> fileContent) {
-        this.fileContent = fileContent;
+        try {
+
+            FileWriter fileWriter = new FileWriter(filePath);
+
+            for (List<String> fileLine : fileContent) {
+                String lineText = String.join(delimiter, fileLine);
+                fileWriter.write(lineText + "\n");
+            }
+
+            fileWriter.close();
+            return true;
+
+        } catch (IOException exception) {
+
+            log.error("An error occurred during saving data to file", exception);
+            return false;
+
+        }
+
     }
 
-    public boolean saveAsXLS(String filePath) {
-
-        return saveAsExcel(new HSSFWorkbook(), filePath);
-
-    }
-
-    public boolean saveAsXLSX(String filePath) {
-
-        return saveAsExcel(new XSSFWorkbook(), filePath);
-
-    }
-
-    private boolean saveAsExcel(Workbook workbook, String filePath) {
+    boolean printToExcelFile(List<List<String>> fileContent, Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
 
