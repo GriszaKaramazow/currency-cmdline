@@ -9,8 +9,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import lombok.extern.slf4j.Slf4j;
-import pl.connectis.model.HistoryRates;
-import pl.connectis.model.SingleDayRates;
+import pl.connectis.dto.HistoryRatesDTO;
+import pl.connectis.dto.SingleDayRatesDTO;
 
 import java.io.IOException;
 
@@ -27,11 +27,11 @@ public class ExchangeRatesRequester {
     }
 
     private HttpRequest getHttpRequester() {
-        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(
-                (HttpRequest request) -> {
-                    request.setParser(new JsonObjectParser(JSON_FACTORY));});
+
+        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
         try {
             HttpRequest httpRequest = requestFactory.buildGetRequest(genericUrl);
+            httpRequest.setParser(new JsonObjectParser(JSON_FACTORY));
             return httpRequest;
         } catch (IOException exception) {
             log.error("An error occurred during building http request", exception);
@@ -39,20 +39,20 @@ public class ExchangeRatesRequester {
         return null;
     }
 
-    public SingleDayRates getSingleDayRates() {
+    public SingleDayRatesDTO getSingleDayRates() {
         HttpRequest httpRequest = getHttpRequester();
         try {
-            return httpRequest.execute().parseAs(SingleDayRates.class);
+            return httpRequest.execute().parseAs(SingleDayRatesDTO.class);
         } catch (IOException exception) {
             log.error("An error occurred during parsing http request", exception);
         }
         return null;
     }
 
-    public HistoryRates getHistoryRates() {
+    public HistoryRatesDTO getHistoryRates() {
         HttpRequest httpRequest = getHttpRequester();
         try {
-            return httpRequest.execute().parseAs(HistoryRates.class);
+            return httpRequest.execute().parseAs(HistoryRatesDTO.class);
         } catch (IOException exception) {
             log.error("An error occurred during parsing http request", exception);
         }

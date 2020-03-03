@@ -4,15 +4,15 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.CurrencySymbol;
-import pl.connectis.model.SingleDayRates;
+import pl.connectis.model.ExchangeRates;
+import pl.connectis.model.SingleRate;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -63,14 +63,14 @@ public class ExchangeRateSingle implements Runnable{
         }
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getSimpleUrl());
-        SingleDayRates singleDayRates = exchangeRatesRequester.getSingleDayRates();
+        SingleDayRatesDTO singleDayRatesDTO = exchangeRatesRequester.getSingleDayRates();
+        ExchangeRates exchangeRates = new ExchangeRates(singleDayRatesDTO);
 
-        if (!validateDate(singleDayRates)) {
+        if (!validateDate(singleDayRatesDTO)) {
             log.warn(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
         }
 
-        printExchangeRateTable(singleDayRates);
-
+        printRate(exchangeRates);
     }
 
     private SimpleUrl getSimpleUrl() {
@@ -83,25 +83,19 @@ public class ExchangeRateSingle implements Runnable{
         return simpleUrl;
     }
 
-    private boolean validateDate(SingleDayRates singleDayRates) {
+    private boolean validateDate(SingleDayRatesDTO singleDayRatesDTO) {
 
-        String receivedDateString = singleDayRates.getDate();
-        LocalDate receivedDate = LocalDate.parse(receivedDateString);
+        String receivedDate = singleDayRatesDTO.getRateDate();
         return receivedDate.equals(exchangeDate);
 
     }
 
-    private void printExchangeRateTable(SingleDayRates singleDayRates) {
+    private void printRate(ExchangeRates exchangeRates) {
 
-        log.info("The exchange rate for " + singleDayRates.getDate());
-        Map<String, Double> rateHashMap = singleDayRates.getRates();
-        rateHashMap.forEach(this::printRate);
-
-    }
-
-    private void printRate(String quoteCurrency, Double rate) {
-
-        log.info(quoteCurrency + "/" + baseCurrency + ": " + rate);
+        for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
+            log.info(singleRate.toString());
+        }
 
     }
+
 }

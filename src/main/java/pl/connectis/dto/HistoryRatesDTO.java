@@ -1,22 +1,20 @@
-package pl.connectis.model;
+package pl.connectis.dto;
 
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
 @Getter
 @Setter
-public class SingleDayRates extends GenericJson {
+public class HistoryRatesDTO extends GenericJson {
 
     @Key("base")
     private String baseCurrency;
 
     @Key
-    private String date;
-
-    @Key
-    private Map<String, Double> rates;
+    private Map<String, Map<String, Double>> rates;
 
 }

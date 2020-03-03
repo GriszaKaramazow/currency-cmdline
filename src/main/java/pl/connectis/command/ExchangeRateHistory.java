@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.dto.HistoryRatesDTO;
 import pl.connectis.model.CurrencySymbol;
-import pl.connectis.model.HistoryRates;
-import pl.connectis.print.FileContent;
-import pl.connectis.print.PrintToConsole;
-import pl.connectis.print.PrintToFile;
+import pl.connectis.model.ExchangeRates;
+import pl.connectis.model.SingleRate;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.HistoryUrl;
 
@@ -81,16 +80,19 @@ public class ExchangeRateHistory implements Runnable{
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getHistoryUrl());
 
-        HistoryRates historyRates = exchangeRatesRequester.getHistoryRates();
+        HistoryRatesDTO historyRatesDTO = exchangeRatesRequester.getHistoryRates();
 
-        if (filePath == null) {
-            PrintToConsole printToConsole = new PrintToConsole(historyRates);
-            printToConsole.showOnScreen();
-        } else {
-            FileContent fileContent = new FileContent(historyRates);
-            PrintToFile printToFile = new PrintToFile(filePath, fileContent);
-            printToFile.printFileContentToFile();
-        }
+        ExchangeRates exchangeRates = new ExchangeRates(historyRatesDTO);
+
+//        if (filePath == null) {
+//            PrintToConsole printToConsole = new PrintToConsole(historyRatesDTO);
+//            printToConsole.showOnScreen();
+//        } else {
+//            FileContent fileContent = new FileContent(historyRatesDTO);
+//            PrintToFile printToFile = new PrintToFile(filePath, fileContent);
+//            printToFile.printFileContentToFile();
+//        }
+        printRate(exchangeRates);
 
     }
 
@@ -106,4 +108,13 @@ public class ExchangeRateHistory implements Runnable{
         return historyUrl;
     }
 
+    private void printRate(ExchangeRates exchangeRates) {
+
+        for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
+            log.info(singleRate.toString());
+        }
+
+    }
+
 }
+
