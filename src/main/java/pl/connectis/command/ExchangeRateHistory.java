@@ -7,11 +7,11 @@ import picocli.CommandLine.Option;
 import pl.connectis.dto.HistoryRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
-import pl.connectis.model.SingleRate;
 import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.HistoryUrl;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,25 +63,29 @@ public class ExchangeRateHistory implements Runnable{
             description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use, to print to console.")
     private String filePath;
 
-    private final String yellowFontColor = "\u001b[33m";
-    private final String resetFontColor = "\u001b[0m";
-
     @Override
     public void run() {
 
         if (startDate.isBefore(LocalDate.of(1999,1,4))) {
-            log.error(yellowFontColor +  "The exchange rate data are available from 1999-01-04" + resetFontColor);
+            log.error("The exchange rate data are available from 1999-01-04.");
             return;
         }
 
         if (startDate.isAfter(endDate)) {
-            log.error(yellowFontColor + "'from " + startDate + " to " + endDate + "' is invalid period" + resetFontColor);
+            log.error("'from " + startDate + " to " + endDate + "' is invalid period.");
             return;
         }
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getHistoryUrl());
 
-        HistoryRatesDTO historyRatesDTO = exchangeRatesRequester.getHistoryRates();
+        HistoryRatesDTO historyRatesDTO;
+
+        try {
+            historyRatesDTO = exchangeRatesRequester.getHistoryRates();
+        } catch (IOException exception) {
+            log.error("An error during requesting data from the API.", exception);
+            return;
+        }
 
         ExchangeRates exchangeRates = new ExchangeRates(historyRatesDTO);
 
@@ -92,6 +96,7 @@ public class ExchangeRateHistory implements Runnable{
     }
 
     private HistoryUrl getHistoryUrl() {
+
         HistoryUrl historyUrl = new HistoryUrl();
         historyUrl.start_at = String.valueOf(startDate);
         historyUrl.end_at = String.valueOf(endDate);
@@ -101,13 +106,6 @@ public class ExchangeRateHistory implements Runnable{
                 .collect(Collectors.joining(","));
         historyUrl.symbols = symbols;
         return historyUrl;
-    }
-
-    private void printRate(ExchangeRates exchangeRates) {
-
-        for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
-            log.info(singleRate.toString());
-        }
 
     }
 

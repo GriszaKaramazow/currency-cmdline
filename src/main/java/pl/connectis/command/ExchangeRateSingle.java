@@ -12,6 +12,7 @@ import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,23 +53,29 @@ public class ExchangeRateSingle implements Runnable{
             description = "Enter a date of exchange rate in yyyy-MM-dd format starting from 1999-01-04. Default: ${DEFAULT-VALUE}.")
     private LocalDate exchangeDate = LocalDate.now();
 
-    private final String yellowFontColor = "\u001b[33m";
-    private final String resetFontColor = "\u001b[0m";
-
     @Override
     public void run() {
 
         if (exchangeDate.isBefore(LocalDate.of(1999,1,4))) {
-            log.warn(yellowFontColor + "The exchange rate data are available from 1999-01-04" + resetFontColor);
+            log.warn("The exchange rate data are available from 1999-01-04.");
             return;
         }
 
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getSimpleUrl());
-        SingleDayRatesDTO singleDayRatesDTO = exchangeRatesRequester.getSingleDayRates();
+
+        SingleDayRatesDTO singleDayRatesDTO;
+
+        try {
+            singleDayRatesDTO = exchangeRatesRequester.getSingleDayRates();
+        } catch (IOException exception) {
+            log.error("An error during requesting data from the API.", exception);
+            return;
+        }
+
         ExchangeRates exchangeRates = new ExchangeRates(singleDayRatesDTO);
 
         if (!validateDate(singleDayRatesDTO)) {
-            log.warn(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
+            log.warn("An exchange rate unavailable for " + exchangeDate + ".");
         }
 
         PrinterFactory printerFactory = new PrinterFactory(null, exchangeRates);

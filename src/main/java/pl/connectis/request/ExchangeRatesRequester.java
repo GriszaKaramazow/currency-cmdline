@@ -17,8 +17,8 @@ import java.io.IOException;
 @Slf4j
 public class ExchangeRatesRequester {
 
-    private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private final JsonFactory JSON_FACTORY = new JacksonFactory();
+    private final HttpTransport httpTransport = new NetHttpTransport();
+    private final JsonFactory jacksonFactory = new JacksonFactory();
 
     private final GenericUrl genericUrl;
 
@@ -26,37 +26,27 @@ public class ExchangeRatesRequester {
         this.genericUrl = genericUrl;
     }
 
-    private HttpRequest getHttpRequester() {
+    private HttpRequest getHttpRequester() throws IOException {
 
-        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
-        try {
-            HttpRequest httpRequest = requestFactory.buildGetRequest(genericUrl);
-            httpRequest.setParser(new JsonObjectParser(JSON_FACTORY));
-            return httpRequest;
-        } catch (IOException exception) {
-            log.error("An error occurred during building http request", exception);
-        }
-        return null;
+        HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+        HttpRequest httpRequest = requestFactory.buildGetRequest(genericUrl);
+        httpRequest.setParser(new JsonObjectParser(jacksonFactory));
+        return httpRequest;
+
     }
 
-    public SingleDayRatesDTO getSingleDayRates() {
+    public SingleDayRatesDTO getSingleDayRates() throws IOException {
+
         HttpRequest httpRequest = getHttpRequester();
-        try {
-            return httpRequest.execute().parseAs(SingleDayRatesDTO.class);
-        } catch (IOException exception) {
-            log.error("An error occurred during parsing http request", exception);
-        }
-        return null;
+        return httpRequest.execute().parseAs(SingleDayRatesDTO.class);
+
     }
 
-    public HistoryRatesDTO getHistoryRates() {
+    public HistoryRatesDTO getHistoryRates() throws IOException {
+
         HttpRequest httpRequest = getHttpRequester();
-        try {
-            return httpRequest.execute().parseAs(HistoryRatesDTO.class);
-        } catch (IOException exception) {
-            log.error("An error occurred during parsing http request", exception);
-        }
-        return null;
+        return httpRequest.execute().parseAs(HistoryRatesDTO.class);
+
     }
 
 }
