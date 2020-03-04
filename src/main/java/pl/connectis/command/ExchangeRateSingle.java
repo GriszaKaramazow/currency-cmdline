@@ -7,7 +7,6 @@ import picocli.CommandLine.Option;
 import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
-import pl.connectis.model.SingleRate;
 import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
@@ -66,24 +65,28 @@ public class ExchangeRateSingle implements Runnable{
         SingleDayRatesDTO singleDayRatesDTO;
 
         try {
+
             singleDayRatesDTO = exchangeRatesRequester.getSingleDayRates();
+
         } catch (IOException exception) {
-            log.error("An error during requesting data from the API.", exception);
+
+            log.error("Error requesting data from the API.", exception);
             return;
         }
 
         ExchangeRates exchangeRates = new ExchangeRates(singleDayRatesDTO);
 
         if (!validateDate(singleDayRatesDTO)) {
-            log.warn("An exchange rate unavailable for " + exchangeDate + ".");
+            log.info("An exchange rate unavailable for " + exchangeDate + ".");
         }
 
-        PrinterFactory printerFactory = new PrinterFactory(null, exchangeRates);
-        printerFactory.print();
+        PrinterFactory printerFactory = new PrinterFactory(null);
+        printerFactory.print(exchangeRates);
 
     }
 
     private SimpleUrl getSimpleUrl() {
+
         SimpleUrl simpleUrl = new SimpleUrl(exchangeDate);
         simpleUrl.base = String.valueOf(baseCurrency);
         String symbols = quoteCurrencies.stream()
@@ -91,20 +94,13 @@ public class ExchangeRateSingle implements Runnable{
                 .collect(Collectors.joining(","));
         simpleUrl.symbols = symbols;
         return simpleUrl;
+
     }
 
     private boolean validateDate(SingleDayRatesDTO singleDayRatesDTO) {
 
         String receivedDate = singleDayRatesDTO.getRateDate();
-        return receivedDate.equals(exchangeDate);
-
-    }
-
-    private void printRate(ExchangeRates exchangeRates) {
-
-        for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
-            log.info(singleRate.toString());
-        }
+        return receivedDate.equals(String.valueOf(exchangeDate));
 
     }
 

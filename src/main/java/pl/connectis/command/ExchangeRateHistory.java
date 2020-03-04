@@ -89,9 +89,9 @@ public class ExchangeRateHistory implements Runnable{
 
         ExchangeRates exchangeRates = new ExchangeRates(historyRatesDTO);
 
-        PrinterFactory printerFactory = new PrinterFactory(filePath, exchangeRates);
+        PrinterFactory printerFactory = new PrinterFactory(filePath);
 
-        printerFactory.print();
+        printerFactory.print(exchangeRates);
 
     }
 

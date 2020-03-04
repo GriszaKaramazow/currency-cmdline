@@ -1,20 +1,15 @@
 package pl.connectis.print;
 
-import java.util.List;
+import pl.connectis.model.ExchangeRates;
 
-public class IPrinterConsole implements Printer {
 
-    private final List<List<String>> fileContent;
-
-    public IPrinterConsole(List<List<String>> fileContent) {
-        this.fileContent = fileContent;
-    }
+public class IPrinterConsole extends Printable implements Printer {
 
     @Override
-    public boolean print() {
+    public void print(ExchangeRates exchangeRates) {
 
+        printToConsole(exchangeRates);
 
-        return true;
     }
 
 }

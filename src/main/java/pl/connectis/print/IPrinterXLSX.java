@@ -1,23 +1,20 @@
 package pl.connectis.print;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.util.List;
+import pl.connectis.model.ExchangeRates;
 
 public class IPrinterXLSX extends Printable implements Printer {
 
     private final String filePath;
-    private final List<List<String>> fileContent;
 
-    public IPrinterXLSX(String filePath, List<List<String>> fileContent) {
+    public IPrinterXLSX(String filePath) {
         this.filePath = filePath;
-        this.fileContent = fileContent;
     }
 
     @Override
-    public boolean print() {
+    public void print(ExchangeRates exchangeRates) {
 
-        return printToExcelFile(fileContent, new XSSFWorkbook(), filePath);
+        printToExcelFile(exchangeRates, new XSSFWorkbook(), filePath);
 
     }
 

@@ -1,23 +1,20 @@
 package pl.connectis.print;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-import java.util.List;
+import pl.connectis.model.ExchangeRates;
 
 public class IPrinterXLS extends Printable implements Printer {
 
     private final String filePath;
-    private final List<List<String>> fileContent;
 
-    public IPrinterXLS(String filePath, List<List<String>> fileContent) {
+    public IPrinterXLS(String filePath) {
         this.filePath = filePath;
-        this.fileContent = fileContent;
     }
 
     @Override
-    public boolean print() {
+    public void print(ExchangeRates exchangeRates) {
 
-        return printToExcelFile(fileContent, new HSSFWorkbook(), filePath);
+        printToExcelFile(exchangeRates, new HSSFWorkbook(), filePath);
 
     }
 

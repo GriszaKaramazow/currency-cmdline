@@ -1,21 +1,19 @@
 package pl.connectis.print;
 
-import java.util.List;
+import pl.connectis.model.ExchangeRates;
 
 public class IPrinterCSV extends Printable implements Printer {
 
     private final String filePath;
-    private final List<List<String>> fileContent;
 
-    public IPrinterCSV(String filePath, List<List<String>> fileContent) {
+    public IPrinterCSV(String filePath) {
         this.filePath = filePath;
-        this.fileContent = fileContent;
     }
 
     @Override
-    public boolean print() {
+    public void print(ExchangeRates exchangeRates) {
 
-        return printToTextFile(fileContent, filePath, ",");
+        printToTextFile(exchangeRates, filePath, ",");
 
     }
 

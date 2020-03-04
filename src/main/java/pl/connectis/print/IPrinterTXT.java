@@ -1,21 +1,19 @@
 package pl.connectis.print;
 
-import java.util.List;
+import pl.connectis.model.ExchangeRates;
 
 public class IPrinterTXT extends Printable implements Printer {
 
     private final String filePath;
-    private final List<List<String>> fileContent;
 
-    public IPrinterTXT(String filePath, List<List<String>> fileContent) {
+    public IPrinterTXT(String filePath) {
         this.filePath = filePath;
-        this.fileContent = fileContent;
     }
 
     @Override
-    public boolean print() {
+    public void print(ExchangeRates exchangeRates) {
 
-        return printToTextFile(fileContent, filePath, "\t");
+        printToTextFile(exchangeRates, filePath, "\t");
 
     }
 

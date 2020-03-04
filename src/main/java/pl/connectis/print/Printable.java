@@ -2,40 +2,124 @@ package pl.connectis.print;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
+import pl.connectis.model.ExchangeRates;
+import pl.connectis.model.SingleRate;
 
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 abstract class Printable {
 
-    boolean printToTextFile(List<List<String>> fileContent, String filePath, String delimiter) {
+    private List<List<String>> prepareFileContent(ExchangeRates exchangeRates) {
 
-        try {
+        List<List<String>> fileContent = new ArrayList<>();
 
-            FileWriter fileWriter = new FileWriter(filePath);
+        String baseCurrency = exchangeRates.getHistoryRates().get(0).getBaseCurrency();
+        List<String> quoteCurrencies = new ArrayList<>();
+        List<String> rateDates = new ArrayList<>();
 
-            for (List<String> fileLine : fileContent) {
-                String lineText = String.join(delimiter, fileLine);
-                fileWriter.write(lineText + "\n");
+        for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
+
+            if (!quoteCurrencies.contains(singleRate.getQuoteCurrency())) {
+                quoteCurrencies.add(singleRate.getQuoteCurrency());
             }
 
-            fileWriter.close();
-            return true;
+            if (!rateDates.contains(singleRate.getRateDate())) {
+                rateDates.add(singleRate.getRateDate());
+            }
 
-        } catch (IOException exception) {
+        }
 
-            log.error("An error occurred during saving data to the file", exception);
-            return false;
+        Collections.sort(quoteCurrencies);
+        Collections.sort(rateDates);
+
+        fileContent.add(createTitleRowOfFileContent(baseCurrency, quoteCurrencies));
+
+        for (String rateDate : rateDates) {
+
+            List<String> currentRow = new ArrayList<>();
+            currentRow.add(rateDate);
+
+            for (String quoteCurrency : quoteCurrencies) {
+
+                for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
+
+                    if (singleRate.getRateDate() == rateDate && singleRate.getQuoteCurrency() == quoteCurrency) {
+                        currentRow.add(String.valueOf(singleRate.getRateValue()));
+                    }
+
+                }
+
+            }
+
+            fileContent.add(currentRow);
+
+        }
+
+        return fileContent;
+
+    }
+
+    private List<String> createTitleRowOfFileContent(String baseCurrency, List<String> quoteCurrencies) {
+
+        List<String> titleRow = new ArrayList<>();
+        titleRow.add("Rate date");
+
+        for (String quoteCurrency : quoteCurrencies) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(baseCurrency);
+            stringBuilder.append("/");
+            stringBuilder.append(quoteCurrency);
+            titleRow.add(stringBuilder.toString());
+
+        }
+
+        return titleRow;
+
+    }
+
+    void printToConsole(ExchangeRates exchangeRates) {
+
+        for (List<String> line : prepareFileContent(exchangeRates)) {
+
+            log.info(String.join("\t\t", line));
 
         }
 
     }
 
-    boolean printToExcelFile(List<List<String>> fileContent, Workbook workbook, String filePath) {
+    void printToTextFile(ExchangeRates exchangeRates, String filePath, String delimiter) {
+
+        try {
+
+            FileWriter fileWriter = new FileWriter(filePath);
+
+            for (List<String> fileLine : prepareFileContent(exchangeRates)) {
+
+                String lineText = String.join(delimiter, fileLine);
+                fileWriter.write(lineText + "\n");
+
+            }
+
+            fileWriter.close();
+            log.info("The data have been saved to '" + filePath + "'.");
+
+        } catch (IOException exception) {
+
+            log.error("An error occurred during saving data to the file", exception);
+
+        }
+
+    }
+
+    void printToExcelFile(ExchangeRates exchangeRates, Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
 
@@ -50,15 +134,17 @@ abstract class Printable {
 
         int rowCounter = 0;
 
-        for (List<String> line : fileContent) {
+        for (List<String> line : prepareFileContent(exchangeRates)) {
 
             Row row = sheet.createRow(rowCounter++);
 
             int columnCounter = 0;
 
             for (String field : line) {
+
                 Cell cell = row.createCell(columnCounter++);
                 sheet.setDefaultColumnWidth(10);
+
                 if (rowCounter == 1) {
                     cell.setCellValue(field);
                     cell.setCellStyle(boldCellStyle);
@@ -77,22 +163,11 @@ abstract class Printable {
 
             FileOutputStream outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-            return true;
+            log.info("The data have been saved to '" + filePath + "'.");
 
         } catch (IOException exception) {
 
             log.error("An error occurred during saving data to the file", exception);
-            return false;
-
-        }
-
-    }
-
-    void printToConsole(List<List<String>> fileContent) {
-
-        for (List<String> line : fileContent) {
-
-            log.info(String.join("\t\t", line));
 
         }
 
