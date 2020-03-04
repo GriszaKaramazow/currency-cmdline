@@ -28,7 +28,7 @@ abstract class Printable {
 
         } catch (IOException exception) {
 
-            log.error("An error occurred during saving data to file", exception);
+            log.error("An error occurred during saving data to the file", exception);
             return false;
 
         }
@@ -41,6 +41,7 @@ abstract class Printable {
 
         CellStyle boldCellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
+        font.setFontHeightInPoints((short)10);
         font.setBold(true);
         boldCellStyle.setFont(font);
 
@@ -80,8 +81,18 @@ abstract class Printable {
 
         } catch (IOException exception) {
 
-            log.error("An error occurred during saving data to file", exception);
+            log.error("An error occurred during saving data to the file", exception);
             return false;
+
+        }
+
+    }
+
+    void printToConsole(List<List<String>> fileContent) {
+
+        for (List<String> line : fileContent) {
+
+            log.info(String.join("\t\t", line));
 
         }
 

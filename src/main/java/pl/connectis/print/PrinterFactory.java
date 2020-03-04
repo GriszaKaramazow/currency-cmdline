@@ -1,40 +1,127 @@
 package pl.connectis.print;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 public class PrinterFactory {
 
+    private final String filePath;
     private final ExchangeRates exchangeRates;
-    private List<List<String>> fileContent;
 
-    public PrinterFactory(ExchangeRates exchangeRates) {
+    private String fileExtension;
+
+    public PrinterFactory(String filePath, ExchangeRates exchangeRates) {
+
+        this.filePath = filePath;
         this.exchangeRates = exchangeRates;
-    }
-
-    public ConsolePrinter newConsolePrinter() {
-
-        return new ConsolePrinter(fileContent);
 
     }
 
-    public TxtPrinterImpl newTxtPrinter(String filePath) {
+    public void print() {
 
-        return new TxtPrinterImpl(filePath, fileContent);
+        List<List<String>> fileContent = prepareFileContent();
+
+        if (filePath == null) {
+
+            Printer printer = new IPrinterConsole(fileContent);
+            printer.print();
+
+        } else {
+
+            setFileExtension();
+            printToFile(fileContent);
+
+        }
 
     }
 
-    public CsvPrinterImpl newCsvPrinter(String filePath) {
+    public void printToFile(List<List<String>> fileContent) {
 
-        return new CsvPrinterImpl(filePath, fileContent);
+        if (!validateFileExtension()) {
+            return;
+        }
+
+        if (!validateFilePath()) {
+            return;
+        }
+        
+        Printer printer;
+
+        switch (fileExtension) {
+
+            case "txt":
+
+                printer = new IPrinterTXT(filePath, fileContent);
+                break;
+
+            case "csv":
+
+                printer = new IPrinterCSV(filePath, fileContent);
+                break;
+
+            case "xls":
+
+                printer = new IPrinterXLS(filePath, fileContent);
+                break;
+
+            case "xlsx":
+
+                printer = new IPrinterXLSX(filePath, fileContent);
+                break;
+
+            default:
+                printer = new IPrinterConsole(fileContent);
+        }
+        
+        printResult(printer.print());
 
     }
 
-    private void prepareFileContent() {
+    private boolean validateFilePath() {
+
+        File myFile = new File(filePath);
+
+        try {
+
+            myFile.createNewFile();
+            log.debug("The file '" + filePath + "' have been created.");
+            return true;
+
+        } catch (IOException exception) {
+
+            log.error("Inappropriate file path '" + filePath + "'.", exception);
+            return false;
+
+        }
+
+    }
+
+    private boolean validateFileExtension() {
+
+        if (fileExtension == null) {
+            log.error("An inappropriate file '" + filePath + "'.");
+            return false;
+        } else if (!Arrays.asList("txt", "csv", "xls", "xlsx").contains(fileExtension)) {
+            log.error(fileExtension + " is unsupported file format.");
+            return false;
+        }
+
+        return true;
+
+    }
+
+    private List<List<String>> prepareFileContent() {
+
+        List<List<String>> fileContent = new ArrayList<>();
 
         String baseCurrency = exchangeRates.getHistoryRates().get(0).getBaseCurrency();
         List<String> quoteCurrencies = new ArrayList<>();
@@ -55,7 +142,7 @@ public class PrinterFactory {
         Collections.sort(quoteCurrencies);
         Collections.sort(rateDates);
 
-        addTitleRowToFileContent(baseCurrency, quoteCurrencies);
+        fileContent.add(createTitleRowOfFileContent(baseCurrency, quoteCurrencies));
 
         for (String rateDate : rateDates) {
 
@@ -75,14 +162,17 @@ public class PrinterFactory {
             }
 
             fileContent.add(currentRow);
+
         }
+
+        return fileContent;
 
     }
 
-    private void addTitleRowToFileContent(String baseCurrency, List<String> quoteCurrencies) {
+    private List<String> createTitleRowOfFileContent(String baseCurrency, List<String> quoteCurrencies) {
 
         List<String> titleRow = new ArrayList<>();
-        titleRow.add("Date");
+        titleRow.add("Rate date");
 
         for (String quoteCurrency : quoteCurrencies) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -92,7 +182,32 @@ public class PrinterFactory {
             titleRow.add(stringBuilder.toString());
         }
 
-        fileContent.add(titleRow);
+        return titleRow;
+
+    }
+
+    private void setFileExtension() {
+
+        String fileExtension = "";
+        int i = filePath.lastIndexOf('.');
+
+        if (i <= 0) {
+            this.fileExtension = null;
+            log.debug("An inappropriate file format: '" + filePath + "'.");
+        } else {
+            this.fileExtension = filePath.substring(i + 1);
+            log.debug("File extension: " + fileExtension);
+        }
+
+    }
+
+    private void printResult(boolean result) {
+
+        if (result) {
+            log.info("The data have been saved to '" + filePath + "'.");
+        } else {
+            log.error("An error occurred during saving the data to the file.");
+        }
 
     }
 

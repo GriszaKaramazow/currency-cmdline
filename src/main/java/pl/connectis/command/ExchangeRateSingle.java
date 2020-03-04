@@ -8,6 +8,7 @@ import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
+import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
 
@@ -70,7 +71,9 @@ public class ExchangeRateSingle implements Runnable{
             log.warn(yellowFontColor + "Exchange rate unavailable for " + exchangeDate + resetFontColor);
         }
 
-        printRate(exchangeRates);
+        PrinterFactory printerFactory = new PrinterFactory(null, exchangeRates);
+        printerFactory.print();
+
     }
 
     private SimpleUrl getSimpleUrl() {

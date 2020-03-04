@@ -1,15 +1,15 @@
 package pl.connectis.print;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.List;
 
-public class XlsPrinter extends Printable implements Printer {
+public class IPrinterXLSX extends Printable implements Printer {
 
     private final String filePath;
     private final List<List<String>> fileContent;
 
-    public XlsPrinter(String filePath, List<List<String>> fileContent) {
+    public IPrinterXLSX(String filePath, List<List<String>> fileContent) {
         this.filePath = filePath;
         this.fileContent = fileContent;
     }
@@ -17,7 +17,7 @@ public class XlsPrinter extends Printable implements Printer {
     @Override
     public boolean print() {
 
-        return printToExcelFile(fileContent, new HSSFWorkbook(), filePath);
+        return printToExcelFile(fileContent, new XSSFWorkbook(), filePath);
 
     }
 
