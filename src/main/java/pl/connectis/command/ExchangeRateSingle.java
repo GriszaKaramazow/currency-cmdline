@@ -52,6 +52,11 @@ public class ExchangeRateSingle implements Runnable{
             description = "Enter a date of exchange rate in yyyy-MM-dd format starting from 1999-01-04. Default: ${DEFAULT-VALUE}.")
     private LocalDate exchangeDate = LocalDate.now();
 
+    @Option(names = {"-f", "--file"},
+            paramLabel = "FILE",
+            description = "Enter a file (txt, csv, xls or xlsx) to save to or do not use, to print to console.")
+    private String filePath;
+
     @Override
     public void run() {
 
@@ -80,7 +85,7 @@ public class ExchangeRateSingle implements Runnable{
             log.info("An exchange rate unavailable for " + exchangeDate + ".");
         }
 
-        PrinterFactory printerFactory = new PrinterFactory(null);
+        PrinterFactory printerFactory = new PrinterFactory(filePath);
         printerFactory.print(exchangeRates);
 
     }
