@@ -8,6 +8,7 @@ import pl.connectis.dto.ExchangeRatesMapper;
 import pl.connectis.dto.HistoryRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
+import pl.connectis.print.Printer;
 import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.HistoryUrl;
@@ -92,7 +93,8 @@ public class ExchangeRateHistory implements Runnable{
         ExchangeRates exchangeRates = exchangeRatesMapper.mapHistoryRatesDTO(historyRatesDTO);
 
         PrinterFactory printerFactory = new PrinterFactory(filePath);
-        printerFactory.print(exchangeRates);
+        Printer printer = printerFactory.getPrinter();
+        printer.print(exchangeRates);
 
     }
 

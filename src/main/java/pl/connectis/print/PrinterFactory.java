@@ -6,9 +6,14 @@ import pl.connectis.model.ExchangeRates;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class PrinterFactory {
+
+    private final List<String> SUPPORTED_EXTENSIONS = Arrays.asList("txt", "csv", "xls", "xlsx");
 
     private final String filePath;
 
@@ -23,38 +28,18 @@ public class PrinterFactory {
 
     }
 
-    private Printer getPrinter() {
+    public Printer getPrinter() {
 
         String fileExtension = getFileExtension();
 
-        switch (fileExtension) {
+        Map<String, Printer> printersMap = new HashMap<>();
+        printersMap.put("txt", new TXTPrinter(filePath));
+        printersMap.put("csv", new CSVPrinter(filePath));
+        printersMap.put("xls", new XLSPrinter(filePath));
+        printersMap.put("xlsx", new XLSXPrinter(filePath));
 
-            case "txt":
+        return printersMap.getOrDefault(fileExtension, new ConsolePrinter());
 
-                log.info("Printing to txt file.");
-                return new IPrinterTXT(filePath);
-
-            case "csv":
-
-                log.info("Printing to csv file.");
-                return new IPrinterCSV(filePath);
-
-            case "xls":
-
-                log.info("Printing to xls file.");
-                return new IPrinterXLS(filePath);
-
-            case "xlsx":
-
-                log.info("Printing to xlsx file.");
-                return new IPrinterXLSX(filePath);
-
-            default:
-
-                log.info("Printing to console.");
-                return new IPrinterConsole();
-
-        }
     }
 
     private String getFileExtension() {
@@ -75,7 +60,7 @@ public class PrinterFactory {
             log.debug("File extension: '" + fileExtension + "'.");
         }
 
-        if (!Arrays.asList("txt", "csv", "xls", "xlsx").contains(fileExtension)) {
+        if (!SUPPORTED_EXTENSIONS.contains(fileExtension)) {
             log.warn("'" + fileExtension + "' is unsupported file format.");
         } else {
             createFile();

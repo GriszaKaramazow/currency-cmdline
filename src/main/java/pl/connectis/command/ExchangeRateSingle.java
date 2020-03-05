@@ -8,6 +8,7 @@ import pl.connectis.dto.ExchangeRatesMapper;
 import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
+import pl.connectis.print.Printer;
 import pl.connectis.print.PrinterFactory;
 import pl.connectis.request.ExchangeRatesRequester;
 import pl.connectis.request.SimpleUrl;
@@ -88,7 +89,8 @@ public class ExchangeRateSingle implements Runnable{
         }
 
         PrinterFactory printerFactory = new PrinterFactory(filePath);
-        printerFactory.print(exchangeRates);
+        Printer printer = printerFactory.getPrinter();
+        printer.print(exchangeRates);
 
     }
 
