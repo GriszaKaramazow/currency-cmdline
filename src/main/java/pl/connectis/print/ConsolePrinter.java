@@ -19,7 +19,7 @@ public class ConsolePrinter extends BasePrinter {
 
     void printToConsole(ExchangeRates exchangeRates) {
 
-        for (List<String> line : prepareFileContent(exchangeRates)) {
+        for (List<String> line : preparePrintContent(exchangeRates)) {
 
             log.info(String.join("\t\t", line));
 

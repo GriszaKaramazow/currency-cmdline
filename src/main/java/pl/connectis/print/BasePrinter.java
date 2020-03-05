@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 abstract class BasePrinter implements Printer {
 
-    List<List<String>> prepareFileContent(ExchangeRates exchangeRates) {
+    List<List<String>> preparePrintContent(ExchangeRates exchangeRates) {
 
         List<List<String>> fileContent = new ArrayList<>();
 

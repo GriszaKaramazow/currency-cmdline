@@ -12,11 +12,6 @@ import java.util.List;
 @Slf4j
 abstract class ExcelPrinter extends BasePrinter {
 
-    @Override
-    public void print(ExchangeRates exchangeRates) {
-
-    }
-
     void printToExcelFile(ExchangeRates exchangeRates, Workbook workbook, String filePath) {
 
         Sheet sheet = workbook.createSheet("Rate");
@@ -32,7 +27,7 @@ abstract class ExcelPrinter extends BasePrinter {
 
         int rowCounter = 0;
 
-        for (List<String> line : prepareFileContent(exchangeRates)) {
+        for (List<String> line : preparePrintContent(exchangeRates)) {
 
             Row row = sheet.createRow(rowCounter++);
 

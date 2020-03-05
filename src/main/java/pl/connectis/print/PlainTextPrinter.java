@@ -10,18 +10,13 @@ import java.util.List;
 @Slf4j
 abstract class PlainTextPrinter extends BasePrinter {
 
-    @Override
-    public void print(ExchangeRates exchangeRates) {
-
-    }
-
     void printToTextFile(ExchangeRates exchangeRates, String filePath, String delimiter) {
 
         try {
 
             FileWriter fileWriter = new FileWriter(filePath);
 
-            for (List<String> fileLine : prepareFileContent(exchangeRates)) {
+            for (List<String> fileLine : preparePrintContent(exchangeRates)) {
 
                 String lineText = String.join(delimiter, fileLine);
                 fileWriter.write(lineText + "\n");
