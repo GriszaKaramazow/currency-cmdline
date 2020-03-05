@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.dto.ExchangeRatesMapper;
 import pl.connectis.dto.HistoryRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
@@ -87,10 +88,10 @@ public class ExchangeRateHistory implements Runnable{
             return;
         }
 
-        ExchangeRates exchangeRates = new ExchangeRates(historyRatesDTO);
+        ExchangeRatesMapper exchangeRatesMapper = new ExchangeRatesMapper();
+        ExchangeRates exchangeRates = exchangeRatesMapper.mapHistoryRatesDTO(historyRatesDTO);
 
         PrinterFactory printerFactory = new PrinterFactory(filePath);
-
         printerFactory.print(exchangeRates);
 
     }

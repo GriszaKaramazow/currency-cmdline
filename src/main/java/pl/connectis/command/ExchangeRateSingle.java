@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import pl.connectis.dto.ExchangeRatesMapper;
 import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.CurrencySymbol;
 import pl.connectis.model.ExchangeRates;
@@ -79,7 +80,8 @@ public class ExchangeRateSingle implements Runnable{
             return;
         }
 
-        ExchangeRates exchangeRates = new ExchangeRates(singleDayRatesDTO);
+        ExchangeRatesMapper exchangeRatesMapper = new ExchangeRatesMapper();
+        ExchangeRates exchangeRates = exchangeRatesMapper.mapSingleDatesDTO(singleDayRatesDTO);
 
         if (!validateDate(singleDayRatesDTO)) {
             log.info("An exchange rate unavailable for " + exchangeDate + ".");

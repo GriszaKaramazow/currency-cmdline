@@ -1,10 +1,10 @@
 package pl.connectis.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
+@AllArgsConstructor
 public class SingleRate {
 
     private final String baseCurrency;
@@ -14,12 +14,5 @@ public class SingleRate {
     private final String rateDate;
 
     private final Double rateValue;
-
-    public SingleRate(String baseCurrency, String quoteCurrency, String rateDate, Double rateValue) {
-        this.baseCurrency = baseCurrency;
-        this.quoteCurrency = quoteCurrency;
-        this.rateDate = rateDate;
-        this.rateValue = rateValue;
-    }
 
 }
