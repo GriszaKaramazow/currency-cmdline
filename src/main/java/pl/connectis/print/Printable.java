@@ -50,7 +50,7 @@ abstract class Printable {
 
                 for (SingleRate singleRate : exchangeRates.getHistoryRates()) {
 
-                    if (singleRate.getRateDate() == rateDate && singleRate.getQuoteCurrency() == quoteCurrency) {
+                    if (singleRate.getRateDate().equals(rateDate) && singleRate.getQuoteCurrency().equals(quoteCurrency)) {
                         currentRow.add(String.valueOf(singleRate.getRateValue()));
                     }
 
@@ -73,11 +73,7 @@ abstract class Printable {
 
         for (String quoteCurrency : quoteCurrencies) {
 
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(baseCurrency);
-            stringBuilder.append("/");
-            stringBuilder.append(quoteCurrency);
-            titleRow.add(stringBuilder.toString());
+            titleRow.add(baseCurrency + "/" + quoteCurrency);
 
         }
 

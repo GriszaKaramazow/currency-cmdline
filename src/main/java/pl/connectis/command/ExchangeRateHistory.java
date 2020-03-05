@@ -99,8 +99,8 @@ public class ExchangeRateHistory implements Runnable{
     private HistoryUrl getHistoryUrl() {
 
         HistoryUrl historyUrl = new HistoryUrl();
-        historyUrl.start_at = String.valueOf(startDate);
-        historyUrl.end_at = String.valueOf(endDate);
+        historyUrl.startAt = String.valueOf(startDate);
+        historyUrl.endAt = String.valueOf(endDate);
         historyUrl.base = String.valueOf(baseCurrency);
         String symbols = quoteCurrencies.stream()
                 .map(Enum::toString)

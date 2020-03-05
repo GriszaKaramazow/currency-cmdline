@@ -9,11 +9,11 @@ public class HistoryUrl extends GenericUrl {
         super("https://api.ratesapi.io/api/history");
     }
 
-    @Key
-    public String start_at;
+    @Key("start_at")
+    public String startAt;
 
-    @Key
-    public String end_at;
+    @Key("end_at")
+    public String endAt;
 
     @Key
     public String base;

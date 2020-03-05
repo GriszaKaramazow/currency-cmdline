@@ -2,13 +2,11 @@ package pl.connectis.dto;
 
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Map;
 
-@Getter
-@Setter
+@Data
 public class HistoryRatesDTO extends GenericJson {
 
     @Key("base")

@@ -1,10 +1,8 @@
 package pl.connectis.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@AllArgsConstructor
+@Data
 public class SingleRate {
 
     private final String baseCurrency;

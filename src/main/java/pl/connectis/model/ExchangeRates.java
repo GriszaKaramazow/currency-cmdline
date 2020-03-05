@@ -1,11 +1,11 @@
 package pl.connectis.model;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Data
 public class ExchangeRates {
 
     private List<SingleRate> historyRates = new ArrayList<>();
