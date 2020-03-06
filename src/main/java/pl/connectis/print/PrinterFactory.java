@@ -21,13 +21,6 @@ public class PrinterFactory {
         this.filePath = filePath;
     }
 
-    public void print(ExchangeRates exchangeRates) {
-
-        Printer printer = getPrinter();
-        printer.print(exchangeRates);
-
-    }
-
     public Printer getPrinter() {
 
         String fileExtension = getFileExtension();
