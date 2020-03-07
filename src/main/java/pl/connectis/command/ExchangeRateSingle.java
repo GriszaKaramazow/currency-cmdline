@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Getter
 @Command(name = "single",
-         sortOptions = false,
-         usageHelpAutoWidth = true,
-         headerHeading = "single%n%n",
-         header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
-         optionListHeading = "%nOptions:%n",
-         footerHeading = "%nSupported currencies:%n",
-         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +
-                 "MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
-public class ExchangeRateSingle implements Runnable{
+        sortOptions = false,
+        usageHelpAutoWidth = true,
+        headerHeading = "single%n%n",
+        header = "Prints to console an exchange rate for a single date starting from 1999-01-04.%n",
+        optionListHeading = "%nOptions:%n",
+        footerHeading = "%nSupported currencies:%n",
+        footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +
+                "MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
+public class ExchangeRateSingle implements Runnable {
 
     @Option(names = {"-h", "--help"},
             usageHelp = true,
@@ -62,7 +62,7 @@ public class ExchangeRateSingle implements Runnable{
     @Override
     public void run() {
 
-        if (exchangeDate.isBefore(LocalDate.of(1999,1,4))) {
+        if (exchangeDate.isBefore(LocalDate.of(1999, 1, 4))) {
             log.warn("The exchange rate data are available from 1999-01-04.");
             return;
         }
@@ -98,10 +98,9 @@ public class ExchangeRateSingle implements Runnable{
 
         SimpleUrl simpleUrl = new SimpleUrl(exchangeDate);
         simpleUrl.base = String.valueOf(baseCurrency);
-        String symbols = quoteCurrencies.stream()
+        simpleUrl.symbols = quoteCurrencies.stream()
                 .map(Enum::toString)
                 .collect(Collectors.joining(","));
-        simpleUrl.symbols = symbols;
         return simpleUrl;
 
     }

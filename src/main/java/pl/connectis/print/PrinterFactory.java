@@ -1,7 +1,6 @@
 package pl.connectis.print;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.connectis.model.ExchangeRates;
 
 import java.io.File;
 import java.io.IOException;

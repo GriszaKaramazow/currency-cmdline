@@ -18,7 +18,7 @@ abstract class ExcelPrinter extends BasePrinter {
 
         CellStyle boldCellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
-        font.setFontHeightInPoints((short)10);
+        font.setFontHeightInPoints((short) 10);
         font.setBold(true);
         boldCellStyle.setFont(font);
 
