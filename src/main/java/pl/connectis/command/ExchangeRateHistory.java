@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Getter
 @Command(name = "history",
-         sortOptions = false,
-         usageHelpAutoWidth = true,
-         headerHeading = "history%n%n",
-         header = "Generates table with exchange rates for selected period (from 1999-01-04) and prints it to the console or to a file.%n",
-         optionListHeading = "%nOptions:%n",
-         footerHeading = "%nSupported currencies:%n",
-         footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +
-                 "MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
-public class ExchangeRateHistory implements Runnable{
+        sortOptions = false,
+        usageHelpAutoWidth = true,
+        headerHeading = "history%n%n",
+        header = "Generates table with exchange rates for selected period (from 1999-01-04) and prints it to the console or to a file.%n",
+        optionListHeading = "%nOptions:%n",
+        footerHeading = "%nSupported currencies:%n",
+        footer = "AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, " +
+                "MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR.")
+public class ExchangeRateHistory implements Runnable {
 
     @Option(names = {"-h", "--help"},
             usageHelp = true,
@@ -68,7 +68,7 @@ public class ExchangeRateHistory implements Runnable{
     @Override
     public void run() {
 
-        if (startDate.isBefore(LocalDate.of(1999,1,4))) {
+        if (startDate.isBefore(LocalDate.of(1999, 1, 4))) {
             log.error("The exchange rate data are available from 1999-01-04.");
             return;
         }
@@ -104,10 +104,9 @@ public class ExchangeRateHistory implements Runnable{
         historyUrl.startAt = String.valueOf(startDate);
         historyUrl.endAt = String.valueOf(endDate);
         historyUrl.base = String.valueOf(baseCurrency);
-        String symbols = quoteCurrencies.stream()
+        historyUrl.symbols = quoteCurrencies.stream()
                 .map(Enum::toString)
                 .collect(Collectors.joining(","));
-        historyUrl.symbols = symbols;
         return historyUrl;
 
     }

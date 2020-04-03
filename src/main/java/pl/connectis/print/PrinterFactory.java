@@ -1,7 +1,6 @@
 package pl.connectis.print;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.connectis.model.ExchangeRates;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +18,6 @@ public class PrinterFactory {
 
     public PrinterFactory(String filePath) {
         this.filePath = filePath;
-    }
-
-    public void print(ExchangeRates exchangeRates) {
-
-        Printer printer = getPrinter();
-        printer.print(exchangeRates);
-
     }
 
     public Printer getPrinter() {
