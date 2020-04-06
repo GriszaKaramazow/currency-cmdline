@@ -67,7 +67,9 @@ public class ExchangeRateSingle implements Runnable {
             return;
         }
 
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(getSimpleUrl());
+        SimpleUrl simpleUrl = getSimpleUrl();
+        log.info(simpleUrl.toString());
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(simpleUrl);
 
         SingleDayRatesDTO singleDayRatesDTO;
 

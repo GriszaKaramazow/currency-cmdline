@@ -56,6 +56,8 @@
         <lombok.version>1.18.12</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
         <junit-jupiter.version>RELEASE</junit-jupiter.version>
+        <mockserver.version>5.10.0</mockserver.version>
+        <commons.version>3.9</commons.version>
     </properties>
 
     <dependencies>
@@ -110,6 +112,16 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${junit-jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-junit-jupiter</artifactId>
+            <version>${mockserver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.version}</version>
         </dependency>
     </dependencies>
 
