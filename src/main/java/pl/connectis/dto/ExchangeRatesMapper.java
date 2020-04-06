@@ -16,7 +16,7 @@ public class ExchangeRatesMapper {
 
         for (String rateDate : rates.keySet()) {
 
-            exchangeRates = mapSingleDatesDTO(exchangeRates,
+            exchangeRates = mapSingleDayRatesDTO(exchangeRates,
                     new SingleDayRatesDTO(baseCurrency, rateDate, rates.get(rateDate)));
 
         }
@@ -25,7 +25,7 @@ public class ExchangeRatesMapper {
 
     }
 
-    public ExchangeRates mapSingleDatesDTO(ExchangeRates exchangeRates, SingleDayRatesDTO singleDayRatesDTO) {
+    public ExchangeRates mapSingleDayRatesDTO(ExchangeRates exchangeRates, SingleDayRatesDTO singleDayRatesDTO) {
 
         String baseCurrency = singleDayRatesDTO.getBaseCurrency();
         String rateDate = singleDayRatesDTO.getRateDate();
@@ -41,9 +41,9 @@ public class ExchangeRatesMapper {
 
     }
 
-    public ExchangeRates mapSingleDatesDTO(SingleDayRatesDTO singleDayRatesDTO) {
+    public ExchangeRates mapSingleDayRatesDTO(SingleDayRatesDTO singleDayRatesDTO) {
 
-        return mapSingleDatesDTO(new ExchangeRates(), singleDayRatesDTO);
+        return mapSingleDayRatesDTO(new ExchangeRates(), singleDayRatesDTO);
 
     }
 

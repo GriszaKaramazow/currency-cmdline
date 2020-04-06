@@ -84,7 +84,7 @@ public class ExchangeRateSingle implements Runnable {
         }
 
         ExchangeRatesMapper exchangeRatesMapper = new ExchangeRatesMapper();
-        ExchangeRates exchangeRates = exchangeRatesMapper.mapSingleDatesDTO(singleDayRatesDTO);
+        ExchangeRates exchangeRates = exchangeRatesMapper.mapSingleDayRatesDTO(singleDayRatesDTO);
 
         if (!validateDate(singleDayRatesDTO)) {
             log.info("An exchange rate unavailable for " + exchangeDate + ".");

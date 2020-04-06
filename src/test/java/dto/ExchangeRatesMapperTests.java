@@ -8,6 +8,7 @@ import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,13 +31,13 @@ public class ExchangeRatesMapperTests {
         SingleDayRatesDTO testSubject = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
 
         // when
-        ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDatesDTO(testSubject);
+        ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDayRatesDTO(testSubject);
 
         // then
         SingleRate singleRate = new SingleRate(baseCurrency, quoteCurrency, rateDate, rateValue);
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(singleRate);
-        assertTrue(exchangeRatesExpected.equals(exchangeRatesResult));
+        assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
 
@@ -60,14 +61,17 @@ public class ExchangeRatesMapperTests {
         SingleDayRatesDTO testSubject = new SingleDayRatesDTO(baseCurrency, rateDate, rates);
 
         // when
-        ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDatesDTO(testSubject);
+        ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDayRatesDTO(testSubject);
 
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyEUR, rateDate, rateValueEUR));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyGBP, rateDate, rateValueGBP));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyUSD, rateDate, rateValueUSD));
-        assertTrue(exchangeRatesExpected.equals(exchangeRatesResult));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyEUR, rateDate, rateValueEUR));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyGBP, rateDate, rateValueGBP));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyUSD, rateDate, rateValueUSD));
+        assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
 
@@ -99,16 +103,16 @@ public class ExchangeRatesMapperTests {
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapHistoryRatesDTO(testSubject);
-        System.out.println(exchangeRatesResult.toString());
 
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrency, rateDateDayOne, rateValueDayOne));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrency, rateDateDayTwo, rateValueDayTwo));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
-        System.out.println(exchangeRatesExpected.toString());
-        assertTrue(exchangeRatesExpected.getHistoryRates().containsAll(exchangeRatesResult.getHistoryRates())
-                && exchangeRatesResult.getHistoryRates().containsAll(exchangeRatesExpected.getHistoryRates()));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrency, rateDateDayOne, rateValueDayOne));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrency, rateDateDayTwo, rateValueDayTwo));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
+        assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
 
@@ -134,16 +138,19 @@ public class ExchangeRatesMapperTests {
         Double rateValueDayThreeCNY = 4.6168434777;
 
         Map<String, Map<String, Double>> rates = new HashMap<>();
+
         Map<String, Double> rateDayOne = new HashMap<>();
         rateDayOne.put(quoteCurrencyTHB, rateValueDayOneTHB);
         rateDayOne.put(quoteCurrencyPHP, rateValueDayOnePHP);
         rateDayOne.put(quoteCurrencyCNY, rateValueDayOneCNY);
         rates.put(rateDateDayOne, rateDayOne);
+
         Map<String, Double> rateDayTwo = new HashMap<>();
         rateDayTwo.put(quoteCurrencyTHB, rateValueDayTwoTHB);
         rateDayTwo.put(quoteCurrencyPHP, rateValueDayTwoPHP);
         rateDayTwo.put(quoteCurrencyCNY, rateValueDayTwoCNY);
         rates.put(rateDateDayTwo, rateDayTwo);
+
         Map<String, Double> rateDayThree = new HashMap<>();
         rateDayThree.put(quoteCurrencyTHB, rateValueDayThreeTHB);
         rateDayThree.put(quoteCurrencyPHP, rateValueDayThreePHP);
@@ -157,19 +164,32 @@ public class ExchangeRatesMapperTests {
 
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayOne, rateValueDayOneTHB));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayOne, rateValueDayOnePHP));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayOne, rateValueDayOneCNY));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayTwo, rateValueDayTwoTHB));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayTwo, rateValueDayTwoPHP));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayTwo, rateValueDayTwoCNY));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
-        exchangeRatesExpected.addSingleRate(new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
-        System.out.println(exchangeRatesExpected.toString());
-        assertTrue(exchangeRatesExpected.getHistoryRates().containsAll(exchangeRatesResult.getHistoryRates())
-                && exchangeRatesResult.getHistoryRates().containsAll(exchangeRatesExpected.getHistoryRates()));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayOne, rateValueDayOneTHB));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayOne, rateValueDayOnePHP));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayOne, rateValueDayOneCNY));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayTwo, rateValueDayTwoTHB));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayTwo, rateValueDayTwoPHP));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayTwo, rateValueDayTwoCNY));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
+        exchangeRatesExpected.addSingleRate(
+                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
+        assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
+    }
+
+    private boolean compareExchangeRates(ExchangeRates exchangeRatesA, ExchangeRates exchangeRatesB) {
+        List<SingleRate> singleRatesListA = exchangeRatesA.getHistoryRates();
+        List<SingleRate> singleRatesListB = exchangeRatesB.getHistoryRates();
+        return singleRatesListA.containsAll(singleRatesListB) && singleRatesListB.containsAll(singleRatesListA);
     }
 
 }
