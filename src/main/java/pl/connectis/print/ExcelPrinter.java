@@ -14,7 +14,7 @@ abstract class ExcelPrinter extends BasePrinter {
 
     void printToExcelFile(ExchangeRates exchangeRates, Workbook workbook, String filePath) {
 
-        Sheet sheet = workbook.createSheet("Rate");
+        Sheet sheet = workbook.createSheet("Rates");
 
         CellStyle boldCellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
