@@ -52,6 +52,7 @@ public class TXTPrinterTests {
         assertTrue(testFileContent.contains(String.valueOf(rateValueDayTwo)));
         assertTrue(testFileContent.contains(rateDateDayThree));
         assertTrue(testFileContent.contains(String.valueOf(rateValueDayThree)));
+
         assertTrue(testFileContent.contains("Rate date\t" + baseCurrency + "/" + quoteCurrency));
         assertTrue(testFileContent.contains(rateDateDayOne + "\t" + rateValueDayOne));
         assertTrue(testFileContent.contains(rateDateDayTwo + "\t" + rateValueDayTwo));
@@ -66,5 +67,6 @@ public class TXTPrinterTests {
         testFile.delete();
 
     }
+
 }
 
