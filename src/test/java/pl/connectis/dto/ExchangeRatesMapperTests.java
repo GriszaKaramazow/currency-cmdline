@@ -1,9 +1,6 @@
-package dto;
+package pl.connectis.dto;
 
 import org.junit.jupiter.api.Test;
-import pl.connectis.dto.ExchangeRatesMapper;
-import pl.connectis.dto.HistoryRatesDTO;
-import pl.connectis.dto.SingleDayRatesDTO;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
 
@@ -37,6 +34,7 @@ public class ExchangeRatesMapperTests {
         SingleRate singleRate = new SingleRate(baseCurrency, quoteCurrency, rateDate, rateValue);
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(singleRate);
+
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
@@ -71,6 +69,7 @@ public class ExchangeRatesMapperTests {
                 new SingleRate(baseCurrency, quoteCurrencyGBP, rateDate, rateValueGBP));
         exchangeRatesExpected.addSingleRate(
                 new SingleRate(baseCurrency, quoteCurrencyUSD, rateDate, rateValueUSD));
+
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
@@ -89,12 +88,15 @@ public class ExchangeRatesMapperTests {
         Double rateValueDayThree = 213.3443928334;
 
         Map<String, Map<String, Double>> rates = new HashMap<>();
+
         Map<String, Double> rateDayOne = new HashMap<>();
         rateDayOne.put(quoteCurrency, rateValueDayOne);
         rates.put(rateDateDayOne, rateDayOne);
+
         Map<String, Double> rateDayTwo = new HashMap<>();
         rateDayTwo.put(quoteCurrency, rateValueDayTwo);
         rates.put(rateDateDayTwo, rateDayTwo);
+
         Map<String, Double> rateDayThree = new HashMap<>();
         rateDayThree.put(quoteCurrency, rateValueDayThree);
         rates.put(rateDateDayThree, rateDayThree);
@@ -112,6 +114,7 @@ public class ExchangeRatesMapperTests {
                 new SingleRate(baseCurrency, quoteCurrency, rateDateDayTwo, rateValueDayTwo));
         exchangeRatesExpected.addSingleRate(
                 new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
+
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
@@ -182,14 +185,17 @@ public class ExchangeRatesMapperTests {
                 new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
         exchangeRatesExpected.addSingleRate(
                 new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
+
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
     }
 
     private boolean compareExchangeRates(ExchangeRates exchangeRatesA, ExchangeRates exchangeRatesB) {
+
         List<SingleRate> singleRatesListA = exchangeRatesA.getHistoryRates();
         List<SingleRate> singleRatesListB = exchangeRatesB.getHistoryRates();
         return singleRatesListA.containsAll(singleRatesListB) && singleRatesListB.containsAll(singleRatesListA);
+
     }
 
 }
