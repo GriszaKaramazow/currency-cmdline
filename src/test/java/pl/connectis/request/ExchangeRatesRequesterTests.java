@@ -24,47 +24,45 @@ public class ExchangeRatesRequesterTests {
 
     @BeforeAll
     public void startServer() {
+
         mockedServer.start();
+        
     }
 
     @AfterAll
     public void stopServer() {
+
         mockedServer.stop();
+
     }
 
     @Test
     public void testsSingleCurrencyGetSingleDayRates() throws IOException {
 
         // given
+        String testUrl = "/2004-11-11?base=USD&symbols=CHF";
+
+        stubFor(get(urlEqualTo(testUrl))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsSingleCurrencyGetSingleDayRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080" + testUrl);
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
+
+        // then
         String baseCurrency = "USD";
         String quoteCurrency = "CHF";
         String rateDate = "2004-11-11";
         Double rateValue = 1.1785104732;
 
-        String responseBody =
-                "{" +
-                        "\"base\":\"" + baseCurrency + "\"," +
-                        "\"rates\":{" +
-                            "\"" + quoteCurrency + "\":" + rateValue +
-                        "}," +
-                        "\"date\":\"" + rateDate + "\"" +
-                        "}";
-
-        stubFor(get(urlEqualTo("/2004-11-11?base=USD&symbols=CHF"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(responseBody)));
-
-        // when
-        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/2004-11-11?base=USD&symbols=CHF");
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
-        SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
-
-        // then
         Map<String, Double> rate = new HashMap<>();
         rate.put(quoteCurrency, rateValue);
         SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
+
         assertTrue(singleDayRatesDTOExpected.equals(singleDayRatesDTOResult));
 
     }
@@ -73,6 +71,20 @@ public class ExchangeRatesRequesterTests {
     public void testsMultipleCurrenciesGetSingleDayRates() throws IOException {
 
         // given
+        String testUrl = "/2016-01-10?base=GBP&symbols=DKK,NOK,SEK";
+
+        stubFor(get(urlEqualTo(testUrl))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsMultipleCurrenciesGetSingleDayRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080" + testUrl);
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
+
+        // then
         String baseCurrency = "GBP";
         String quoteCurrencySEK = "SEK";
         String quoteCurrencyNOK = "NOK";
@@ -82,29 +94,6 @@ public class ExchangeRatesRequesterTests {
         Double rateValueNOK = 12.9913176505;
         Double rateValueDKK = 10.0106013232;
 
-        String responseBody =
-                "{" +
-                        "\"base\":\"" + baseCurrency + "\"," +
-                        "\"rates\":{" +
-                            "\"" + quoteCurrencyDKK + "\":" + rateValueDKK + "," +
-                            "\"" + quoteCurrencyNOK + "\":" + rateValueNOK + "," +
-                            "\"" + quoteCurrencySEK + "\":" + rateValueSEK +
-                        "}," +
-                        "\"date\":\"" + rateDate + "\"" +
-                        "}";
-
-        stubFor(get(urlEqualTo("/2016-01-10?base=GBP&symbols=DKK,NOK,SEK"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(responseBody)));
-
-        // when
-        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/2016-01-10?base=GBP&symbols=DKK,NOK,SEK");
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
-        SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
-
-        // then
         Map<String, Double> rate = new HashMap<>();
         rate.put(quoteCurrencyDKK, rateValueDKK);
         rate.put(quoteCurrencyNOK, rateValueNOK);
@@ -118,6 +107,68 @@ public class ExchangeRatesRequesterTests {
     public void testsSingleCurrencyGetHistoryRates() throws IOException {
 
         // given
+        String testUrl = "/history?start_at=2016-05-25&end_at=2016-05-27&base=ZAR&symbols=INR";
+
+        stubFor(get(urlEqualTo(testUrl))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsSingleCurrencyGetHistoryRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080" + testUrl);
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
+
+        // then
+        String baseCurrency = "ZAR";
+        String quoteCurrency = "INR";
+        String rateDateDayOne = "2016-05-25";
+        Double rateValueDayOne = 4.297592547;
+        String rateDateDayTwo = "2016-05-26";
+        Double rateValueDayTwo = 4.3014095829;
+        String rateDateDayThree = "2016-05-27";
+        Double rateValueDayThree = 4.2902741484;
+
+        Map<String, Map<String, Double>> rates = new HashMap<>();
+
+        Map<String, Double> rateDayOne = new HashMap<>();
+        rateDayOne.put(quoteCurrency, rateValueDayOne);
+        rates.put(rateDateDayOne, rateDayOne);
+
+        Map<String, Double> rateDayTwo = new HashMap<>();
+        rateDayTwo.put(quoteCurrency, rateValueDayTwo);
+        rates.put(rateDateDayTwo, rateDayTwo);
+
+        Map<String, Double> rateDayThree = new HashMap<>();
+        rateDayThree.put(quoteCurrency, rateValueDayThree);
+        rates.put(rateDateDayThree, rateDayThree);
+
+
+        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
+
+        assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
+
+    }
+
+    @Test
+    public void testsMultipleCurrenciesGetHistoryRates() throws IOException {
+
+        // given
+        String testUrl = "/history?start_at=2019-04-16&end_at=2019-04-20&base=BRL&symbols=TRY,CZK,RON";
+
+        stubFor(get(urlEqualTo(testUrl))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsMultipleCurrenciesGetHistoryRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080" + testUrl);
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
+
+        // then
         String baseCurrency = "BRL";
         String rateDateDayOne = "2019-04-16";
         String rateDateDayTwo = "2019-04-17";
@@ -135,18 +186,6 @@ public class ExchangeRatesRequesterTests {
         Double rateValueDayTwoTRY = 1.474980702;
         Double rateValueDayThreeTRY = 1.4813826177;
 
-        stubFor(get(urlEqualTo("/history?start_at=2016-05-25&end_at=2016-05-27&base=ZAR&symbols=INR"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("testsMultipleCurrenciesGetHistoryRatesResponseBody.json")));
-
-        // when
-        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/history?start_at=2016-05-25&end_at=2016-05-27&base=ZAR&symbols=INR");
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
-        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
-
-        // then
         Map<String, Map<String, Double>> rates = new HashMap<>();
 
         Map<String, Double> rateDayOne = new HashMap<>();
@@ -165,51 +204,6 @@ public class ExchangeRatesRequesterTests {
         rateDayThree.put(quoteCurrencyCZK, rateValueDayThreeCZK);
         rateDayThree.put(quoteCurrencyRON, rateValueDayThreeRON);
         rateDayThree.put(quoteCurrencyTRY, rateValueDayThreeTRY);
-        rates.put(rateDateDayThree, rateDayThree);
-
-        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
-
-        assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
-
-    }
-
-    @Test
-    public void testsMultipleCurrenciesGetHistoryRates() throws IOException {
-
-        // given
-        String baseCurrency = "ZAR";
-        String quoteCurrency = "INR";
-        String rateDateDayOne = "2016-05-25";
-        Double rateValueDayOne = 4.297592547;
-        String rateDateDayTwo = "2016-05-26";
-        Double rateValueDayTwo = 4.3014095829;
-        String rateDateDayThree = "2016-05-27";
-        Double rateValueDayThree = 4.2902741484;
-
-        stubFor(get(urlEqualTo("/history?start_at=2019-04-16&end_at=2019-04-20&base=BRL&symbols=TRY,CZK,RON"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("testsSingleCurrencyGetHistoryRatesResponseBody.json")));
-
-        // when
-        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/history?start_at=2019-04-16&end_at=2019-04-20&base=BRL&symbols=TRY,CZK,RON");
-        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
-        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
-
-        // then
-        Map<String, Map<String, Double>> rates = new HashMap<>();
-
-        Map<String, Double> rateDayOne = new HashMap<>();
-        rateDayOne.put(quoteCurrency, rateValueDayOne);
-        rates.put(rateDateDayOne, rateDayOne);
-
-        Map<String, Double> rateDayTwo = new HashMap<>();
-        rateDayTwo.put(quoteCurrency, rateValueDayTwo);
-        rates.put(rateDateDayTwo, rateDayTwo);
-
-        Map<String, Double> rateDayThree = new HashMap<>();
-        rateDayThree.put(quoteCurrency, rateValueDayThree);
         rates.put(rateDateDayThree, rateDayThree);
 
         HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
