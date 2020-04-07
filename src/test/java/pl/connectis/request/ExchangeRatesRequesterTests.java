@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import pl.connectis.dto.HistoryRatesDTO;
 import pl.connectis.dto.SingleDayRatesDTO;
 
 import java.io.IOException;
@@ -110,6 +111,110 @@ public class ExchangeRatesRequesterTests {
         rate.put(quoteCurrencySEK, rateValueSEK);
         SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
         assertTrue(singleDayRatesDTOExpected.equals(singleDayRatesDTOResult));
+
+    }
+
+    @Test
+    public void testsSingleCurrencyGetHistoryRates() throws IOException {
+
+        // given
+        String baseCurrency = "BRL";
+        String rateDateDayOne = "2019-04-16";
+        String rateDateDayTwo = "2019-04-17";
+        String rateDateDayThree = "2019-04-18";
+        String quoteCurrencyCZK = "CZK";
+        Double rateValueDayOneCZK = 5.8428577934;
+        Double rateValueDayTwoCZK = 5.8250465423;
+        Double rateValueDayThreeCZK = 5.8096186038;
+        String quoteCurrencyRON = "RON";
+        Double rateValueDayOneRON = 1.0841491735;
+        Double rateValueDayTwoRON = 1.0812559597;
+        Double rateValueDayThreeRON = 1.0771840927;
+        String quoteCurrencyTRY = "TRY";
+        Double rateValueDayOneTRY = 1.4962433405;
+        Double rateValueDayTwoTRY = 1.474980702;
+        Double rateValueDayThreeTRY = 1.4813826177;
+
+        stubFor(get(urlEqualTo("/history?start_at=2016-05-25&end_at=2016-05-27&base=ZAR&symbols=INR"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsMultipleCurrenciesGetHistoryRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/history?start_at=2016-05-25&end_at=2016-05-27&base=ZAR&symbols=INR");
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
+
+        // then
+        Map<String, Map<String, Double>> rates = new HashMap<>();
+
+        Map<String, Double> rateDayOne = new HashMap<>();
+        rateDayOne.put(quoteCurrencyCZK, rateValueDayOneCZK);
+        rateDayOne.put(quoteCurrencyRON, rateValueDayOneRON);
+        rateDayOne.put(quoteCurrencyTRY, rateValueDayOneTRY);
+        rates.put(rateDateDayOne, rateDayOne);
+
+        Map<String, Double> rateDayTwo = new HashMap<>();
+        rateDayTwo.put(quoteCurrencyCZK, rateValueDayTwoCZK);
+        rateDayTwo.put(quoteCurrencyRON, rateValueDayTwoRON);
+        rateDayTwo.put(quoteCurrencyTRY, rateValueDayTwoTRY);
+        rates.put(rateDateDayTwo, rateDayTwo);
+
+        Map<String, Double> rateDayThree = new HashMap<>();
+        rateDayThree.put(quoteCurrencyCZK, rateValueDayThreeCZK);
+        rateDayThree.put(quoteCurrencyRON, rateValueDayThreeRON);
+        rateDayThree.put(quoteCurrencyTRY, rateValueDayThreeTRY);
+        rates.put(rateDateDayThree, rateDayThree);
+
+        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
+
+        assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
+
+    }
+
+    @Test
+    public void testsMultipleCurrenciesGetHistoryRates() throws IOException {
+
+        // given
+        String baseCurrency = "ZAR";
+        String quoteCurrency = "INR";
+        String rateDateDayOne = "2016-05-25";
+        Double rateValueDayOne = 4.297592547;
+        String rateDateDayTwo = "2016-05-26";
+        Double rateValueDayTwo = 4.3014095829;
+        String rateDateDayThree = "2016-05-27";
+        Double rateValueDayThree = 4.2902741484;
+
+        stubFor(get(urlEqualTo("/history?start_at=2019-04-16&end_at=2019-04-20&base=BRL&symbols=TRY,CZK,RON"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("testsSingleCurrencyGetHistoryRatesResponseBody.json")));
+
+        // when
+        GenericUrl genericUrl = new GenericUrl("http://localhost:8080/history?start_at=2019-04-16&end_at=2019-04-20&base=BRL&symbols=TRY,CZK,RON");
+        ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+        HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
+
+        // then
+        Map<String, Map<String, Double>> rates = new HashMap<>();
+
+        Map<String, Double> rateDayOne = new HashMap<>();
+        rateDayOne.put(quoteCurrency, rateValueDayOne);
+        rates.put(rateDateDayOne, rateDayOne);
+
+        Map<String, Double> rateDayTwo = new HashMap<>();
+        rateDayTwo.put(quoteCurrency, rateValueDayTwo);
+        rates.put(rateDateDayTwo, rateDayTwo);
+
+        Map<String, Double> rateDayThree = new HashMap<>();
+        rateDayThree.put(quoteCurrency, rateValueDayThree);
+        rates.put(rateDateDayThree, rateDayThree);
+
+        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
+
+        assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
 
     }
 
