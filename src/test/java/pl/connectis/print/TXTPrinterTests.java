@@ -1,6 +1,5 @@
 package pl.connectis.print;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
@@ -14,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TXTPrinterTests {
 
-    private final String testFilePath = "target/test.txt";
-
     @Test
     public void testsPrintingToTXT() throws IOException {
 
         // given
+        String testFilePath = "target/test.txt";
+
         String baseCurrency = "CAD";
         String quoteCurrency = "HUF";
         String rateDateDayOne = "2019-06-03";
@@ -58,13 +57,7 @@ public class TXTPrinterTests {
         assertTrue(testFileContent.contains(rateDateDayTwo + "\t" + rateValueDayTwo));
         assertTrue(testFileContent.contains(rateDateDayThree + "\t" + rateValueDayThree));
 
-    }
-
-    @AfterEach
-    public void tearDown() {
-
-        File testFile = new File(testFilePath);
-        testFile.delete();
+        new File(testFilePath).delete();
 
     }
 

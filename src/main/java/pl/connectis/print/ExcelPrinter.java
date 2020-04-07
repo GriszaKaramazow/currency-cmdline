@@ -57,6 +57,8 @@ abstract class ExcelPrinter extends BasePrinter {
             FileOutputStream outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
             log.info("The data have been saved to '" + filePath + "'.");
+            workbook.close();
+            outputStream.close();
 
         } catch (IOException exception) {
 
