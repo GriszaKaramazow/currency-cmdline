@@ -86,13 +86,13 @@ public class ExchangeRatesRequesterTests {
 
         // then
         String baseCurrency = "GBP";
-        String quoteCurrencySEK = "SEK";
-        String quoteCurrencyNOK = "NOK";
         String quoteCurrencyDKK = "DKK";
+        String quoteCurrencyNOK = "NOK";
+        String quoteCurrencySEK = "SEK";
         String rateDate = "2016-01-08";
-        Double rateValueSEK = 12.4317288208;
-        Double rateValueNOK = 12.9913176505;
         Double rateValueDKK = 10.0106013232;
+        Double rateValueNOK = 12.9913176505;
+        Double rateValueSEK = 12.4317288208;
 
         Map<String, Double> rate = new HashMap<>();
         rate.put(quoteCurrencyDKK, rateValueDKK);
