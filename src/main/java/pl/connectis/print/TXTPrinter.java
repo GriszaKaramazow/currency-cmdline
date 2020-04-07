@@ -13,7 +13,6 @@ public class TXTPrinter extends PlainTextPrinter {
     @Override
     public void print(ExchangeRates exchangeRates) {
 
-
         printToTextFile(exchangeRates, filePath, "\t");
 
     }

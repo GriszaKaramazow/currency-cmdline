@@ -26,7 +26,7 @@ public class ExchangeRatesRequesterTests {
     public void startServer() {
 
         mockedServer.start();
-        
+
     }
 
     @AfterAll
