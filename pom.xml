@@ -56,8 +56,7 @@
         <lombok.version>1.18.12</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
         <junit-jupiter.version>RELEASE</junit-jupiter.version>
-        <mockserver.version>5.10.0</mockserver.version>
-        <commons.version>3.9</commons.version>
+        <wiremock.version>2.26.3</wiremock.version>
     </properties>
 
     <dependencies>
@@ -114,14 +113,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mock-server</groupId>
-            <artifactId>mockserver-junit-jupiter</artifactId>
-            <version>${mockserver.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
-            <version>2.26.3</version>
+            <artifactId>wiremock</artifactId>
+            <version>${wiremock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -32,7 +32,7 @@ $ java -jar currency-cmdline-0.4.0.jar -h
 
 ## Commands
 
-### ```simple``` 
+### ```single``` 
 
 Prints to console an exchange rate for a single date.
 
@@ -95,4 +95,6 @@ prints EUR/USD and GBP/USD exchange rates for december 2019 to ```rates.xlxs```.
 * [Apache POI](https://poi.apache.org/) - Generates xls and xlsx files
 * [SLF4J](http://www.slf4j.org/) - Logging and printing to console
 * [Project Lombok](https://projectlombok.org/) - Reduces boiler-plate code
+* [JUnit Jupiter](https://junit.org/junit5/) - Unit and integration testing
+* [WireMock](http://wiremock.org/) - Mock server for HTTP requests in unit testing
 * [Exchangerate API](https://exchangeratesapi.io/) - WebAPI delivering foreign exchange rates published by the European Central Bank
