@@ -3,18 +3,14 @@ package pl.connectis.print;
 import org.junit.jupiter.api.Test;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import pl.connectis.utils.FileUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TXTPrinterTests {
 
     @Test
-    public void testsPrintingToTXT() throws IOException {
+    public void testsPrintingToTXT() {
 
         // given
         String testFilePath = "target/test.txt";
@@ -36,12 +32,14 @@ public class TXTPrinterTests {
         exchangeRates.addSingleRate(
                 new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
 
-        // when
         Printer printer = new TXTPrinter(testFilePath);
+
+        // when
         printer.print(exchangeRates);
 
         // then
-        String testFileContent = new String(Files.readAllBytes(Paths.get(testFilePath)));
+        FileUtils fileUtils = new FileUtils(testFilePath);
+        String testFileContent = fileUtils.getTextFileContentAsString();
 
         assertTrue(testFileContent.contains(baseCurrency));
         assertTrue(testFileContent.contains(quoteCurrency));
@@ -57,7 +55,7 @@ public class TXTPrinterTests {
         assertTrue(testFileContent.contains(rateDateDayTwo + "\t" + rateValueDayTwo));
         assertTrue(testFileContent.contains(rateDateDayThree + "\t" + rateValueDayThree));
 
-        new File(testFilePath).delete();
+        fileUtils.deleteFile();
 
     }
 

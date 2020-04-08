@@ -4,21 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import picocli.CommandLine;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import pl.connectis.utils.FileUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(Lifecycle.PER_CLASS)
+@TestInstance(Lifecycle.PER_METHOD)
 public class ExchangeRateSingleIntegrationTests {
 
     private final CommandLine commandLine = new CommandLine(new ExchangeRate());
 
     @Test
-    public void testsPrintingToTXT() throws IOException {
+    public void testsPrintingToTXT() {
 
         // given
         String testFilePath = "target/test.txt";
@@ -28,7 +24,8 @@ public class ExchangeRateSingleIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        String testFileContent = new String(Files.readAllBytes(Paths.get(testFilePath)));
+        FileUtils fileUtils = new FileUtils(testFilePath);
+        String testFileContent = fileUtils.getTextFileContentAsString();
 
         String baseCurrency = "USD";
         String quoteCurrency = "CHF";
@@ -43,12 +40,12 @@ public class ExchangeRateSingleIntegrationTests {
         assertTrue(testFileContent.contains("Rate date\t" + baseCurrency + "/" + quoteCurrency));
         assertTrue(testFileContent.contains(rateDate + "\t" + rateValue));
 
-        new File(testFilePath).delete();
+        fileUtils.deleteFile();
 
     }
 
     @Test
-    public void testPrintingToCSV() throws IOException {
+    public void testPrintingToCSV() {
 
         // given
         String testFilePath = "target/test.csv";
@@ -58,7 +55,8 @@ public class ExchangeRateSingleIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        String testFileContent = new String(Files.readAllBytes(Paths.get(testFilePath)));
+        FileUtils fileUtils = new FileUtils(testFilePath);
+        String testFileContent = fileUtils.getTextFileContentAsString();
 
         String baseCurrency = "GBP";
         String quoteCurrencyDKK = "DKK";
@@ -84,7 +82,7 @@ public class ExchangeRateSingleIntegrationTests {
         assertTrue(testFileContent.contains(
                 rateDate + "," + rateValueDKK + "," + rateValueNOK + "," + rateValueSEK));
 
-        new File(testFilePath).delete();
+        fileUtils.deleteFile();
 
     }
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestInstance(Lifecycle.PER_CLASS)
+@TestInstance(Lifecycle.PER_METHOD)
 public class ExchangeRateHistoryIntegrationTests {
 
     private final CommandLine commandLine = new CommandLine(new ExchangeRate());

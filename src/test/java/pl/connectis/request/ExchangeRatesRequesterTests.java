@@ -48,9 +48,10 @@ public class ExchangeRatesRequesterTests {
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("testsSingleCurrencyGetSingleDayRatesResponseBody.json")));
 
-        // when
         GenericUrl genericUrl = new GenericUrl("http://localhost:8080" + testUrl);
         ExchangeRatesRequester exchangeRatesRequester = new ExchangeRatesRequester(genericUrl);
+
+        // when
         SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
 
         // then

@@ -60,8 +60,9 @@ public class XLSXPrinterTests {
         exchangeRates.addSingleRate(
                 new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
 
-        // when
         Printer printer = new XLSXPrinter(testFilePath);
+
+        // when
         printer.print(exchangeRates);
 
         // then
