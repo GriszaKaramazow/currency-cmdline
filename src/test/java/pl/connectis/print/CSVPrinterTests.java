@@ -15,42 +15,25 @@ public class CSVPrinterTests {
         // given
         String testFilePath = "target/test.csv";
 
-        String baseCurrency = "NZD";
-        String rateDateDayOne = "2019-12-11";
-        String rateDateDayTwo = "2019-12-12";
-        String rateDateDayThree = "2019-12-13";
-        String quoteCurrencyCNY = "CNY";
-        Double rateValueDayOneCNY = 4.6064760104;
-        Double rateValueDayTwoCNY = 4.6358689223;
-        Double rateValueDayThreeCNY = 4.6168434777;
-        String quoteCurrencyPHP = "PHP";
-        Double rateValueDayOnePHP = 33.253958875;
-        Double rateValueDayTwoPHP = 33.4058913995;
-        Double rateValueDayThreePHP = 33.4504830202;
-        String quoteCurrencyTHB = "THB";
-        Double rateValueDayOneTHB = 19.8050106358;
-        Double rateValueDayTwoTHB = 19.8781497693;
-        Double rateValueDayThreeTHB = 19.9899247318;
-
         ExchangeRates exchangeRates = new ExchangeRates();
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayOne, rateValueDayOneCNY));
+                new SingleRate("NZD", "CNY", "2019-12-11", 4.6064760104));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayOne, rateValueDayOnePHP));
+                new SingleRate("NZD", "PHP", "2019-12-11", 33.253958875));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayOne, rateValueDayOneTHB));
+                new SingleRate("NZD", "THB", "2019-12-11", 19.8050106358));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayTwo, rateValueDayTwoCNY));
+                new SingleRate("NZD", "CNY", "2019-12-12", 4.6358689223));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayTwo, rateValueDayTwoPHP));
+                new SingleRate("NZD", "PHP", "2019-12-12", 33.4058913995));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayTwo, rateValueDayTwoTHB));
+                new SingleRate("NZD", "THB", "2019-12-12", 19.8781497693));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
+                new SingleRate("NZD", "CNY", "2019-12-13", 4.6168434777));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
+                new SingleRate("NZD", "PHP", "2019-12-13", 33.4504830202));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
+                new SingleRate("NZD", "THB", "2019-12-13", 19.9899247318));
 
         Printer printer = new CSVPrinter(testFilePath);
 
@@ -61,32 +44,27 @@ public class CSVPrinterTests {
         FileUtils fileUtils = new FileUtils(testFilePath);
         String testFileContent = fileUtils.getTextFileContentAsString();
 
-        assertTrue(testFileContent.contains(baseCurrency));
-        assertTrue(testFileContent.contains(rateDateDayOne));
-        assertTrue(testFileContent.contains(rateDateDayTwo));
-        assertTrue(testFileContent.contains(rateDateDayThree));
-        assertTrue(testFileContent.contains(quoteCurrencyTHB));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayOneTHB)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayTwoTHB)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayThreeTHB)));
-        assertTrue(testFileContent.contains(quoteCurrencyPHP));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayOnePHP)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayTwoPHP)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayThreePHP)));
-        assertTrue(testFileContent.contains(quoteCurrencyCNY));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayOneCNY)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayTwoCNY)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayThreeCNY)));
+        assertTrue(testFileContent.contains("NZD"));
+        assertTrue(testFileContent.contains("2019-12-11"));
+        assertTrue(testFileContent.contains("2019-12-12"));
+        assertTrue(testFileContent.contains("2019-12-13"));
+        assertTrue(testFileContent.contains("CNY"));
+        assertTrue(testFileContent.contains(String.valueOf(4.6064760104)));
+        assertTrue(testFileContent.contains(String.valueOf(4.6358689223)));
+        assertTrue(testFileContent.contains(String.valueOf(4.6168434777)));
+        assertTrue(testFileContent.contains("PHP"));
+        assertTrue(testFileContent.contains(String.valueOf(33.253958875)));
+        assertTrue(testFileContent.contains(String.valueOf(33.4058913995)));
+        assertTrue(testFileContent.contains(String.valueOf(33.4504830202)));
+        assertTrue(testFileContent.contains("THB"));
+        assertTrue(testFileContent.contains(String.valueOf(19.8050106358)));
+        assertTrue(testFileContent.contains(String.valueOf(19.8781497693)));
+        assertTrue(testFileContent.contains(String.valueOf(19.9899247318)));
 
-        assertTrue(testFileContent.contains(
-                "Rate date," + baseCurrency + "/" + quoteCurrencyCNY + "," + baseCurrency + "/" + quoteCurrencyPHP
-                + "," + baseCurrency + "/" + quoteCurrencyTHB));
-        assertTrue(testFileContent.contains(
-                rateDateDayOne + "," + rateValueDayOneCNY + "," + rateValueDayOnePHP + "," + rateValueDayOneTHB));
-        assertTrue(testFileContent.contains(
-                rateDateDayTwo + "," + rateValueDayTwoCNY + "," + rateValueDayTwoPHP + "," + rateValueDayTwoTHB));
-        assertTrue(testFileContent.contains(
-                rateDateDayThree + "," + rateValueDayThreeCNY + "," + rateValueDayThreePHP + "," + rateValueDayThreeTHB));
+        assertTrue(testFileContent.contains("Rate date,NZD/CNY,NZD/PHP,NZD/THB"));
+        assertTrue(testFileContent.contains("2019-12-11," + 4.6064760104 + "," + 33.253958875  + "," + 19.8050106358));
+        assertTrue(testFileContent.contains("2019-12-12," + 4.6358689223 + "," + 33.4058913995 + "," + 19.8781497693));
+        assertTrue(testFileContent.contains("2019-12-13," + 4.6168434777 + "," + 33.4504830202 + "," + 19.9899247318));
 
         fileUtils.deleteFile();
 

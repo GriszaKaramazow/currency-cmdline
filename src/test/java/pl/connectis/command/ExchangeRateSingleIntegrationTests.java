@@ -27,18 +27,13 @@ public class ExchangeRateSingleIntegrationTests {
         FileUtils fileUtils = new FileUtils(testFilePath);
         String testFileContent = fileUtils.getTextFileContentAsString();
 
-        String baseCurrency = "USD";
-        String quoteCurrency = "CHF";
-        String rateDate = "2004-11-11";
-        Double rateValue = 1.1785104732;
+        assertTrue(testFileContent.contains("USD"));
+        assertTrue(testFileContent.contains("CHF"));
+        assertTrue(testFileContent.contains("2004-11-11"));
+        assertTrue(testFileContent.contains(String.valueOf(1.1785104732)));
 
-        assertTrue(testFileContent.contains(baseCurrency));
-        assertTrue(testFileContent.contains(quoteCurrency));
-        assertTrue(testFileContent.contains(rateDate));
-        assertTrue(testFileContent.contains(String.valueOf(rateValue)));
-
-        assertTrue(testFileContent.contains("Rate date\t" + baseCurrency + "/" + quoteCurrency));
-        assertTrue(testFileContent.contains(rateDate + "\t" + rateValue));
+        assertTrue(testFileContent.contains("Rate date\tUSD/CHF"));
+        assertTrue(testFileContent.contains("2004-11-11\t" + 1.1785104732));
 
         fileUtils.deleteFile();
 
@@ -58,29 +53,17 @@ public class ExchangeRateSingleIntegrationTests {
         FileUtils fileUtils = new FileUtils(testFilePath);
         String testFileContent = fileUtils.getTextFileContentAsString();
 
-        String baseCurrency = "GBP";
-        String quoteCurrencyDKK = "DKK";
-        String quoteCurrencyNOK = "NOK";
-        String quoteCurrencySEK = "SEK";
-        String rateDate = "2016-01-08";
-        Double rateValueDKK = 10.0106013232;
-        Double rateValueNOK = 12.9913176505;
-        Double rateValueSEK = 12.4317288208;
+        assertTrue(testFileContent.contains("GBP"));
+        assertTrue(testFileContent.contains("DKK"));
+        assertTrue(testFileContent.contains("NOK"));
+        assertTrue(testFileContent.contains("SEK"));
+        assertTrue(testFileContent.contains("2016-01-08"));
+        assertTrue(testFileContent.contains(String.valueOf(10.0106013232)));
+        assertTrue(testFileContent.contains(String.valueOf(12.9913176505)));
+        assertTrue(testFileContent.contains(String.valueOf(12.4317288208)));
 
-        assertTrue(testFileContent.contains(baseCurrency));
-        assertTrue(testFileContent.contains(quoteCurrencyDKK));
-        assertTrue(testFileContent.contains(quoteCurrencyNOK));
-        assertTrue(testFileContent.contains(quoteCurrencySEK));
-        assertTrue(testFileContent.contains(rateDate));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDKK)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueNOK)));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueSEK)));
-
-        assertTrue(testFileContent.contains(
-                "Rate date," + baseCurrency + "/" + quoteCurrencyDKK + "," + baseCurrency + "/" + quoteCurrencyNOK
-                        + "," + baseCurrency + "/" + quoteCurrencySEK));
-        assertTrue(testFileContent.contains(
-                rateDate + "," + rateValueDKK + "," + rateValueNOK + "," + rateValueSEK));
+        assertTrue(testFileContent.contains("Rate date,GBP/DKK,GBP/NOK,GBP/SEK"));
+        assertTrue(testFileContent.contains("2016-01-08," + 10.0106013232 + "," + 12.9913176505 + "," + 12.4317288208));
 
         fileUtils.deleteFile();
 

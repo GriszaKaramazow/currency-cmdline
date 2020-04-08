@@ -18,20 +18,15 @@ public class ExchangeRatesMapperTests {
     public void testSingleCurrencyMapSingleDatesDTO() {
 
         // given
-        String baseCurrency = "EUR";
-        String quoteCurrency = "PLN";
-        String rateDate = "2020-02-28";
-        Double rateValue = 4.3259;
-
         Map<String, Double> rate = new HashMap<>();
-        rate.put(quoteCurrency, rateValue);
-        SingleDayRatesDTO testSubject = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
+        rate.put("PLN", 4.3259);
+        SingleDayRatesDTO testSubject = new SingleDayRatesDTO("EUR", "2020-02-28", rate);
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDayRatesDTO(testSubject);
 
         // then
-        SingleRate singleRate = new SingleRate(baseCurrency, quoteCurrency, rateDate, rateValue);
+        SingleRate singleRate = new SingleRate("EUR", "PLN", "2020-02-28", 4.3259);
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(singleRate);
 
@@ -43,20 +38,11 @@ public class ExchangeRatesMapperTests {
     public void testMultipleCurrenciesMapSingleDatesDTO () {
 
         // given
-        String baseCurrency = "RUB";
-        String quoteCurrencyGBP = "GBP";
-        String quoteCurrencyEUR = "EUR";
-        String quoteCurrencyUSD = "USD";
-        String rateDate = "2020-03-13";
-        Double rateValueGBP = 0.0110319117;
-        Double rateValueEUR = 0.0123856648;
-        Double rateValueUSD = 0.0137530422;
-
         Map<String, Double> rates = new HashMap<>();
-        rates.put(quoteCurrencyGBP, rateValueGBP);
-        rates.put(quoteCurrencyEUR, rateValueEUR);
-        rates.put(quoteCurrencyUSD, rateValueUSD);
-        SingleDayRatesDTO testSubject = new SingleDayRatesDTO(baseCurrency, rateDate, rates);
+        rates.put("EUR", 0.0123856648);
+        rates.put("GBP", 0.0110319117);
+        rates.put("USD", 0.0137530422);
+        SingleDayRatesDTO testSubject = new SingleDayRatesDTO("RUB",  "2020-03-13", rates);
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDayRatesDTO(testSubject);
@@ -64,11 +50,11 @@ public class ExchangeRatesMapperTests {
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyEUR, rateDate, rateValueEUR));
+                new SingleRate("RUB", "EUR", "2020-03-13", 0.0123856648));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyGBP, rateDate, rateValueGBP));
+                new SingleRate("RUB", "GBP", "2020-03-13", 0.0110319117));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyUSD, rateDate, rateValueUSD));
+                new SingleRate("RUB", "USD", "2020-03-13", 0.0137530422));
 
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
@@ -78,30 +64,21 @@ public class ExchangeRatesMapperTests {
     public void testSingleCurrencyMapHistoryRatesDTO () {
 
         // given
-        String baseCurrency = "CAD";
-        String quoteCurrency = "HUF";
-        String rateDateDayOne = "2019-06-03";
-        Double rateValueDayOne = 214.4191283614;
-        String rateDateDayTwo = "2019-06-04";
-        Double rateValueDayTwo = 213.0898021309;
-        String rateDateDayThree = "2019-06-05";
-        Double rateValueDayThree = 213.3443928334;
-
         Map<String, Map<String, Double>> rates = new HashMap<>();
 
         Map<String, Double> rateDayOne = new HashMap<>();
-        rateDayOne.put(quoteCurrency, rateValueDayOne);
-        rates.put(rateDateDayOne, rateDayOne);
+        rateDayOne.put("HUF", 214.4191283614);
+        rates.put("2019-06-03", rateDayOne);
 
         Map<String, Double> rateDayTwo = new HashMap<>();
-        rateDayTwo.put(quoteCurrency, rateValueDayTwo);
-        rates.put(rateDateDayTwo, rateDayTwo);
+        rateDayTwo.put("HUF", 213.0898021309);
+        rates.put("2019-06-04", rateDayTwo);
 
         Map<String, Double> rateDayThree = new HashMap<>();
-        rateDayThree.put(quoteCurrency, rateValueDayThree);
-        rates.put(rateDateDayThree, rateDayThree);
+        rateDayThree.put("HUF", 213.3443928334);
+        rates.put("2019-06-05", rateDayThree);
 
-        HistoryRatesDTO testSubject = new HistoryRatesDTO(baseCurrency, rates);
+        HistoryRatesDTO testSubject = new HistoryRatesDTO("CAD", rates);
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapHistoryRatesDTO(testSubject);
@@ -109,11 +86,11 @@ public class ExchangeRatesMapperTests {
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayOne, rateValueDayOne));
+                new SingleRate("CAD", "HUF", "2019-06-03", 214.4191283614));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayTwo, rateValueDayTwo));
+                new SingleRate("CAD", "HUF", "2019-06-04", 213.0898021309));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
+                new SingleRate("CAD", "HUF", "2019-06-05", 213.3443928334));
 
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 
@@ -123,44 +100,27 @@ public class ExchangeRatesMapperTests {
     public void testMultipleCurrenciesMapHistoryRatesDTO() {
 
         // given
-        String baseCurrency = "NZD";
-        String rateDateDayOne = "2019-12-11";
-        String rateDateDayTwo = "2019-12-12";
-        String rateDateDayThree = "2019-12-13";
-        String quoteCurrencyCNY = "CNY";
-        Double rateValueDayOneCNY = 4.6064760104;
-        Double rateValueDayTwoCNY = 4.6358689223;
-        Double rateValueDayThreeCNY = 4.6168434777;
-        String quoteCurrencyPHP = "PHP";
-        Double rateValueDayOnePHP = 33.253958875;
-        Double rateValueDayTwoPHP = 33.4058913995;
-        Double rateValueDayThreePHP = 33.4504830202;
-        String quoteCurrencyTHB = "THB";
-        Double rateValueDayOneTHB = 19.8050106358;
-        Double rateValueDayTwoTHB = 19.8781497693;
-        Double rateValueDayThreeTHB = 19.9899247318;
-
         Map<String, Map<String, Double>> rates = new HashMap<>();
 
         Map<String, Double> rateDayOne = new HashMap<>();
-        rateDayOne.put(quoteCurrencyCNY, rateValueDayOneCNY);
-        rateDayOne.put(quoteCurrencyPHP, rateValueDayOnePHP);
-        rateDayOne.put(quoteCurrencyTHB, rateValueDayOneTHB);
-        rates.put(rateDateDayOne, rateDayOne);
+        rateDayOne.put("CNY", 4.6064760104);
+        rateDayOne.put("PHP", 33.253958875);
+        rateDayOne.put("THB", 19.8050106358);
+        rates.put("2019-12-11", rateDayOne);
 
         Map<String, Double> rateDayTwo = new HashMap<>();
-        rateDayTwo.put(quoteCurrencyCNY, rateValueDayTwoCNY);
-        rateDayTwo.put(quoteCurrencyPHP, rateValueDayTwoPHP);
-        rateDayTwo.put(quoteCurrencyTHB, rateValueDayTwoTHB);
-        rates.put(rateDateDayTwo, rateDayTwo);
+        rateDayTwo.put("CNY", 4.6358689223);
+        rateDayTwo.put("PHP", 33.4058913995);
+        rateDayTwo.put("THB", 19.8781497693);
+        rates.put("2019-12-12", rateDayTwo);
 
         Map<String, Double> rateDayThree = new HashMap<>();
-        rateDayThree.put(quoteCurrencyCNY, rateValueDayThreeCNY);
-        rateDayThree.put(quoteCurrencyPHP, rateValueDayThreePHP);
-        rateDayThree.put(quoteCurrencyTHB, rateValueDayThreeTHB);
-        rates.put(rateDateDayThree, rateDayThree);
+        rateDayThree.put("CNY", 4.6168434777);
+        rateDayThree.put("PHP", 33.4504830202);
+        rateDayThree.put("THB", 19.9899247318);
+        rates.put("2019-12-13", rateDayThree);
 
-        HistoryRatesDTO testSubject = new HistoryRatesDTO(baseCurrency, rates);
+        HistoryRatesDTO testSubject = new HistoryRatesDTO("NZD", rates);
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapHistoryRatesDTO(testSubject);
@@ -168,23 +128,23 @@ public class ExchangeRatesMapperTests {
         // then
         ExchangeRates exchangeRatesExpected = new ExchangeRates();
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayOne, rateValueDayOneCNY));
+                new SingleRate("NZD", "CNY", "2019-12-11", 4.6064760104));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayOne, rateValueDayOnePHP));
+                new SingleRate("NZD", "PHP", "2019-12-11", 33.253958875));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayOne, rateValueDayOneTHB));
+                new SingleRate("NZD", "THB", "2019-12-11", 19.8050106358));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayTwo, rateValueDayTwoCNY));
+                new SingleRate("NZD", "CNY", "2019-12-12", 4.6358689223));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayTwo, rateValueDayTwoPHP));
+                new SingleRate("NZD", "PHP", "2019-12-12", 33.4058913995));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayTwo, rateValueDayTwoTHB));
+                new SingleRate("NZD", "THB", "2019-12-12", 19.8781497693));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
+                new SingleRate("NZD", "CNY", "2019-12-13", 4.6168434777));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
+                new SingleRate("NZD", "PHP", "2019-12-13", 33.4504830202));
         exchangeRatesExpected.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
+                new SingleRate("NZD", "THB", "2019-12-13", 19.9899247318));
 
         assertTrue(compareExchangeRates(exchangeRatesExpected, exchangeRatesResult));
 

@@ -18,42 +18,25 @@ public class XLSXPrinterTests {
         // given
         String testFilePath = "target/test.xlsx";
 
-        String baseCurrency = "NZD";
-        String rateDateDayOne = "2019-12-11";
-        String rateDateDayTwo = "2019-12-12";
-        String rateDateDayThree = "2019-12-13";
-        String quoteCurrencyCNY = "CNY";
-        Double rateValueDayOneCNY = 4.6064760104;
-        Double rateValueDayTwoCNY = 4.6358689223;
-        Double rateValueDayThreeCNY = 4.6168434777;
-        String quoteCurrencyPHP = "PHP";
-        Double rateValueDayOnePHP = 33.253958875;
-        Double rateValueDayTwoPHP = 33.4058913995;
-        Double rateValueDayThreePHP = 33.4504830202;
-        String quoteCurrencyTHB = "THB";
-        Double rateValueDayOneTHB = 19.8050106358;
-        Double rateValueDayTwoTHB = 19.8781497693;
-        Double rateValueDayThreeTHB = 19.9899247318;
-
         ExchangeRates exchangeRates = new ExchangeRates();
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayOne, rateValueDayOneCNY));
+                new SingleRate("NZD", "CNY", "2019-12-11", 4.6064760104));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayOne, rateValueDayOnePHP));
+                new SingleRate("NZD", "PHP", "2019-12-11", 33.253958875));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayOne, rateValueDayOneTHB));
+                new SingleRate("NZD", "THB", "2019-12-11", 19.8050106358));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayTwo, rateValueDayTwoCNY));
+                new SingleRate("NZD", "CNY", "2019-12-12", 4.6358689223));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayTwo, rateValueDayTwoPHP));
+                new SingleRate("NZD", "PHP", "2019-12-12", 33.4058913995));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayTwo, rateValueDayTwoTHB));
+                new SingleRate("NZD", "THB", "2019-12-12", 19.8781497693));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyCNY, rateDateDayThree, rateValueDayThreeCNY));
+                new SingleRate("NZD", "CNY", "2019-12-13", 4.6168434777));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyPHP, rateDateDayThree, rateValueDayThreePHP));
+                new SingleRate("NZD", "PHP", "2019-12-13", 33.4504830202));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrencyTHB, rateDateDayThree, rateValueDayThreeTHB));
+                new SingleRate("NZD", "THB", "2019-12-13", 19.9899247318));
 
         Printer printer = new XLSXPrinter(testFilePath);
 
@@ -64,24 +47,24 @@ public class XLSXPrinterTests {
         ExcelFileTestHelper fileTestHelper = new XLSXFileTestHelper(testFilePath);
 
         assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, fileTestHelper.getCellValueString(0, 1));
-        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, fileTestHelper.getCellValueString(0, 2));
-        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, fileTestHelper.getCellValueString(0, 3));
+        assertEquals("NZD/CNY", fileTestHelper.getCellValueString(0, 1));
+        assertEquals("NZD/PHP", fileTestHelper.getCellValueString(0, 2));
+        assertEquals("NZD/THB", fileTestHelper.getCellValueString(0, 3));
 
-        assertEquals(rateDateDayOne, fileTestHelper.getCellValueDateAsString(1, 0));
-        assertEquals(rateValueDayOneCNY, fileTestHelper.getCellValueDouble(1, 1));
-        assertEquals(rateValueDayOnePHP, fileTestHelper.getCellValueDouble(1, 2));
-        assertEquals(rateValueDayOneTHB, fileTestHelper.getCellValueDouble(1, 3));
+        assertEquals("2019-12-11", fileTestHelper.getCellValueDateAsString(1, 0));
+        assertEquals(4.6064760104, fileTestHelper.getCellValueDouble(1, 1));
+        assertEquals(33.253958875, fileTestHelper.getCellValueDouble(1, 2));
+        assertEquals(19.8050106358, fileTestHelper.getCellValueDouble(1, 3));
 
-        assertEquals(rateDateDayTwo, fileTestHelper.getCellValueDateAsString(2, 0));
-        assertEquals(rateValueDayTwoCNY, fileTestHelper.getCellValueDouble(2, 1));
-        assertEquals(rateValueDayTwoPHP, fileTestHelper.getCellValueDouble(2, 2));
-        assertEquals(rateValueDayTwoTHB, fileTestHelper.getCellValueDouble(2, 3));
+        assertEquals("2019-12-12", fileTestHelper.getCellValueDateAsString(2, 0));
+        assertEquals(4.6358689223, fileTestHelper.getCellValueDouble(2, 1));
+        assertEquals(33.4058913995, fileTestHelper.getCellValueDouble(2, 2));
+        assertEquals(19.8781497693, fileTestHelper.getCellValueDouble(2, 3));
 
-        assertEquals(rateDateDayThree, fileTestHelper.getCellValueDateAsString(3, 0));
-        assertEquals(rateValueDayThreeCNY, fileTestHelper.getCellValueDouble(3, 1));
-        assertEquals(rateValueDayThreePHP, fileTestHelper.getCellValueDouble(3, 2));
-        assertEquals(rateValueDayThreeTHB, fileTestHelper.getCellValueDouble(3, 3));
+        assertEquals("2019-12-13", fileTestHelper.getCellValueDateAsString(3, 0));
+        assertEquals(4.6168434777, fileTestHelper.getCellValueDouble(3, 1));
+        assertEquals(33.4504830202, fileTestHelper.getCellValueDouble(3, 2));
+        assertEquals(19.9899247318, fileTestHelper.getCellValueDouble(3, 3));
 
         fileTestHelper.closeDeleteFile();
 

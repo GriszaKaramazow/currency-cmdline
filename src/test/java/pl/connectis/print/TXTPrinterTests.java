@@ -15,22 +15,13 @@ public class TXTPrinterTests {
         // given
         String testFilePath = "target/test.txt";
 
-        String baseCurrency = "CAD";
-        String quoteCurrency = "HUF";
-        String rateDateDayOne = "2019-06-03";
-        Double rateValueDayOne = 214.4191283614;
-        String rateDateDayTwo = "2019-06-04";
-        Double rateValueDayTwo = 213.0898021309;
-        String rateDateDayThree = "2019-06-05";
-        Double rateValueDayThree = 213.3443928334;
-
         ExchangeRates exchangeRates = new ExchangeRates();
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayOne, rateValueDayOne));
+                new SingleRate("CAD", "HUF", "2019-06-03", 214.4191283614));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayTwo, rateValueDayTwo));
+                new SingleRate("CAD", "HUF", "2019-06-04", 213.0898021309));
         exchangeRates.addSingleRate(
-                new SingleRate(baseCurrency, quoteCurrency, rateDateDayThree, rateValueDayThree));
+                new SingleRate("CAD", "HUF", "2019-06-05", 213.3443928334));
 
         Printer printer = new TXTPrinter(testFilePath);
 
@@ -41,19 +32,19 @@ public class TXTPrinterTests {
         FileUtils fileUtils = new FileUtils(testFilePath);
         String testFileContent = fileUtils.getTextFileContentAsString();
 
-        assertTrue(testFileContent.contains(baseCurrency));
-        assertTrue(testFileContent.contains(quoteCurrency));
-        assertTrue(testFileContent.contains(rateDateDayOne));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayOne)));
-        assertTrue(testFileContent.contains(rateDateDayTwo));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayTwo)));
-        assertTrue(testFileContent.contains(rateDateDayThree));
-        assertTrue(testFileContent.contains(String.valueOf(rateValueDayThree)));
+        assertTrue(testFileContent.contains("CAD"));
+        assertTrue(testFileContent.contains("HUF"));
+        assertTrue(testFileContent.contains("2019-06-03"));
+        assertTrue(testFileContent.contains(String.valueOf(214.4191283614)));
+        assertTrue(testFileContent.contains("2019-06-04"));
+        assertTrue(testFileContent.contains(String.valueOf(213.0898021309)));
+        assertTrue(testFileContent.contains("2019-06-05"));
+        assertTrue(testFileContent.contains(String.valueOf(213.3443928334)));
 
-        assertTrue(testFileContent.contains("Rate date\t" + baseCurrency + "/" + quoteCurrency));
-        assertTrue(testFileContent.contains(rateDateDayOne + "\t" + rateValueDayOne));
-        assertTrue(testFileContent.contains(rateDateDayTwo + "\t" + rateValueDayTwo));
-        assertTrue(testFileContent.contains(rateDateDayThree + "\t" + rateValueDayThree));
+        assertTrue(testFileContent.contains("Rate date\tCAD/HUF"));
+        assertTrue(testFileContent.contains("2019-06-03\t" + 214.4191283614));
+        assertTrue(testFileContent.contains("2019-06-04\t" + 213.0898021309));
+        assertTrue(testFileContent.contains("2019-06-05\t" + 213.3443928334));
 
         fileUtils.deleteFile();
 

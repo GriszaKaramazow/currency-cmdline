@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -55,14 +56,9 @@ public class ExchangeRatesRequesterTests {
         SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
 
         // then
-        String baseCurrency = "USD";
-        String quoteCurrency = "CHF";
-        String rateDate = "2004-11-11";
-        Double rateValue = 1.1785104732;
-
         Map<String, Double> rate = new HashMap<>();
-        rate.put(quoteCurrency, rateValue);
-        SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
+        rate.put("CHF", 1.1785104732);
+        SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO("USD", "2004-11-11", rate);
 
         assertTrue(singleDayRatesDTOExpected.equals(singleDayRatesDTOResult));
 
@@ -86,20 +82,11 @@ public class ExchangeRatesRequesterTests {
         SingleDayRatesDTO singleDayRatesDTOResult = exchangeRatesRequester.getSingleDayRates();
 
         // then
-        String baseCurrency = "GBP";
-        String quoteCurrencyDKK = "DKK";
-        String quoteCurrencyNOK = "NOK";
-        String quoteCurrencySEK = "SEK";
-        String rateDate = "2016-01-08";
-        Double rateValueDKK = 10.0106013232;
-        Double rateValueNOK = 12.9913176505;
-        Double rateValueSEK = 12.4317288208;
-
         Map<String, Double> rate = new HashMap<>();
-        rate.put(quoteCurrencyDKK, rateValueDKK);
-        rate.put(quoteCurrencyNOK, rateValueNOK);
-        rate.put(quoteCurrencySEK, rateValueSEK);
-        SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO(baseCurrency, rateDate, rate);
+        rate.put( "DKK", 10.0106013232);
+        rate.put("NOK", 12.9913176505);
+        rate.put("SEK", 12.4317288208);
+        SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO("GBP", "2016-01-08", rate);
         assertTrue(singleDayRatesDTOExpected.equals(singleDayRatesDTOResult));
 
     }
@@ -122,31 +109,22 @@ public class ExchangeRatesRequesterTests {
         HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
 
         // then
-        String baseCurrency = "ZAR";
-        String quoteCurrency = "INR";
-        String rateDateDayOne = "2016-05-25";
-        Double rateValueDayOne = 4.297592547;
-        String rateDateDayTwo = "2016-05-26";
-        Double rateValueDayTwo = 4.3014095829;
-        String rateDateDayThree = "2016-05-27";
-        Double rateValueDayThree = 4.2902741484;
-
         Map<String, Map<String, Double>> rates = new HashMap<>();
 
         Map<String, Double> rateDayOne = new HashMap<>();
-        rateDayOne.put(quoteCurrency, rateValueDayOne);
-        rates.put(rateDateDayOne, rateDayOne);
+        rateDayOne.put("INR", 4.297592547);
+        rates.put("2016-05-25", rateDayOne);
 
         Map<String, Double> rateDayTwo = new HashMap<>();
-        rateDayTwo.put(quoteCurrency, rateValueDayTwo);
-        rates.put(rateDateDayTwo, rateDayTwo);
+        rateDayTwo.put("INR", 4.3014095829);
+        rates.put("2016-05-26", rateDayTwo);
 
         Map<String, Double> rateDayThree = new HashMap<>();
-        rateDayThree.put(quoteCurrency, rateValueDayThree);
-        rates.put(rateDateDayThree, rateDayThree);
+        rateDayThree.put("INR", 4.2902741484);
+        rates.put("2016-05-27", rateDayThree);
 
 
-        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
+        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO("ZAR", rates);
 
         assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
 
@@ -170,46 +148,29 @@ public class ExchangeRatesRequesterTests {
         HistoryRatesDTO historyRatesDTOResult = exchangeRatesRequester.getHistoryRates();
 
         // then
-        String baseCurrency = "BRL";
-        String rateDateDayOne = "2019-04-16";
-        String rateDateDayTwo = "2019-04-17";
-        String rateDateDayThree = "2019-04-18";
-        String quoteCurrencyCZK = "CZK";
-        Double rateValueDayOneCZK = 5.8428577934;
-        Double rateValueDayTwoCZK = 5.8250465423;
-        Double rateValueDayThreeCZK = 5.8096186038;
-        String quoteCurrencyRON = "RON";
-        Double rateValueDayOneRON = 1.0841491735;
-        Double rateValueDayTwoRON = 1.0812559597;
-        Double rateValueDayThreeRON = 1.0771840927;
-        String quoteCurrencyTRY = "TRY";
-        Double rateValueDayOneTRY = 1.4962433405;
-        Double rateValueDayTwoTRY = 1.474980702;
-        Double rateValueDayThreeTRY = 1.4813826177;
-
         Map<String, Map<String, Double>> rates = new HashMap<>();
 
         Map<String, Double> rateDayOne = new HashMap<>();
-        rateDayOne.put(quoteCurrencyCZK, rateValueDayOneCZK);
-        rateDayOne.put(quoteCurrencyRON, rateValueDayOneRON);
-        rateDayOne.put(quoteCurrencyTRY, rateValueDayOneTRY);
-        rates.put(rateDateDayOne, rateDayOne);
+        rateDayOne.put("CZK", 5.8428577934);
+        rateDayOne.put("RON", 1.0841491735);
+        rateDayOne.put("TRY", 1.4962433405);
+        rates.put("2019-04-16", rateDayOne);
 
         Map<String, Double> rateDayTwo = new HashMap<>();
-        rateDayTwo.put(quoteCurrencyCZK, rateValueDayTwoCZK);
-        rateDayTwo.put(quoteCurrencyRON, rateValueDayTwoRON);
-        rateDayTwo.put(quoteCurrencyTRY, rateValueDayTwoTRY);
-        rates.put(rateDateDayTwo, rateDayTwo);
+        rateDayTwo.put("CZK", 5.8250465423);
+        rateDayTwo.put("RON", 1.0812559597);
+        rateDayTwo.put("TRY", 1.474980702);
+        rates.put("2019-04-17", rateDayTwo);
 
         Map<String, Double> rateDayThree = new HashMap<>();
-        rateDayThree.put(quoteCurrencyCZK, rateValueDayThreeCZK);
-        rateDayThree.put(quoteCurrencyRON, rateValueDayThreeRON);
-        rateDayThree.put(quoteCurrencyTRY, rateValueDayThreeTRY);
-        rates.put(rateDateDayThree, rateDayThree);
+        rateDayThree.put("CZK", 5.8096186038);
+        rateDayThree.put("RON", 1.0771840927);
+        rateDayThree.put("TRY", 1.4813826177);
+        rates.put("2019-04-18", rateDayThree);
 
-        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO(baseCurrency, rates);
+        HistoryRatesDTO historyRatesDTOExpected = new HistoryRatesDTO("BRL", rates);
 
-        assertTrue(historyRatesDTOExpected.equals(historyRatesDTOResult));
+        assertEquals(historyRatesDTOExpected, historyRatesDTOResult);
 
     }
 
