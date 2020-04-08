@@ -1,21 +1,16 @@
 package pl.connectis.print;
 
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
-import pl.connectis.utils.TestUtils;
+import pl.connectis.utils.ExcelFileTestHelper;
+import pl.connectis.utils.XLSXFileTestHelper;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XLSXPrinterTests {
-
-    private final TestUtils testUtils = new TestUtils();
 
     @Test
     public void testsPrintingToXLSX() throws IOException {
@@ -66,33 +61,29 @@ public class XLSXPrinterTests {
         printer.print(exchangeRates);
 
         // then
-        FileInputStream fileInputStream = new FileInputStream(testFilePath);
-        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-        XSSFSheet sheet = workbook.getSheet("Rates");
+        ExcelFileTestHelper fileTestHelper = new XLSXFileTestHelper(testFilePath);
 
-        assertEquals("Rate date", testUtils.getCellValue(sheet, 0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, testUtils.getCellValue(sheet, 0, 1));
-        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, testUtils.getCellValue(sheet, 0, 2));
-        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, testUtils.getCellValue(sheet, 0, 3));
+        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, fileTestHelper.getCellValue(0, 1));
+        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, fileTestHelper.getCellValue(0, 2));
+        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, fileTestHelper.getCellValue(0, 3));
 
-        assertEquals(rateDateDayOne, testUtils.getCellValue(sheet, 1, 0));
-        assertEquals(String.valueOf(rateValueDayOneCNY), testUtils.getCellValue(sheet, 1, 1));
-        assertEquals(String.valueOf(rateValueDayOnePHP), testUtils.getCellValue(sheet, 1, 2));
-        assertEquals(String.valueOf(rateValueDayOneTHB), testUtils.getCellValue(sheet, 1, 3));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
+        assertEquals(String.valueOf(rateValueDayOneCNY), fileTestHelper.getCellValue(1, 1));
+        assertEquals(String.valueOf(rateValueDayOnePHP), fileTestHelper.getCellValue(1, 2));
+        assertEquals(String.valueOf(rateValueDayOneTHB), fileTestHelper.getCellValue(1, 3));
 
-        assertEquals(rateDateDayTwo, testUtils.getCellValue(sheet, 2, 0));
-        assertEquals(String.valueOf(rateValueDayTwoCNY), testUtils.getCellValue(sheet, 2, 1));
-        assertEquals(String.valueOf(rateValueDayTwoPHP), testUtils.getCellValue(sheet, 2, 2));
-        assertEquals(String.valueOf(rateValueDayTwoTHB), testUtils.getCellValue(sheet, 2, 3));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
+        assertEquals(String.valueOf(rateValueDayTwoCNY), fileTestHelper.getCellValue(2, 1));
+        assertEquals(String.valueOf(rateValueDayTwoPHP), fileTestHelper.getCellValue(2, 2));
+        assertEquals(String.valueOf(rateValueDayTwoTHB), fileTestHelper.getCellValue(2, 3));
 
-        assertEquals(rateDateDayThree, testUtils.getCellValue(sheet, 3, 0));
-        assertEquals(String.valueOf(rateValueDayThreeCNY), testUtils.getCellValue(sheet, 3, 1));
-        assertEquals(String.valueOf(rateValueDayThreePHP), testUtils.getCellValue(sheet, 3, 2));
-        assertEquals(String.valueOf(rateValueDayThreeTHB), testUtils.getCellValue(sheet, 3, 3));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
+        assertEquals(String.valueOf(rateValueDayThreeCNY), fileTestHelper.getCellValue(3, 1));
+        assertEquals(String.valueOf(rateValueDayThreePHP), fileTestHelper.getCellValue(3, 2));
+        assertEquals(String.valueOf(rateValueDayThreeTHB), fileTestHelper.getCellValue(3, 3));
 
-        workbook.close();
-        fileInputStream.close();
-        new File(testFilePath).delete();
+        fileTestHelper.closeDeleteFile();
 
     }
 

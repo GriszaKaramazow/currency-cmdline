@@ -1,17 +1,13 @@
 package pl.connectis.command;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import picocli.CommandLine;
-import pl.connectis.utils.TestUtils;
+import pl.connectis.utils.ExcelFileTestHelper;
+import pl.connectis.utils.XLSFileTestHelper;
+import pl.connectis.utils.XLSXFileTestHelper;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ExchangeRateHistoryIntegrationTests {
 
     private final CommandLine commandLine = new CommandLine(new ExchangeRate());
-    private final TestUtils testUtils = new TestUtils();
 
     @Test
     public void testsPrintingToXLS() throws IOException {
@@ -33,9 +28,7 @@ public class ExchangeRateHistoryIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        FileInputStream fileInputStream = new FileInputStream(testFilePath);
-        HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
-        HSSFSheet sheet = workbook.getSheet("Rates");
+        ExcelFileTestHelper fileTestHelper = new XLSFileTestHelper(testFilePath);
 
         String baseCurrency = "CAD";
         String quoteCurrency = "HUF";
@@ -46,18 +39,16 @@ public class ExchangeRateHistoryIntegrationTests {
         String rateDateDayThree = "2019-06-05";
         Double rateValueDayThree = 213.3443928334;
 
-        assertEquals("Rate date", testUtils.getCellValue(sheet, 0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrency, testUtils.getCellValue(sheet, 0, 1));
-        assertEquals(rateDateDayOne, testUtils.getCellValue(sheet, 1, 0));
-        assertEquals(String.valueOf(rateValueDayOne), testUtils.getCellValue(sheet, 1, 1));
-        assertEquals(rateDateDayTwo, testUtils.getCellValue(sheet, 2, 0));
-        assertEquals(String.valueOf(rateValueDayTwo), testUtils.getCellValue(sheet, 2, 1));
-        assertEquals(rateDateDayThree, testUtils.getCellValue(sheet, 3, 0));
-        assertEquals(String.valueOf(rateValueDayThree), testUtils.getCellValue(sheet, 3, 1));
+        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrency, fileTestHelper.getCellValue(0, 1));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
+        assertEquals(String.valueOf(rateValueDayOne), fileTestHelper.getCellValue(1, 1));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
+        assertEquals(String.valueOf(rateValueDayTwo), fileTestHelper.getCellValue(2, 1));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
+        assertEquals(String.valueOf(rateValueDayThree), fileTestHelper.getCellValue(3, 1));
 
-        workbook.close();
-        fileInputStream.close();
-        new File(testFilePath).delete();
+        fileTestHelper.closeDeleteFile();
 
     }
 
@@ -72,9 +63,7 @@ public class ExchangeRateHistoryIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        FileInputStream fileInputStream = new FileInputStream(testFilePath);
-        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-        XSSFSheet sheet = workbook.getSheet("Rates");
+        ExcelFileTestHelper fileTestHelper = new XLSXFileTestHelper(testFilePath);
 
         String baseCurrency = "NZD";
         String rateDateDayOne = "2019-12-11";
@@ -93,29 +82,27 @@ public class ExchangeRateHistoryIntegrationTests {
         Double rateValueDayTwoTHB = 19.8781497693;
         Double rateValueDayThreeTHB = 19.9899247318;
 
-        assertEquals("Rate date", testUtils.getCellValue(sheet, 0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, testUtils.getCellValue(sheet, 0, 1));
-        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, testUtils.getCellValue(sheet, 0, 2));
-        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, testUtils.getCellValue(sheet, 0, 3));
+        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, fileTestHelper.getCellValue(0, 1));
+        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, fileTestHelper.getCellValue(0, 2));
+        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, fileTestHelper.getCellValue(0, 3));
 
-        assertEquals(rateDateDayOne, testUtils.getCellValue(sheet, 1, 0));
-        assertEquals(String.valueOf(rateValueDayOneCNY), testUtils.getCellValue(sheet, 1, 1));
-        assertEquals(String.valueOf(rateValueDayOnePHP), testUtils.getCellValue(sheet, 1, 2));
-        assertEquals(String.valueOf(rateValueDayOneTHB), testUtils.getCellValue(sheet, 1, 3));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
+        assertEquals(String.valueOf(rateValueDayOneCNY), fileTestHelper.getCellValue(1, 1));
+        assertEquals(String.valueOf(rateValueDayOnePHP), fileTestHelper.getCellValue(1, 2));
+        assertEquals(String.valueOf(rateValueDayOneTHB), fileTestHelper.getCellValue(1, 3));
 
-        assertEquals(rateDateDayTwo, testUtils.getCellValue(sheet, 2, 0));
-        assertEquals(String.valueOf(rateValueDayTwoCNY), testUtils.getCellValue(sheet, 2, 1));
-        assertEquals(String.valueOf(rateValueDayTwoPHP), testUtils.getCellValue(sheet, 2, 2));
-        assertEquals(String.valueOf(rateValueDayTwoTHB), testUtils.getCellValue(sheet, 2, 3));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
+        assertEquals(String.valueOf(rateValueDayTwoCNY), fileTestHelper.getCellValue(2, 1));
+        assertEquals(String.valueOf(rateValueDayTwoPHP), fileTestHelper.getCellValue(2, 2));
+        assertEquals(String.valueOf(rateValueDayTwoTHB), fileTestHelper.getCellValue(2, 3));
 
-        assertEquals(rateDateDayThree, testUtils.getCellValue(sheet, 3, 0));
-        assertEquals(String.valueOf(rateValueDayThreeCNY), testUtils.getCellValue(sheet, 3, 1));
-        assertEquals(String.valueOf(rateValueDayThreePHP), testUtils.getCellValue(sheet, 3, 2));
-        assertEquals(String.valueOf(rateValueDayThreeTHB), testUtils.getCellValue(sheet, 3, 3));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
+        assertEquals(String.valueOf(rateValueDayThreeCNY), fileTestHelper.getCellValue(3, 1));
+        assertEquals(String.valueOf(rateValueDayThreePHP), fileTestHelper.getCellValue(3, 2));
+        assertEquals(String.valueOf(rateValueDayThreeTHB), fileTestHelper.getCellValue(3, 3));
 
-        workbook.close();
-        fileInputStream.close();
-        new File(testFilePath).delete();
+        fileTestHelper.closeDeleteFile();
 
     }
 
