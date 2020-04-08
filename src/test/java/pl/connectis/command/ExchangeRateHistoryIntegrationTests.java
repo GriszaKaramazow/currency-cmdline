@@ -39,14 +39,14 @@ public class ExchangeRateHistoryIntegrationTests {
         String rateDateDayThree = "2019-06-05";
         Double rateValueDayThree = 213.3443928334;
 
-        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrency, fileTestHelper.getCellValue(0, 1));
-        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
-        assertEquals(String.valueOf(rateValueDayOne), fileTestHelper.getCellValue(1, 1));
-        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
-        assertEquals(String.valueOf(rateValueDayTwo), fileTestHelper.getCellValue(2, 1));
-        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
-        assertEquals(String.valueOf(rateValueDayThree), fileTestHelper.getCellValue(3, 1));
+        assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrency, fileTestHelper.getCellValueString(0, 1));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValueDateAsString(1, 0));
+        assertEquals(rateValueDayOne, fileTestHelper.getCellValueDouble(1, 1));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValueDateAsString(2, 0));
+        assertEquals(rateValueDayTwo, fileTestHelper.getCellValueDouble(2, 1));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValueDateAsString(3, 0));
+        assertEquals(rateValueDayThree, fileTestHelper.getCellValueDouble(3, 1));
 
         fileTestHelper.closeDeleteFile();
 
@@ -82,25 +82,25 @@ public class ExchangeRateHistoryIntegrationTests {
         Double rateValueDayTwoTHB = 19.8781497693;
         Double rateValueDayThreeTHB = 19.9899247318;
 
-        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, fileTestHelper.getCellValue(0, 1));
-        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, fileTestHelper.getCellValue(0, 2));
-        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, fileTestHelper.getCellValue(0, 3));
+        assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrencyCNY, fileTestHelper.getCellValueString(0, 1));
+        assertEquals(baseCurrency + "/" + quoteCurrencyPHP, fileTestHelper.getCellValueString(0, 2));
+        assertEquals(baseCurrency + "/" + quoteCurrencyTHB, fileTestHelper.getCellValueString(0, 3));
 
-        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
-        assertEquals(String.valueOf(rateValueDayOneCNY), fileTestHelper.getCellValue(1, 1));
-        assertEquals(String.valueOf(rateValueDayOnePHP), fileTestHelper.getCellValue(1, 2));
-        assertEquals(String.valueOf(rateValueDayOneTHB), fileTestHelper.getCellValue(1, 3));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValueDateAsString(1, 0));
+        assertEquals(rateValueDayOneCNY, fileTestHelper.getCellValueDouble(1, 1));
+        assertEquals(rateValueDayOnePHP, fileTestHelper.getCellValueDouble(1, 2));
+        assertEquals(rateValueDayOneTHB, fileTestHelper.getCellValueDouble(1, 3));
 
-        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
-        assertEquals(String.valueOf(rateValueDayTwoCNY), fileTestHelper.getCellValue(2, 1));
-        assertEquals(String.valueOf(rateValueDayTwoPHP), fileTestHelper.getCellValue(2, 2));
-        assertEquals(String.valueOf(rateValueDayTwoTHB), fileTestHelper.getCellValue(2, 3));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValueDateAsString(2, 0));
+        assertEquals(rateValueDayTwoCNY, fileTestHelper.getCellValueDouble(2, 1));
+        assertEquals(rateValueDayTwoPHP, fileTestHelper.getCellValueDouble(2, 2));
+        assertEquals(rateValueDayTwoTHB, fileTestHelper.getCellValueDouble(2, 3));
 
-        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
-        assertEquals(String.valueOf(rateValueDayThreeCNY), fileTestHelper.getCellValue(3, 1));
-        assertEquals(String.valueOf(rateValueDayThreePHP), fileTestHelper.getCellValue(3, 2));
-        assertEquals(String.valueOf(rateValueDayThreeTHB), fileTestHelper.getCellValue(3, 3));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValueDateAsString(3, 0));
+        assertEquals(rateValueDayThreeCNY, fileTestHelper.getCellValueDouble(3, 1));
+        assertEquals(rateValueDayThreePHP, fileTestHelper.getCellValueDouble(3, 2));
+        assertEquals(rateValueDayThreeTHB, fileTestHelper.getCellValueDouble(3, 3));
 
         fileTestHelper.closeDeleteFile();
 

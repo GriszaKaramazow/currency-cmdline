@@ -43,14 +43,14 @@ public class XLSPrinterTests {
         // then
         ExcelFileTestHelper fileTestHelper = new XLSFileTestHelper(testFilePath);
 
-        assertEquals("Rate date", fileTestHelper.getCellValue(0, 0));
-        assertEquals(baseCurrency + "/" + quoteCurrency, fileTestHelper.getCellValue(0, 1));
-        assertEquals(rateDateDayOne, fileTestHelper.getCellValue(1, 0));
-        assertEquals(String.valueOf(rateValueDayOne), fileTestHelper.getCellValue(1, 1));
-        assertEquals(rateDateDayTwo, fileTestHelper.getCellValue(2, 0));
-        assertEquals(String.valueOf(rateValueDayTwo), fileTestHelper.getCellValue(2, 1));
-        assertEquals(rateDateDayThree, fileTestHelper.getCellValue(3, 0));
-        assertEquals(String.valueOf(rateValueDayThree), fileTestHelper.getCellValue(3, 1));
+        assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
+        assertEquals(baseCurrency + "/" + quoteCurrency, fileTestHelper.getCellValueString(0, 1));
+        assertEquals(rateDateDayOne, fileTestHelper.getCellValueDateAsString(1, 0));
+        assertEquals(rateValueDayOne, fileTestHelper.getCellValueDouble(1, 1));
+        assertEquals(rateDateDayTwo, fileTestHelper.getCellValueDateAsString(2, 0));
+        assertEquals(rateValueDayTwo, fileTestHelper.getCellValueDouble(2, 1));
+        assertEquals(rateDateDayThree, fileTestHelper.getCellValueDateAsString(3, 0));
+        assertEquals(rateValueDayThree, fileTestHelper.getCellValueDouble(3, 1));
 
         fileTestHelper.closeDeleteFile();
 

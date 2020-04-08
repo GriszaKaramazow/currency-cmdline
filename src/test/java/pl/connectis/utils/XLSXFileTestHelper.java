@@ -27,20 +27,23 @@ public class XLSXFileTestHelper extends ExcelFileTestHelper {
 
     }
 
-    public String getCellValue(int row, int cell) {
+    public String getCellValueString(int row, int cell) {
 
+        return sheet.getRow(row).getCell(cell).getStringCellValue();
+
+    }
+
+    public double getCellValueDouble(int row, int cell) {
+
+        return sheet.getRow(row).getCell(cell).getNumericCellValue();
+
+    }
+
+    public String getCellValueDateAsString(int row, int cell) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
         String cellValueString = sheet.getRow(row).getCell(cell).toString();
-
-        try {
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-            cellValueString = String.valueOf(LocalDate.parse(cellValueString, formatter));
-
-        } finally {
-
-            return cellValueString;
-
-        }
+        return String.valueOf(LocalDate.parse(cellValueString, formatter));
 
     }
 
