@@ -62,7 +62,7 @@ public class CSVPrinterTests {
         assertTrue(testFileContent.contains(String.valueOf(19.9899247318)));
 
         assertTrue(testFileContent.contains("Rate date,NZD/CNY,NZD/PHP,NZD/THB"));
-        assertTrue(testFileContent.contains("2019-12-11," + 4.6064760104 + "," + 33.253958875  + "," + 19.8050106358));
+        assertTrue(testFileContent.contains("2019-12-11," + 4.6064760104 + "," + 33.253958875 + "," + 19.8050106358));
         assertTrue(testFileContent.contains("2019-12-12," + 4.6358689223 + "," + 33.4058913995 + "," + 19.8781497693));
         assertTrue(testFileContent.contains("2019-12-13," + 4.6168434777 + "," + 33.4504830202 + "," + 19.9899247318));
 

@@ -22,7 +22,14 @@ public class ExcelFileTestHelper {
     private final Workbook workbook;
     private final Sheet sheet;
 
-    public static ExcelFileTestHelper createXLSXFileHelper(String filepath){
+    private ExcelFileTestHelper(String testFilePath, FileInputStream fileInputStream, Workbook workbook) throws IOException {
+        this.testFilePath = testFilePath;
+        this.fileInputStream = fileInputStream;
+        this.workbook = workbook;
+        this.sheet = workbook.getSheet("Rates");
+    }
+
+    public static ExcelFileTestHelper createXLSXFileHelper(String filepath) {
 
         try {
 
@@ -39,7 +46,7 @@ public class ExcelFileTestHelper {
 
     }
 
-    public static ExcelFileTestHelper createXLSFileHelper(String filepath){
+    public static ExcelFileTestHelper createXLSFileHelper(String filepath) {
 
         try {
 
@@ -54,13 +61,6 @@ public class ExcelFileTestHelper {
 
         }
 
-    }
-
-    private ExcelFileTestHelper(String testFilePath, FileInputStream fileInputStream, Workbook workbook) throws IOException {
-        this.testFilePath = testFilePath;
-        this.fileInputStream = fileInputStream;
-        this.workbook = workbook;
-        this.sheet = workbook.getSheet("Rates");
     }
 
     public String getCellValueString(int row, int cell) {

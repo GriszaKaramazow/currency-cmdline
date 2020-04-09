@@ -35,14 +35,14 @@ public class ExchangeRatesMapperTests {
     }
 
     @Test
-    public void testMultipleCurrenciesMapSingleDatesDTO () {
+    public void testMultipleCurrenciesMapSingleDatesDTO() {
 
         // given
         Map<String, Double> rates = new HashMap<>();
         rates.put("EUR", 0.0123856648);
         rates.put("GBP", 0.0110319117);
         rates.put("USD", 0.0137530422);
-        SingleDayRatesDTO testSubject = new SingleDayRatesDTO("RUB",  "2020-03-13", rates);
+        SingleDayRatesDTO testSubject = new SingleDayRatesDTO("RUB", "2020-03-13", rates);
 
         // when
         ExchangeRates exchangeRatesResult = exchangeRatesMapper.mapSingleDayRatesDTO(testSubject);
@@ -61,7 +61,7 @@ public class ExchangeRatesMapperTests {
     }
 
     @Test
-    public void testSingleCurrencyMapHistoryRatesDTO () {
+    public void testSingleCurrencyMapHistoryRatesDTO() {
 
         // given
         Map<String, Map<String, Double>> rates = new HashMap<>();

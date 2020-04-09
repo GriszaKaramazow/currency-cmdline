@@ -83,7 +83,7 @@ public class ExchangeRatesRequesterTests {
 
         // then
         Map<String, Double> rate = new HashMap<>();
-        rate.put( "DKK", 10.0106013232);
+        rate.put("DKK", 10.0106013232);
         rate.put("NOK", 12.9913176505);
         rate.put("SEK", 12.4317288208);
         SingleDayRatesDTO singleDayRatesDTOExpected = new SingleDayRatesDTO("GBP", "2016-01-08", rate);

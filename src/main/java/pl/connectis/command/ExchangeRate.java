@@ -18,7 +18,7 @@ public class ExchangeRate implements Runnable {
     private boolean usageHelpRequested;
 
     public void run() {
-        
+
         log.info("Use -h or --help to display help menu.");
 
     }
