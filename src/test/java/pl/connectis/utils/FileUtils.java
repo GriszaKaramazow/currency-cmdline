@@ -16,18 +16,16 @@ public class FileUtils {
 
     public String getTextFileContentAsString() {
 
-        String fileContent = "";
-
         try {
 
-            fileContent = new String(Files.readAllBytes(Paths.get(testFilePath)));
+            return new String(Files.readAllBytes(Paths.get(testFilePath)));
 
         } catch (IOException exception) {
 
-            log.error("Unable to read file: '" + testFilePath + "'.");
-        }
+            log.error("Unable to read a file: '" + testFilePath + "'.");
+            throw new IllegalStateException("Unable to read a file: '" + testFilePath + "'.");
 
-        return fileContent;
+        }
 
     }
 

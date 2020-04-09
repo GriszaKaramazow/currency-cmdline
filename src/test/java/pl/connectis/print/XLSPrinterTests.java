@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import pl.connectis.model.ExchangeRates;
 import pl.connectis.model.SingleRate;
 import pl.connectis.utils.ExcelFileTestHelper;
-import pl.connectis.utils.XLSFileTestHelper;
 
 import java.io.IOException;
 
@@ -32,7 +31,7 @@ public class XLSPrinterTests {
         printer.print(exchangeRates);
 
         // then
-        ExcelFileTestHelper fileTestHelper = new XLSFileTestHelper(testFilePath);
+        ExcelFileTestHelper fileTestHelper = ExcelFileTestHelper.createXLSFileHelper(testFilePath);
 
         assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
         assertEquals("CAD/HUF", fileTestHelper.getCellValueString(0, 1));

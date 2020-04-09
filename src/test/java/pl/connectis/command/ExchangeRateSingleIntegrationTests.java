@@ -1,14 +1,11 @@
 package pl.connectis.command;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import picocli.CommandLine;
 import pl.connectis.utils.FileUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(Lifecycle.PER_METHOD)
 public class ExchangeRateSingleIntegrationTests {
 
     private final CommandLine commandLine = new CommandLine(new ExchangeRate());

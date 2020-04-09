@@ -1,18 +1,13 @@
 package pl.connectis.command;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import picocli.CommandLine;
 import pl.connectis.utils.ExcelFileTestHelper;
-import pl.connectis.utils.XLSFileTestHelper;
-import pl.connectis.utils.XLSXFileTestHelper;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestInstance(Lifecycle.PER_METHOD)
 public class ExchangeRateHistoryIntegrationTests {
 
     private final CommandLine commandLine = new CommandLine(new ExchangeRate());
@@ -28,7 +23,7 @@ public class ExchangeRateHistoryIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        ExcelFileTestHelper fileTestHelper = new XLSFileTestHelper(testFilePath);
+        ExcelFileTestHelper fileTestHelper = ExcelFileTestHelper.createXLSFileHelper(testFilePath);
 
         assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
         assertEquals("CAD/HUF", fileTestHelper.getCellValueString(0, 1));
@@ -54,7 +49,7 @@ public class ExchangeRateHistoryIntegrationTests {
         commandLine.execute(command.split(" "));
 
         // then
-        ExcelFileTestHelper fileTestHelper = new XLSXFileTestHelper(testFilePath);
+        ExcelFileTestHelper fileTestHelper = ExcelFileTestHelper.createXLSXFileHelper(testFilePath);
 
         assertEquals("Rate date", fileTestHelper.getCellValueString(0, 0));
         assertEquals("NZD/CNY", fileTestHelper.getCellValueString(0, 1));
